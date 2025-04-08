@@ -1,0 +1,8 @@
+.button_container {
+    text-align: left;
+}
+
+button {
+    margin-top: 5px;
+    font-size: 20px;
+}
