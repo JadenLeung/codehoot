@@ -5,6 +5,6 @@
 #include <limits.h>
 
 int main(void) {
-    malloc(50);
+    int *a = malloc(40);
     printf("Hello, World!\n");
 }
