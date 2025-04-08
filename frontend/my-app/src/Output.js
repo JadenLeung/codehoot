@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './Output.css';
 
 function Output({output}) {
 
     const formattedOutput = output.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
+        <>
+            {line}
+            <br />
+        </>
       ));
 
   return (

@@ -20,14 +20,15 @@ def hello_world():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    data = request.data.decode('utf-8')
+    data = request.get_json()
+    data = data.get('code')
 
     with open("main.c", "w") as f:
         f.write(data)
 
     try:
         compile_process = subprocess.run(
-            ['clang', 'main.c', '-o', 'temp.out'],
+            ['clang', '-std=c99', '-g', '-Wall', 'main.c'],
             capture_output=True, text=True
         )
 
@@ -35,7 +36,7 @@ def submit():
             return jsonify({"error": "Compilation failed", "details": compile_process.stderr}), 500
 
         run_process = subprocess.run(
-            ['./temp.out'],
+            ['./a.out'],
             capture_output=True, text=True
         )
 
