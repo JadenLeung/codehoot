@@ -7,13 +7,5 @@
 
 // add(a, b): Returns the sum of a and b
 int add(int a, int b) {
-    return a + b;
-}
-
-int main(void) {
-    int a = 0;
-    int b = 0;
-    scanf("%d", &a);
-    scanf("%d", &b);
-    printf("%d\n", add(a, b));
+    // Your code here
 }
