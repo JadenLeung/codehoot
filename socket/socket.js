@@ -40,25 +40,20 @@ io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
 
-    socket.on("create-room", (data, name, cb) => {
-        createRoom(data, name, false);
+    socket.on("create-room", () => {
+        createRoom();
     });
 
-    function createRoom(data, name, setroom) {
-
+    function createRoom() {
         for (let i = 136; true; i++) {
-            if (setroom) {
-                i = setroom;
-            }
-            if (rooms.hasOwnProperty(i)) {
+            if (rooms.hasOwnProperty("CS" + i)) {
                 continue;
             }
             let room = "CS" + i;
-            data.leader = socket.id;
             rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}};
             console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
             socket.join(String(i));
-            socket.emit("joined_room", room, socket.id, name, rooms[room].stage);
+            socket.emit("created-room", room);
             break;
         }
     }
@@ -255,7 +250,7 @@ io.on("connection", (socket) => {
         io.to(id).emit("race_won", winner);
     })
     socket.on("disconnect", (reason) => {
-        console.log(`User disconnected: ${socket.id}, Reason: ${reason}`);
+        console.log(`User disconnected: ${socket.id}, Reason: ${reason}`, rooms);
         removePlayer(socket.id);
         console.log(io.engine.clientsCount)
         if (io.engine.clientsCount == 0) {

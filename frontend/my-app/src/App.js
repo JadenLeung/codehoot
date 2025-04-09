@@ -39,7 +39,7 @@ function App() {
           }
           {
             ["start", "entername", "lobby", "hostlobby"].includes(mode) &&
-            <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } 
+            <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar}/>
           }
         </div>
