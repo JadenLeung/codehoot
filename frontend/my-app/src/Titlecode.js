@@ -4,7 +4,7 @@ import Title from './Title';
 import Mainbutton from './Mainbutton';
 import Rectangle from './Rectangle';
 
-function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, setAvatar, socket}) {
+function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, setAvatar, socket, setRoom, room, setData}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -44,9 +44,12 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
 
   useEffect(() => {
     if (socket) {
-      socket.on("created-room", (room) => {
+      socket.on("created-room", (r, d) => {
         setMode("hostlobby");
         setErrorHeight("-70px");
+        setRoom(r);
+        setData(d);
+        console.log("data:", r, d)
       })
       return () => {
         socket.off("created-room");

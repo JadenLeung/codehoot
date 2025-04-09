@@ -16,6 +16,8 @@ function App() {
   const [avatar, setAvatar] = useState('nomair');
   const [players, setPlayers] = useState([]);
   const [socket, setSocket] = useState(null);
+  const [room, setRoom] = useState(null);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     const socketInstance = io('http://localhost:3004'); // Replace with your server URL
@@ -40,11 +42,12 @@ function App() {
           {
             ["start", "entername", "lobby", "hostlobby"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
-              placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar}/>
+              placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
+              setRoom={setRoom} setData={setData} room={room} data={data}/>
           }
         </div>
       {mode === "hostlobby"
-        && <Host players={players} mode={mode} setMode={setMode} question={question} setQuestion={setQuestion}/>
+        && <Host players={players} mode={mode} setMode={setMode} question={question} setQuestion={setQuestion} room={room} data={data}/>
       }
       {mode === "ingame" && (
         <>

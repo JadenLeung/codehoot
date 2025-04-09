@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
             rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}};
             console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
             socket.join(String(i));
-            socket.emit("created-room", room);
+            socket.emit("created-room", room, rooms[room]);
             break;
         }
     }

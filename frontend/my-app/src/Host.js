@@ -4,7 +4,7 @@ import Title from './Title';
 import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 
-function Host({ players, mode, setMode, question, setQuestion }) {
+function Host({ players, mode, setMode, question, setQuestion, room }) {
 
     useEffect(() => {
 
@@ -20,7 +20,7 @@ function Host({ players, mode, setMode, question, setQuestion }) {
                     </div>
                     <div className="box">
                         <p className = "title">Game PIN:</p>
-                        <p className="pin">CS136</p>
+                        <p className="pin">{room}</p>
                     </div>
                 </div>
             </Rectangle>
