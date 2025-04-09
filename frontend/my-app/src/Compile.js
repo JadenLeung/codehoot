@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Compile.css';
 
-function Compile({code, setOutput, question}) {
+function Compile({code, setOutput, question, socket, endtime, room}) {
+
+  const [time, setTime] = useState(0);
 
   async function submitButton() {
+    let t = Math.round((endtime - Date.now()) / 1000);
+    setTime(t >= 0 ? t : 0);
+    
     setOutput({state: "Compiling..."});
     try {
         const response = await fetch("http://127.0.0.1:5004/submit", {
@@ -16,6 +21,13 @@ function Compile({code, setOutput, question}) {
         const data = await response.text();
         console.log(data)
         setOutput(JSON.parse(data))
+        if (JSON.parse(data).hasOwnProperty("correct")) {
+          alert(JSON.parse(data).correct)
+          socket.emit("submit-score", t, JSON.parse(data).correct, room, (str) => {
+            alert(str);
+          })
+        }
+        
     } catch (error) {
         setOutput(`Could not connect to server\n${error}`);
     }

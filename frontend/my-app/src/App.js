@@ -41,8 +41,12 @@ function App() {
           setPlayers(prevPlayers => prevPlayers.map((player) => (player.id == id) ? { ...player, avatar : avatar} : player));
         }
       })
+      socket.on("time-change", (t) => {
+        setEndTime(t);
+      })
       return () => {
         socket.off("room-change");
+        socket.off("time-change");
       };
     }
   }, [socket]);
@@ -70,7 +74,7 @@ function App() {
       }
       {mode === "ingame" && (
         <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
-        endtime={endtime} data={data} socket={socket} name={name} avatar={avatar}></Coding>
+        endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room}></Coding>
       )}
     </div>
   )

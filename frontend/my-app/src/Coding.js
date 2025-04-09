@@ -6,7 +6,7 @@ import Form from './Form';
 import Output from './Output';
 
 
-function Coding ({setCode, code, question, output, setOutput, endtime, socket, name, avatar}) {
+function Coding ({setCode, code, question, output, setOutput, endtime, socket, name, avatar, room}) {
 
   const [time, setTime] = useState(0);
 
@@ -32,7 +32,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
       </div>
           <Form setCode={setCode} code={code} question={question} />
           {time > 0 && <div>
-                <Compile code={code} setOutput={setOutput} question={question} />
+                <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} />
                 <Output output={output} />
               </div>
           }

@@ -3,12 +3,20 @@ import './Host.css';
 import Title from './Title';
 import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
+import config from "./config.js";
 
 function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime }) {
 
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(999);
+    console.log(JSON.stringify(config), question, config.time[question])
     function startMatch() {
-        socket.emit("start-match", room, 100000);
+        if (mode == "hostlobby") {
+            socket.emit("start-match", room, config.time[question] * 1000);
+        } else if (time == 0) {
+            socket.emit("view-leaderboard", room);
+        } else {
+            socket.emit("end-round", room);
+        }
     }
 
     useEffect(() => {
@@ -76,9 +84,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
                         </div> 
-                        { mode == "hostlobby" &&
-                            <Mainbutton fontSize="30px" onClick={startMatch}>Start</Mainbutton>
-                        }
+                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : "Results"}</Mainbutton>
                     </div>
                 </div>
 

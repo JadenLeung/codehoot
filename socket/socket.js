@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
             let room = "CS" + i;
             rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1};
             console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
-            socket.join(String(i));
+            socket.join(room);
             socket.emit("created-room", room, rooms[room]);
             break;
         }
@@ -110,53 +110,25 @@ io.on("connection", (socket) => {
             rooms[room].stage = "ingame";
             rooms[room].time = Date.now() + timeLimit;
             io.to(room).emit('started-match', rooms[room].time); // only others in that room
-            socket.emit('started-match2', rooms[room].time)
+            socket.emit('started-match2', rooms[room].time);
         }
     });
 
-    socket.on("next-round", (room) => {
-        room = String(room);
-        console.log("Attempting next round");
-        if (rooms.hasOwnProperty(room) && rooms[room].stage != "lobby") {
-            console.log("Starting next round");
-            rooms[room].stage = "ingame";
-            rooms[room].round++;
-            rooms[room].solved = {};
-            rooms[room].progress = {};
-            rooms[room].times = {};
-            rooms[room].screenshots = {};
-            io.to(room).emit("next-match", rooms[room], 
-                getShuffle(rooms[room].data.dims[rooms[room].round], rooms[room].data.shufflearr[rooms[room].round] ?? false));
-        }
-    });
-
-    socket.on("progress-update", (room, progress, time, posid) => {
-        room = String(room);
+    socket.on("submit-score", (time, passed, room, cb) => {
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-            rooms[room].progress[socket.id] = progress;
-            rooms[room].times[socket.id] = time;
-            if (rooms[room].data.type == "teamblind" && (socket.id == rooms[room].data.blinded || rooms[room].userids.length == 1)) {
-                rooms[room].data.time = time;
-                rooms[room].data.posid = posid;
+            if (!rooms[room].userdata[socket.id].passed || passed > rooms[room].userdata[socket.id].passed) {
+                rooms[room].userdata[socket.id].time = time;
+                rooms[room].userdata[socket.id].passed = passed;
+                console.log("Score submited", time, rooms[room].userdata[socket.id])
+                cb("highscore");
             }
-            console.log("emitting");
-            io.to(room).emit("update-data", rooms[room]);
         }
     });
 
-    socket.on("send-message", (message, room, username, image = false) => {
-        if (rooms.hasOwnProperty(room) && rooms[room].userids.length > 1) {
-            if (image == true)
-                console.log("sending image");
-            io.to(room).emit("sending-message", message, socket.id, {[socket.id] : username, ...rooms[room].names}, image);
-        } else {
-            console.log("sending to one person");
-            socket.emit("sending-message", message, socket.id, {[socket.id] : username}, image);
-        }
-    })
-
-    socket.on("send-screenshot", (screenshot, op) => {
-        io.to(op).emit("update-screenshot", screenshot);
+    socket.on("end-round", (room) => {
+        console.log("End round")
+        rooms[room].time = Date.now();
+        io.to(room).emit("time-change", rooms[room].time);
     })
 
     function updateTimes(room) {
