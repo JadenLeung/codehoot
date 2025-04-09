@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 import './App.css';
 import Form from './Form';
 import Title from './Title';
@@ -13,9 +14,20 @@ function App() {
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
   const [avatar, setAvatar] = useState('nomair');
-  const [players, setPlayers] = useState([{"name": "ChengFeng Deng", "avatar": "morland"},{"name": "Bradley Low", "avatar": "urs"},{"name": "Daharius", "avatar": "nomair"},{"name": "Jaden", "avatar": "aryo"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},{"name": "Jaden", "avatar": "nomair"},]);
+  const [players, setPlayers] = useState([]);
+  const [socket, setSocket] = useState(null);
 
-  if (mode == "start") {
+  useEffect(() => {
+    const socketInstance = io('http://localhost:4000'); // Replace with your server URL
+    setSocket(socketInstance);
+
+    // Cleanup the socket connection when the component unmounts
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  if (mode === "start") {
     document.body.style.backgroundColor = '#511ca2';
   }
 
@@ -27,14 +39,14 @@ function App() {
           }
           {
             ["start", "entername", "lobby", "hostlobby"].includes(mode) &&
-            <Titlecode setMode={setMode} mode = {mode} buttonText={mode == "start" ? "Enter" : "OK, go!" } 
-              placeholderText={mode == "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar}/>
+            <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } 
+              placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar}/>
           }
         </div>
-      {mode == "hostlobby"
+      {mode === "hostlobby"
         && <Host players={players} mode={mode} setMode={setMode} question={question} setQuestion={setQuestion}/>
       }
-      {mode == "ingame" && (
+      {mode === "ingame" && (
         <>
           <Title color = "white">Codehoot!</Title>
           <Form setCode={setCode} code={code} question={question} />
