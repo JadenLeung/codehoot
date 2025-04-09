@@ -3,7 +3,7 @@ import './Titlecode.css';
 import Title from './Title';
 import Mainbutton from './Mainbutton';
 
-function Titlecode({ output, mode, setMode, buttonText, placeholderText}) {
+function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, setAvatar}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -51,6 +51,8 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText}) {
     }
   }, [mode]);
 
+  const picList = ["nomair", "watson", "urs", "aryo", "josh"]
+
   return (
     <div className="container">
       <div className="circle" style={{left:left.circle}}></div>
@@ -66,8 +68,12 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText}) {
       { mode == "lobby" &&
 
         <div>
+            <img src = {`/data/avatars/${avatar}.png`} className="image"></img>
             <Title color="white">Welcome, {text}</Title>
             <p className="avatar-text">Select your avatar</p>
+            {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
+            onClick={() => {setAvatar(pic)}}/>))}
+
         </div>
       }
       <div className="circle2" style={{right:right.circle}}></div>

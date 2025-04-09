@@ -11,7 +11,7 @@ function App() {
   const [code, setCode] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
-  const [avatar, setAvatar] = useState('default');
+  const [avatar, setAvatar] = useState('nomair');
 
   if (mode == "start") {
     document.body.style.backgroundColor = '#511ca2';
@@ -19,14 +19,14 @@ function App() {
 
   return (
     <div className="App">
-        <div style = {{marginTop: "275px"}}>
+        <div style = {{marginTop: mode != "lobby" ? "275px" : "50px"}}>
           {["start", "entername"].includes(mode) && 
             <Title color="white" marginTop="275px">Codehoot!</Title>
           }
           {
             ["start", "entername", "lobby"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode == "start" ? "Enter" : "OK, go!" } 
-              placeholderText={mode == "start" ? "Game PIN" : "Nickname" } avatar={avatar}/>
+              placeholderText={mode == "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar}/>
           }
         </div>
       {mode == "ingame" && (
@@ -38,7 +38,7 @@ function App() {
         </>
       )}
     </div>
-  );
+  )
 }
 
 export default App;

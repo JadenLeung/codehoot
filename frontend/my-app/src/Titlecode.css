@@ -38,7 +38,7 @@
     border-right: 500px solid transparent; /* Right transparent border */
     border-bottom: 700px solid #451592;    /* Bottom border with color (equilateral triangle) */
     z-index: -1;
-    transition: left 0.5s ease;
+    transition: left 1s ease;
   }
   
   
@@ -50,7 +50,7 @@
     background-color: #4a1798;   /* Circle color */
     border-radius: 50%;          /* Makes the shape round */
     z-index: -2;               /* Ensure the circle appears above other elements */
-    transition: left 0.5s ease;
+    transition: left 1s ease;
   }
 
   .circle2 {
@@ -61,7 +61,7 @@
     background-color: #4a1798;   /* Circle color */
     border-radius: 50%;          /* Makes the shape round */
     z-index: -2;               /* Ensure the circle appears above other elements */
-    transition: right 0.5s ease;
+    transition: right 1s ease;
   }
 
   .C {
@@ -71,7 +71,7 @@
     color: #4c1a9b;
     font-family: 'Montserrat';
     font-weight: bold;
-    transition: right 0.5s ease;
+    transition: right 1s ease;
   }
 
   .error {
@@ -96,4 +96,14 @@
   .avatar-text {
     color: white;
     font-family: 'Montserrat';
+  }
+
+  .image {
+    height: 150px;
+    margin: 10px;
+    border-radius: 5px;
+  }
+
+  #josh {
+    margin-left: -25px;
   }
