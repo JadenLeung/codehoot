@@ -21,18 +21,21 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
 
   return (
     <div>
+      <div className="headercode">
+          <div className="profile">
+            <img className="profile-avatar" src={`/data/avatars/${avatar}.png`} alt="Avatar"/>
+            <p className="name">{name}</p>
+          </div>
           <Title color = "white">Codehoot!</Title>
+          <p className="time">{time}</p>
+
+      </div>
           <Form setCode={setCode} code={code} question={question} />
           {time > 0 && <div>
                 <Compile code={code} setOutput={setOutput} question={question} />
                 <Output output={output} />
               </div>
           }
-          <p className="time">{time}</p>
-          <div className="profile">
-            <img className="profile-avatar" src={`/data/avatars/${avatar}.png`} alt="Avatar"/>
-            <p className="name">{name}</p>
-          </div>
     </div>
   )
 }
