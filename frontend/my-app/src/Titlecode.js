@@ -13,27 +13,41 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
   const [left, setLeft] = useState({"circle" : "-400px", "triangle" : "-100px"});
   const [right, setRight] = useState({"circle" : "-400px", "text" : "40px"});
 
+  function riseError(str) {
+    setError(str);
+    if (errorHeight == "-70px") {
+      setErrorHeight("-20px");
+    }
+  }
+
   function submitButton() {
     if (mode == "start") {
         if (text == "") {
-            if (errorHeight == "-70px") {
-                setError("ⓘ Assertion failed, Game PIN must not be null");
-                setErrorHeight("-20px");
-            }
+          riseError("ⓘ Assertion failed, Game PIN must not be null")
         } else {
-            setMode("entername");
-            setText("");  
-            setErrorHeight("-70px");
+            socket.emit('attempt-join', text, (res) => {
+              if (res) {
+                setMode("entername");
+                setText("");  
+                setRoom(text);
+                setErrorHeight("-70px");
+              } else {
+                riseError("ⓘ Runtime Error: Room not found");
+              }
+            });
         }
     } else {
         if (text == "") {
-            if (errorHeight == "-70px") {
-                setError("ⓘ Assertion failed, nickname must not be null");
-                setErrorHeight("-20px");
-            }
+          riseError("ⓘ Assertion failed, nickname must not be null");
         } else {
-            setMode("lobby");    
-            setErrorHeight("-70px");
+          socket.emit('join-room', room, text, (res) => {
+            if (res == "Game already started" || res == "Game already ended") {
+              riseError("ⓘ " + res);
+              setMode("start");  
+            } else if (res == "Name is taken") {
+              riseError("ⓘ " + res);
+            }
+          });
         }
     }
   }
@@ -50,12 +64,18 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         setRoom(r);
         setData(d);
         console.log("data:", r, d)
-      })
+      });
+
+      socket.on("joined-room", (stage) => {
+        setMode(stage);    
+        setErrorHeight("-70px");
+      });
+
       return () => {
         socket.off("created-room");
+        socket.off("joined-room");
       };
     }
-
   }, [socket]);
 
   useEffect(() => {

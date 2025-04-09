@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
     });
 
     function createRoom() {
-        for (let i = 136; true; i++) {
+        for (let i = 136; true; i = Math.round(Math.random() * 1000 + 1)) {
             if (rooms.hasOwnProperty("CS" + i)) {
                 continue;
             }
@@ -58,29 +58,33 @@ io.on("connection", (socket) => {
         }
     }
     
+    socket.on("attempt-join", (room, cb) => {
+        cb(rooms.hasOwnProperty(room));
+    });
+
     socket.on("join-room", (room, name, failedcb) => {
         joinRoom(room, name, failedcb);
     });
 
-    function joinRoom(room, name, failedcb) {
+    function joinRoom(room, name, cb) {
         room = String(room);
         console.log("Attempting to join room, data is ", rooms[room])
-        let late_join = rooms[room] && rooms[room].data && rooms[room].data.type && rooms[room].data.type != "teamblind";
         if (rooms.hasOwnProperty(room)) {
             if (rooms[room].stage != "lobby") {
-                failedcb("Game already started.");
-            } else if (rooms[room].userids.some((id) => userdata[id].name == name)) {
-                failedcb("Name is taken");
+                cb("Game already started");
+            } else if (rooms[room].userids.some((id) => rooms[room].userdata[id].name == name)) {
+                cb("Name is taken");
             } else if (!rooms[room].userids.includes(socket.id)) {
                 rooms[room].userids.push(socket.id);
+                rooms[room].userdata[socket.id] = {name: name};
                 socket.join(String(room));
                 console.log("Current rooms after joining", io.sockets.adapter.rooms, socket.id);
-                io.to(rooms[room].host).emit("room_change", rooms);
-                io.to(socket.id).emit("joined_room", room, socket.id, name, rooms[room].stage);
+                io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "join");
+                io.to(socket.id).emit("joined-room", rooms[room].stage);
                 console.log(`${socket.id} joined room ${room}. Updated Data: ${JSON.stringify(rooms)}`);
             }
         } else {
-            failedcb("Invalid room #");
+            cb("Game already ended");
         }
     }
     
@@ -253,45 +257,17 @@ io.on("connection", (socket) => {
         console.log(`User disconnected: ${socket.id}, Reason: ${reason}`, rooms);
         removePlayer(socket.id);
         console.log(io.engine.clientsCount)
-        if (io.engine.clientsCount == 0) {
-            rooms = {};
-        }
        
     });
 
     function removePlayer(player) {
         Object.keys(rooms).forEach((room) => {
-            if (rooms[room].userids && rooms[room].userids.includes(player)) {
-                for (let i = 0; rooms[room] && i < rooms[room].userids.length; ++i) {
-                    if (player == rooms[room].userids[i]) {
-                        io.to(room).emit("left_room", room, socket.id, rooms[room].names);
-                        if (rooms[room].solved && rooms[room].solved[player]) {
-                            delete rooms[room].solved[player];
-                            console.log("Deleting player from solved", rooms[room].solved)
-                        }
-                        if (rooms[room].times && rooms[room].times[player]) {
-                            rooms[room].times[player] = "DNF";
-                            console.log("Setting player to DNF")
-                        }
-                        rooms[room].userids.splice(i, 1);
-                        if (rooms[room].userids.length == 0) {
-                            delete rooms[room];
-                            io.emit("room_change", rooms);
-                            return;
-                        }
-                        if (rooms[room].data.leader == player) {
-                            rooms[room].data.leader = rooms[room].userids[0];
-                        }
-                        if (rooms[room].stage == "lobby") {
-                            io.to(room).emit("refresh_rooms", rooms[room], room);
-                        } else if (rooms[room].stage == "ingame") {
-                            updateTimes(room);
-                        } else if (rooms[room].stage == "results") {
-                            io.to(room).emit("all-solved", rooms[room], rooms[room].winners);
-                        }
-                        io.emit("room_change", rooms);
-                        console.log(`${player} is leaving the room ${room}. Data is ${JSON.stringify(rooms)}`);
-                    }
+            if (rooms[room]) {
+                if (player == rooms[room].host) {
+                    delete rooms[room];
+                } else if (rooms[room].userids.includes(player)){
+                    io.to(rooms[room].host).emit("left_room", room, socket.id, rooms[room].names);
+                    rooms[room].userids = rooms[room].userids.filter((p) => p != player);
                 }
                 console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
             }
