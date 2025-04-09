@@ -32,6 +32,7 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
             }
         } else {
             setMode("lobby");    
+            setErrorHeight("-70px");
         }
     }
   }
