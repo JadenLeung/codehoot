@@ -9,7 +9,7 @@ function Output({output}) {
       }
 
       return text.split('\n').map((line) => (
-        <div style = {{color: `${output.hasOwnProperty("error") ? "white" : output.hasOwnProperty("incorrect") && output["incorrect"] == 0 ? "green" : "white"}`}}>
+        <div style = {{color: `${output.hasOwnProperty("error") ? "white" : output.hasOwnProperty("incorrect") && output["incorrect"] == 0 ? "#99FF9D" : "white"}`}}>
             {line}
             <br />
         </div>

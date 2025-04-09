@@ -10,7 +10,8 @@ function App() {
   const [mode, setMode] = useState('start');
   const [code, setCode] = useState('');
   const [output, setOutput] = useState({});
-  const [question, setQuestion] = useState('Q2');
+  const [question, setQuestion] = useState('Q1');
+  const [avatar, setAvatar] = useState('default');
 
   if (mode == "start") {
     document.body.style.backgroundColor = '#511ca2';
@@ -18,15 +19,19 @@ function App() {
 
   return (
     <div className="App">
-      {mode == "start" && (
         <div style = {{marginTop: "275px"}}>
-          <Title color="white">Codehoot!</Title>
-          <Titlecode/>
+          {["start", "entername"].includes(mode) && 
+            <Title color="white" marginTop="275px">Codehoot!</Title>
+          }
+          {
+            ["start", "entername", "lobby"].includes(mode) &&
+            <Titlecode setMode={setMode} mode = {mode} buttonText={mode == "start" ? "Enter" : "OK, go!" } 
+              placeholderText={mode == "start" ? "Game PIN" : "Nickname" } avatar={avatar}/>
+          }
         </div>
-      )}
       {mode == "ingame" && (
         <>
-          <Title>Codehoot!</Title>
+          <Title color = "white">Codehoot!</Title>
           <Form setCode={setCode} code={code} question={question} />
           <Compile code={code} setOutput={setOutput} question={question} />
           <Output output={output} />
