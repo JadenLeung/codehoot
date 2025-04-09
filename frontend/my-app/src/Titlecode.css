@@ -104,6 +104,14 @@
     border-radius: 5px;
   }
 
-  #josh {
-    margin-left: -25px;
+  .host-text {
+    color: white;
+    font-family: 'Montserrat';
+    margin-top:230px;
+    text-align: center;
+  }
+
+  .host-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }

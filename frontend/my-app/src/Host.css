@@ -1,0 +1,102 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top:0px;
+}
+
+.title {
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 40px;
+    margin-top:0px;
+    margin-bottom:0px;
+    font-weight: 1200;
+}
+
+.pin {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size: 80px;
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+.banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.box {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.wait-text {
+    font-family: 'Montserrat';
+    color: white;
+    font-size: 30px;
+}
+
+.player-box {
+    background-color: #260064;
+    padding-right: 20px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.player-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+
+
+}
+
+.avatar {
+    height: 100px;
+    padding-right: 20px;
+    border-radius: 5px;
+}
+
+.corner-container {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    align-items: top;
+    gap: 10px;
+}
+
+.corner-box {
+    background-color: gray;
+    width: 80px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: left;
+
+}
+
+.corner-box p {
+    color: white;
+    padding-right: 15px;
+    font-size: 20px;
+}
+.corner-box i {
+    color: white;
+    padding-left: 10px;
+    font-size: 30px;
+}
