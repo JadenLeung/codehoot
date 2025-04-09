@@ -18,7 +18,7 @@ function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:4000'); // Replace with your server URL
+    const socketInstance = io('http://localhost:3004'); // Replace with your server URL
     setSocket(socketInstance);
 
     // Cleanup the socket connection when the component unmounts
