@@ -109,7 +109,7 @@ def submit():
                     
 
         return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
-        "correct": list(correct), "incorrect": list(incorrect), "numTests": len(correct) + len(incorrect)})
+        "correct": len(correct), "incorrect": len(incorrect), "numTests": len(correct) + len(incorrect)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
