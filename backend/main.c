@@ -6,7 +6,7 @@
 #include <stdbool.h>
 // add(a, b): Returns the sum of a and b
 int add(int a, int b) {
-    return 3;
+    return a + b;
 }
 
 int main(void) {
