@@ -110,6 +110,7 @@ io.on("connection", (socket) => {
             rooms[room].stage = "ingame";
             rooms[room].time = Date.now() + timeLimit;
             io.to(room).emit('started-match', rooms[room].time); // only others in that room
+            socket.emit('started-match2', rooms[room].time)
         }
     });
 

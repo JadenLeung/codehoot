@@ -1,52 +1,84 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Host.css';
 import Title from './Title';
 import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 
-function Host({ players, mode, setMode, question, setQuestion, room, socket }) {
-  
-  function startMatch() {
-    socket.emit("start-match", room, 300000);
-  }
+function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime }) {
 
-  return (
+    const [time, setTime] = useState(0);
+    function startMatch() {
+        socket.emit("start-match", room, 100000);
+    }
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        let t = Math.round((endtime - Date.now()) / 1000);
+        setTime(t >= 0 ? t : 0);
+      }, 100);
+  
+      return () => clearInterval(interval);
+    }, [endtime]);
+
+    useEffect(() => {
+        socket.on("started-match2", (t) => {
+            setEndTime(t)
+            setMode("hostingame");
+        })
+    }, []);
+
+
+    return (
     <div>
         <div className="container">
-            <Rectangle width="900px">
-                <div className="banner">
-                    <div className="box">
-                        <p className = "title">Join at {window.location.href.replace("http://", "")}</p>
+            { mode == "hostlobby" && 
+                <Rectangle width="900px">
+                    <div className="banner">
+                        <div className="box">
+                            <p className = "title">Join at {window.location.href.replace("http://", "")}</p>
+                        </div>
+                        <div className="box">
+                            <p className = "title">Game PIN:</p>
+                            <p className="pin">{room}</p>
+                        </div>
                     </div>
-                    <div className="box">
-                        <p className = "title">Game PIN:</p>
-                        <p className="pin">{room}</p>
-                    </div>
+                </Rectangle>
+            }
+            { mode != "hostlobby" && 
+                <div className="hostlobby-container">
+                    <Rectangle>
+                        <p className = "title">Question {question.substring(1)}</p>
+                    </Rectangle>
+                    <p className="bigtime">{time}</p>
                 </div>
-            </Rectangle>
+            }
         </div>
         <div className="container">
-            {players.length == 0 && 
+            {players.length == 0 && mode == "hostlobby" && 
                 <Rectangle backgroundColor="#260064" width="350px">
                     <p className="wait-text">Queue is empty</p>
                 </Rectangle>
             }
             {players.length != 0 && 
                 <div>
-                    <div className = "player-container">
-                        {players.map((player) => (
-                        <div className="player-box"  key={player}>
-                            <img src={`/data/avatars/${player.avatar}.png`} alt="Avatar" className="avatar"/>
-                            <p className="wait-text">{player.name}</p>
+                    { mode == "hostlobby" &&
+                        <div className = "player-container">
+                            {players.map((player) => (
+                            <div className="player-box"  key={player}>
+                                <img src={`/data/avatars/${player.avatar}.png`} alt="Avatar" className="avatar"/>
+                                <p className="wait-text">{player.name}</p>
+                            </div>
+                            ))}
                         </div>
-                        ))}
-                    </div>
+                    }
                     <div className = "corner-container">
                         <div className="corner-box">
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
-                        </div>
-                        <Mainbutton fontSize="30px" onClick={startMatch}>Start</Mainbutton>
+                        </div> 
+                        { mode == "hostlobby" &&
+                            <Mainbutton fontSize="30px" onClick={startMatch}>Start</Mainbutton>
+                        }
                     </div>
                 </div>
 

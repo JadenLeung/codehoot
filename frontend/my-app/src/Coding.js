@@ -12,7 +12,8 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(Math.round((endtime - Date.now()) / 1000));
+      let t = Math.round((endtime - Date.now()) / 1000);
+      setTime(t >= 0 ? t : 0);
     }, 100);
 
     return () => clearInterval(interval);
@@ -22,8 +23,11 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
     <div>
           <Title color = "white">Codehoot!</Title>
           <Form setCode={setCode} code={code} question={question} />
-          <Compile code={code} setOutput={setOutput} question={question} />
-          <Output output={output} />
+          {time > 0 && <div>
+                <Compile code={code} setOutput={setOutput} question={question} />
+                <Output output={output} />
+              </div>
+          }
           <p className="time">{time}</p>
           <div className="profile">
             <img className="profile-avatar" src={`/data/avatars/${avatar}.png`} alt="Avatar"/>

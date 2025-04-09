@@ -64,9 +64,9 @@ function App() {
               setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName}/>
           }
         </div>
-      {mode === "hostlobby"
+      {(mode === "hostlobby" || mode === "hostingame")
         && <Host players={players} mode={mode} setMode={setMode} question={question} 
-          setQuestion={setQuestion} room={room} data={data} socket={socket}/>
+          setQuestion={setQuestion} room={room} data={data} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
       {mode === "ingame" && (
         <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
