@@ -1,0 +1,37 @@
+.time {
+    color: white;
+    font-size: 30px;
+    position: fixed;
+    top: 0px;
+    right: 20px;
+    
+    border-radius: 50%;       /* Makes it round */
+    padding: 15px;            /* Space inside the circle */
+    text-align: center;       /* Center the text */
+    background-color: #44178D; /* Optional */
+    width: 60px;              /* Set width and height for a perfect circle */
+    height: 60px;
+    line-height: 30px;        /* Adjust line height to center text vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile {
+    top: 0px;
+    left: 20px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.name {
+    color: white;
+    font-size: 20px;
+}
+
+.profile-avatar {
+    height: 40px;
+    margin-right: 10px;
+}

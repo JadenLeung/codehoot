@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import './App.css';
-import Form from './Form';
 import Title from './Title';
-import Compile from './Compile';
-import Output from './Output';
 import Titlecode from './Titlecode';
 import Host from './Host';
+import Coding from './Coding';
 
 function App() {
   const [mode, setMode] = useState('start');
   const [code, setCode] = useState('');
+  const [name, setName] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
   const [avatar, setAvatar] = useState('nomair');
@@ -18,6 +17,7 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [room, setRoom] = useState(null);
   const [data, setData] = useState({});
+  const [endtime, setEndTime] = useState(0);
 
   useEffect(() => {
     const socketInstance = io('http://localhost:3004'); // Replace with your server URL
@@ -37,6 +37,8 @@ function App() {
           setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);
         } else if (action == "leave") {
           setPlayers(prevPlayers => prevPlayers.filter((player) => player.id !== id));
+        } else if (action == "avatar") {
+          setPlayers(prevPlayers => prevPlayers.map((player) => (player.id == id) ? { ...player, avatar : avatar} : player));
         }
       })
       return () => {
@@ -59,19 +61,16 @@ function App() {
             ["start", "entername", "lobby", "hostlobby"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data}/>
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName}/>
           }
         </div>
       {mode === "hostlobby"
-        && <Host players={players} mode={mode} setMode={setMode} question={question} setQuestion={setQuestion} room={room} data={data}/>
+        && <Host players={players} mode={mode} setMode={setMode} question={question} 
+          setQuestion={setQuestion} room={room} data={data} socket={socket}/>
       }
       {mode === "ingame" && (
-        <>
-          <Title color = "white">Codehoot!</Title>
-          <Form setCode={setCode} code={code} question={question} />
-          <Compile code={code} setOutput={setOutput} question={question} />
-          <Output output={output} />
-        </>
+        <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
+        endtime={endtime} data={data} socket={socket} name={name} avatar={avatar}></Coding>
       )}
     </div>
   )

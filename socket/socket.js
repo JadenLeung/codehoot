@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
                 continue;
             }
             let room = "CS" + i;
-            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}};
+            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1};
             console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
             socket.join(String(i));
             socket.emit("created-room", room, rooms[room]);
@@ -87,6 +87,13 @@ io.on("connection", (socket) => {
             cb("Game already ended");
         }
     }
+
+    socket.on("change-avatar", (room, avatar) => {
+        if (rooms[room]) {
+            rooms[room].userdata[socket.id].avatar = avatar;
+            io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", avatar, "avatar");
+        }
+    })
     
     socket.on("leave-room", (room) => {
         room = String(room);
@@ -96,39 +103,16 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("start-match", (room) => {
+    socket.on("start-match", (room, timeLimit) => {
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "lobby") {
+            socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
-            rooms[room].round = 0;
-            if (rooms[room].data.type == "teamblind") {
-                console.log("Setting match");
-                if (rooms[room].data.startblind == 0 || rooms[room].userids.length == 1) {
-                    rooms[room].data.blinded = rooms[room].userids[0];
-                } else {
-                    rooms[room].data.blinded = rooms[room].userids[1];
-                }
-                rooms[room].data.time = 0;
-                rooms[room].data.startblind = 0;
-            }
-            io.to(room).emit("started-match", rooms[room], 
-                getShuffle(rooms[room].data.dims[rooms[room].round], rooms[room].data.shufflearr[rooms[room].round] ?? false));
-            io.emit("room_change", rooms);
+            rooms[room].time = Date.now() + timeLimit;
+            io.to(room).emit('started-match', rooms[room].time); // only others in that room
         }
     });
-    socket.on("solved", (room, time) => {
-        room = String(room);
-        console.log("Someone emitted solved", rooms[room].stage, time, socket.id);
-        if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-            rooms[room].solved[socket.id] = time;
-            console.log("Beforer append, ", rooms, rooms[room], rooms[room].solved,rooms[room].solved[socket.id]);
-            updateTimes(room);
-            if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-                rooms[room].solvedarr[rooms[room].round] = rooms[room].solved;
-                console.log("Append solved", JSON.stringify(rooms[room].solvedarr));
-            }
-        }
-    });
+
     socket.on("next-round", (room) => {
         room = String(room);
         console.log("Attempting next round");

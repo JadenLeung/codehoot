@@ -4,7 +4,11 @@ import Title from './Title';
 import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 
-function Host({ players, mode, setMode, question, setQuestion, room }) {
+function Host({ players, mode, setMode, question, setQuestion, room, socket }) {
+  
+  function startMatch() {
+    socket.emit("start-match", room, 300000);
+  }
 
   return (
     <div>
@@ -42,7 +46,7 @@ function Host({ players, mode, setMode, question, setQuestion, room }) {
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
                         </div>
-                        <Mainbutton fontSize="30px">Start</Mainbutton>
+                        <Mainbutton fontSize="30px" onClick={startMatch}>Start</Mainbutton>
                     </div>
                 </div>
 

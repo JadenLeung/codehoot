@@ -4,7 +4,8 @@ import Title from './Title';
 import Mainbutton from './Mainbutton';
 import Rectangle from './Rectangle';
 
-function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, setAvatar, socket, setRoom, room, setData}) {
+function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, 
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -18,6 +19,11 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
     if (errorHeight == "-70px") {
       setErrorHeight("-20px");
     }
+  }
+
+  function changeAvatar(avatar) {
+    setAvatar(avatar);
+    socket.emit("change-avatar", room, avatar);
   }
 
   function submitButton() {
@@ -37,6 +43,7 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
             });
         }
     } else {
+        setName(text);
         if (text == "") {
           riseError("ⓘ Assertion failed, nickname must not be null");
         } else {
@@ -72,12 +79,24 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         setErrorHeight("-70px");
       });
 
+      socket.on("started-match", (time) => {
+        if (mode == "lobby") {
+          setMode("ingame");    
+          setErrorHeight("-70px");
+          setEndTime(time);
+        } else if (mode == "changename") {
+          setMode("start");
+          riseError("ⓘ Game already started");
+        }
+      });
+
       return () => {
         socket.off("created-room");
         socket.off("joined-room");
+        socket.off("started-match");
       };
     }
-  }, [socket]);
+  }, [socket, mode]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -117,9 +136,8 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
               <Title color="white">Welcome, {text}</Title>
               <p className="avatar-text">Select your avatar</p>
               {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
-              onClick={() => {setAvatar(pic)}}/>))}
+              onClick={() => {changeAvatar(pic)}}/>))}
               <br></br>
-              <Mainbutton onClick={() => setMode("ingame")}>Continue</Mainbutton>
           </div>
         }
         <div className="circle2" style={{right:right.circle}}></div>
