@@ -1,0 +1,109 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rectangle {
+    margin-top: 40px;
+    padding-top: 10px;
+    width: 280px;
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+.input-code {
+    width: 220px;              
+    padding: 10px 15px;                
+    font-size: 16px;                     
+    border: 1px solid #cccccc;          
+    border-radius: 5px;                 
+    background-color: white;       
+    box-shadow: none;               
+    outline: none;                   
+    text-align: center;            
+    font-family: 'Montserrat';
+    font-weight: bold;  
+  }
+
+  .input-code::placeholder {
+    color:#b3b3b3;
+  }
+  
+  .equilateral-triangle {
+    position: fixed; 
+    bottom: -000px;
+    border-left: 500px solid transparent;  /* Left transparent border */
+    border-right: 500px solid transparent; /* Right transparent border */
+    border-bottom: 700px solid #451592;    /* Bottom border with color (equilateral triangle) */
+    z-index: -1;
+    transition: left 1s ease;
+  }
+  
+  
+  .circle {
+    position: fixed;             /* Fixes the circle in the viewport */
+    top: -500px;                   /* Distance from the top of the page */
+    width: 1000px;                /* Width of the circle */
+    height: 1000px;               /* Height of the circle */
+    background-color: #4a1798;   /* Circle color */
+    border-radius: 50%;          /* Makes the shape round */
+    z-index: -2;               /* Ensure the circle appears above other elements */
+    transition: left 1s ease;
+  }
+
+  .circle2 {
+    position: fixed;             /* Fixes the circle in the viewport */
+    bottom: -1000px;                   /* Distance from the top of the page */
+    width: 1500px;                /* Width of the circle */
+    height: 1500px;               /* Height of the circle */
+    background-color: #4a1798;   /* Circle color */
+    border-radius: 50%;          /* Makes the shape round */
+    z-index: -2;               /* Ensure the circle appears above other elements */
+    transition: right 1s ease;
+  }
+
+  .C {
+    top: 40px;
+    font-size: 100px;
+    position: fixed; 
+    color: #4c1a9b;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    transition: right 1s ease;
+  }
+
+  .error {
+    position: fixed;  
+    margin-top: 40px;
+    width: 100%;
+    height: 30px;
+    background-color: #e21a3b;
+    border-radius: 5px;
+    padding-bottom: 40px;
+    text-align: left;
+    transition: bottom 0.3s ease;
+  }
+
+  .error-text {
+    color: white;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .avatar-text {
+    color: white;
+    font-family: 'Montserrat';
+  }
+
+  .image {
+    height: 150px;
+    margin: 10px;
+    border-radius: 5px;
+  }
+
+  #josh {
+    margin-left: -25px;
+  }

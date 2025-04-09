@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import './Form.css';
 
-function Form({setCode, code}) {
-
+function Form({ setCode, code, question }) {
   useEffect(() => {
-    fetch('/data/startercode.c')
+    fetch(`http://127.0.0.1:5004/code?question=${question}`)
       .then((res) => res.text())
       .then((text) => setCode(text))
       .catch((err) => {
