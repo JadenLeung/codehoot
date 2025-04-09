@@ -7,7 +7,7 @@ import Output from './Output';
 
 function App() {
   const [code, setCode] = useState('');
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
 
   return (

@@ -3,16 +3,23 @@ import './Output.css';
 
 function Output({output}) {
 
-    const formattedOutput = output.split('\n').map((line, index) => (
-        <>
+    function formattedOutput(text) {
+      if (!text) {
+        return "";
+      }
+      
+      return text.split('\n').map((line) => (
+        <div style = {{color: `${output.hasOwnProperty("error") ? "red" : output.hasOwnProperty("incorrect") && output["incorrect"] == 0 ? "green" : "white"}`}}>
             {line}
             <br />
-        </>
+        </div>
       ));
+    }
 
   return (
     <div>
-        <p className="output-text">{formattedOutput}</p>
+        <p className="output-text">{output.state ? output.state : output.hasOwnProperty("error") 
+                                ?  formattedOutput(output.error + "\n" + output.details) : formattedOutput(output.output)}</p>
     </div>
   );
 }

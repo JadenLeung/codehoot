@@ -4,9 +4,9 @@ import './Compile.css';
 function Compile({code, setOutput, question}) {
 
   async function submitButton() {
-    setOutput("Compiling...");
+    setOutput({state: "Compiling..."});
     try {
-        const response = await fetch("http://127.0.0.1:5003/submit", {
+        const response = await fetch("http://127.0.0.1:5004/submit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -15,11 +15,7 @@ function Compile({code, setOutput, question}) {
         });
         const data = await response.text();
         console.log(data)
-        if (!JSON.parse(data).hasOwnProperty("output")) {
-            setOutput(JSON.parse(data).error + "\n" + JSON.parse(data).details);
-        } else {
-            setOutput(JSON.parse(data).output);
-        }
+        setOutput(JSON.parse(data))
     } catch (error) {
         setOutput(`Could not connect to server\n${error}`);
     }
