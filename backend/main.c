@@ -4,15 +4,13 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <stdbool.h>
-// add(a, b): Returns the sum of a and b
-int add(int a, int b) {
-    return 3;
+// last_digit(a): Gets the first digit of a
+int last_digit(int a) {
+    // Your code here
 }
 
 int main(void) {
     int a = 0;
-    int b = 0;
     scanf("%d", &a);
-    scanf("%d", &b);
-    printf("%d\n", add(a, b));
+    printf("%d\n", last_digit(a));
 }

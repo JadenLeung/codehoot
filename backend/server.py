@@ -57,18 +57,21 @@ def submit():
     try:
         # Compile the code with AddressSanitizer enabled
         compile_process = subprocess.run(
-            ['clang', '-fsanitize=address', '-fsanitize=leak', '-std=c99', '-g', '-Wall', 'main.c'],
+            ['clang', '-fsanitize=address', '-fsanitize=leak', '-std=c99', '-g', '-Wall', '-Werror', 'main.c'],
             capture_output=True, text=True
         )
 
-        if compile_process.returncode != 0:
+        if compile_process.returncode != 0 or len(compile_process.stderr) > 0:
             return jsonify({"error": "Compilation failed", "details": compile_process.stderr}), 500
         
         files = glob.glob(f"./code/{question}/tests/*.in")
         files.sort()
         print(files)
         
-        for file in files:
+
+        correct = set([])
+        incorrect = set([])
+        for i, file in enumerate(files):
             print(file)
             with open(file, "r") as input_file:
                 run_process = subprocess.Popen(
@@ -98,9 +101,15 @@ def submit():
                 expected = expected.read()
                 print(str(res == expected), expected)
                 if (res != expected):
-                    return jsonify({"output": f"Failed test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
-            
-        return jsonify({"output": "All test cases passed"})
+                    if  i == 0:
+                        return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
+                    incorrect.add(i)
+                else:
+                    correct.add(i)
+                    
+
+        return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
+        "correct": list(correct), "incorrect": list(incorrect), "numTests": len(correct) + len(incorrect)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -113,4 +122,4 @@ def parse_asan(message):
 
 
 if __name__ == '__main__':
-    app.run(port=5003, debug=True)
+    app.run(port=5004, debug=True)
