@@ -115,6 +115,28 @@
     margin-top:50px;
 }
 
+
+
+.plustime {
+    color: white;
+    font-size: 60px;
+    border-radius: 50%;       /* Makes it round */
+    text-align: center;       /* Center the text */
+    background-color: #44178D; /* Optional */
+    width: 50px;              /* Set width and height for a perfect circle */
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:-175px;
+    transition: background-color 0.3s;
+}
+
+.plustime:hover {
+    cursor: pointer;
+    background-color: #A36AFE;
+}
+
 .hostlobby-container {
     display: flex;
     flex-direction: column;

@@ -131,6 +131,13 @@ io.on("connection", (socket) => {
         io.to(room).emit("time-change", rooms[room].time);
     })
 
+    socket.on("add-time", (room, add) => {
+        console.log("Add Time")
+        rooms[room].time = rooms[room].time + add * 1000;
+        io.to(room).emit("time-change", rooms[room].time);
+    })
+
+
     function updateTimes(room) {
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage != "lobby") {

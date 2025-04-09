@@ -19,6 +19,10 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
         }
     }
 
+    function addTime() {
+        socket.emit("add-time", room, config.timeIncrement)
+    }
+
     useEffect(() => {
       const interval = setInterval(() => {
         let t = Math.round((endtime - Date.now()) / 1000);
@@ -58,6 +62,9 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                         <p className = "title">Question {question.substring(1)}</p>
                     </Rectangle>
                     <p className="bigtime">{time}</p>
+                    { time > 0 &&
+                        <p className="plustime" onClick={addTime}>+</p>
+                    }
                 </div>
             }
         </div>
