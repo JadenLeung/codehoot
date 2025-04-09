@@ -1,11 +1,11 @@
 import React from 'react';
 import './Title.css';
 
-function Title() {
+function Title({children, color}) {
 
   return (
     <div >
-      <h6>CodeHoot!</h6>
+      <h6 style={{color: color}}>{children}</h6>
     </div>
   );
 }

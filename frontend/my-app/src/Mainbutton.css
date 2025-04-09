@@ -1,0 +1,11 @@
+button {
+    font-family: 'Montserrat';
+    background-color: #333333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #555555;
+}
