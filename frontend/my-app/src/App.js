@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-        <div style = {{marginTop: mode != "lobby" ? "275px" : "50px"}}>
+        <div style = {{marginTop: ["start", "entername"].includes(mode) ? "275px" : "50px"}}>
           {["start", "entername"].includes(mode) && 
             <Title color="white" marginTop="275px">Codehoot!</Title>
           }

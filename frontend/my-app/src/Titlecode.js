@@ -73,7 +73,8 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
             <p className="avatar-text">Select your avatar</p>
             {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
             onClick={() => {setAvatar(pic)}}/>))}
-
+            <br></br>
+            <Mainbutton onClick={() => setMode("ingame")}>Continue</Mainbutton>
         </div>
       }
       <div className="circle2" style={{right:right.circle}}></div>
