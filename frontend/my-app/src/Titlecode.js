@@ -40,10 +40,11 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         if (text == "") {
           riseError("ⓘ Assertion failed, nickname must not be null");
         } else {
-          socket.emit('join-room', room, text, (res) => {
+          socket.emit('join-room', room, text, "nomair", (res) => {
             if (res == "Game already started" || res == "Game already ended") {
               riseError("ⓘ " + res);
               setMode("start");  
+              setText("");
             } else if (res == "Name is taken") {
               riseError("ⓘ " + res);
             }
@@ -104,7 +105,8 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         { mode != "lobby" && mode != "hostlobby" &&
           <Rectangle marginTop="40px" width="280px">
               <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : 16}
-                  onChange={(event) => {setText(event.target.value)}} onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
+                  onChange={(event) => {setText(mode == "start" ? event.target.value.toUpperCase() : event.target.value)}} 
+                  onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
               <Mainbutton width = "250px" onClick={submitButton}>{buttonText}</Mainbutton>
           </Rectangle>
         }

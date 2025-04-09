@@ -29,6 +29,22 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("room-change", (d, id, name, avatar, action) => {
+        if (action == "join") {
+          setData(d);
+          setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);
+        } else if (action == "leave") {
+          setPlayers(prevPlayers => prevPlayers.filter((player) => player.id !== id));
+        }
+      })
+      return () => {
+        socket.off("room-change");
+      };
+    }
+  }, [socket]);
+
   if (mode === "start") {
     document.body.style.backgroundColor = '#511ca2';
   }

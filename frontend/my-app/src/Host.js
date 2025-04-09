@@ -6,10 +6,6 @@ import Mainbutton from './Mainbutton';
 
 function Host({ players, mode, setMode, question, setQuestion, room }) {
 
-    useEffect(() => {
-
-    }, players);
-
   return (
     <div>
         <div className="container">

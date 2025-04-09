@@ -62,11 +62,11 @@ io.on("connection", (socket) => {
         cb(rooms.hasOwnProperty(room));
     });
 
-    socket.on("join-room", (room, name, failedcb) => {
-        joinRoom(room, name, failedcb);
+    socket.on("join-room", (room, name, avatar, failedcb) => {
+        joinRoom(room, name, avatar, failedcb);
     });
 
-    function joinRoom(room, name, cb) {
+    function joinRoom(room, name, avatar, cb) {
         room = String(room);
         console.log("Attempting to join room, data is ", rooms[room])
         if (rooms.hasOwnProperty(room)) {
@@ -76,10 +76,10 @@ io.on("connection", (socket) => {
                 cb("Name is taken");
             } else if (!rooms[room].userids.includes(socket.id)) {
                 rooms[room].userids.push(socket.id);
-                rooms[room].userdata[socket.id] = {name: name};
+                rooms[room].userdata[socket.id] = {name: name, avatar: avatar};
                 socket.join(String(room));
                 console.log("Current rooms after joining", io.sockets.adapter.rooms, socket.id);
-                io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "join");
+                io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, name, avatar, "join");
                 io.to(socket.id).emit("joined-room", rooms[room].stage);
                 console.log(`${socket.id} joined room ${room}. Updated Data: ${JSON.stringify(rooms)}`);
             }
@@ -266,7 +266,7 @@ io.on("connection", (socket) => {
                 if (player == rooms[room].host) {
                     delete rooms[room];
                 } else if (rooms[room].userids.includes(player)){
-                    io.to(rooms[room].host).emit("left_room", room, socket.id, rooms[room].names);
+                    io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", "", "leave");
                     rooms[room].userids = rooms[room].userids.filter((p) => p != player);
                 }
                 console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
