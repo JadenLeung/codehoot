@@ -22,7 +22,6 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
         console.log(data)
         setOutput(JSON.parse(data))
         if (JSON.parse(data).hasOwnProperty("correct")) {
-          alert(JSON.parse(data).correct)
           socket.emit("submit-score", t, JSON.parse(data).correct, room, (str) => {
             alert(str);
           })

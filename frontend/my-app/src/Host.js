@@ -8,10 +8,10 @@ import config from "./config.js";
 function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime }) {
 
     const [time, setTime] = useState(999);
-    console.log(JSON.stringify(config), question, config.time[question])
+    console.log(JSON.stringify(config), question, config.testcases[question])
     function startMatch() {
         if (mode == "hostlobby") {
-            socket.emit("start-match", room, config.time[question] * 1000);
+            socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question]);
         } else if (time == 0) {
             socket.emit("view-leaderboard", room);
         } else {

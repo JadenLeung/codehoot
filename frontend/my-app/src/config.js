@@ -3,6 +3,10 @@ const config = {
         Q1: 10,
         Q2: 300
     },
+    testcases: {
+        Q1: 2,
+        Q2: 2
+    },
     timeIncrement: 30,
 }
 
