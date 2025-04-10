@@ -28,12 +28,17 @@ signal.signal(signal.SIGINT, terminate_subprocesses)
 def hello_world():
     return 'Hello World'
 
+@app.route('/public')
+def get_public():
+    question = request.args.get('question')
 
 @app.route('/code')
 def get_code():
     question = request.args.get('question')
     with open(f"code/{question}/startcode.c", "r") as f:
-        return f.read()
+        with open(f"code/{question}/tests/public.in", "r") as infile:
+            with open(f"code/{question}/tests/public.expect", "r") as expectfile:
+                return jsonify({"code": f.read(), "in": infile.read(), "expect": expectfile.read()})
 
 @app.route('/submit', methods=['POST'])
 def submit():
