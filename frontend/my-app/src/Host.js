@@ -58,6 +58,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
 
         return (() => {
             socket.off("started-match2");
+            socket.off("view-leaderboard");
         })
     }, []);
 

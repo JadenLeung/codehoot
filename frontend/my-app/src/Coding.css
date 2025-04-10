@@ -43,3 +43,23 @@
     margin-right: 15px;
     border-radius: 5px;
 }
+
+.leaderboard-client-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:20px;
+    flex-direction: column;
+}
+
+.ranktext {
+    color:white;
+    font-size: 25px;
+}
+
+.score-text {
+    color:white;
+    font-size: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

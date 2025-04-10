@@ -1,7 +1,7 @@
 import React from 'react';
 import './Title.css';
 
-function Title({children, color, marginTop}) {
+function Title({children, color, marginTop = "15px"}) {
 
   return (
     <div >

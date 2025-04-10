@@ -172,7 +172,8 @@ io.on("connection", (socket) => {
             console.log("leaderboard is", leaderboard, "old is ", oldleaderboard);
             for (let i = 0; i < leaderboard.length; i++) {
                 let id = leaderboard[i].id;
-                socket.to(id).emit("view-score", leaderboard, oldleaderboard, points[id], i);
+                socket.to(id).emit("view-score", leaderboard, oldleaderboard, points[id], i, 
+                    rooms[room].userdata[id].passed ? rooms[room].userdata[id].passed : 0);
             }
             socket.emit("view-leaderboard", leaderboard, oldleaderboard, points, scores, rooms[room]);
         }
