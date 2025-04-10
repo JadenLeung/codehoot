@@ -5,9 +5,11 @@ import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 import config from "./config.js";
 
-function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime }) {
+function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime, setData }) {
 
     const [time, setTime] = useState(999);
+    const [leaderboardData, setLeaderboardData] = useState({});
+
     console.log(JSON.stringify(config), question, config.testcases[question])
     function startMatch() {
         if (mode == "hostlobby") {
@@ -23,6 +25,14 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
         socket.emit("add-time", room, config.timeIncrement)
     }
 
+    function dashString(testcases) {
+        let str = "----";
+        for (let i = 0; i < testcases - 2; i++) {
+            str += "----";
+        }
+        return str;
+    }
+
     useEffect(() => {
       const interval = setInterval(() => {
         let t = ((endtime - Date.now()) / 1000);
@@ -36,6 +46,16 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
         socket.on("started-match2", (t) => {
             setEndTime(t)
             setMode("hostingame");
+        });
+        socket.on("view-leaderboard", (leaderboard, oldleaderboard, points, scores, d) => {
+            setData(d);
+            setMode("hostresults");
+            setLeaderboardData({ leaderboard, oldleaderboard, points, scores });
+            console.log("Viewing leaderboard", { leaderboard, oldleaderboard, points, scores })
+        });
+
+        return (() => {
+            socket.off("started-match2");
         })
     }, []);
 
@@ -56,7 +76,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                     </div>
                 </Rectangle>
             }
-            { mode != "hostlobby" && 
+            { mode == "hostingame" && 
                 <div className="hostlobby-container">
                     <Rectangle>
                         <p className = "title">Question {question.substring(1)}</p>
@@ -65,6 +85,27 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                     { time > 0 &&
                         <p className="plustime" onClick={addTime}>+</p>
                     }
+                </div>
+            }
+            { mode == "hostresults" && 
+                <div>
+                <div className="bargraph">
+                    {leaderboardData.scores.map((arr, i) => (
+                        <div key={i}>
+                            <Rectangle height={arr.length * (400 / players.length) + "px"} width="100px" 
+                                backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
+                            <p className="bartext">{arr.length}</p>
+                        </div>
+                    ))}
+                </div>
+                <p className="bartext">{`0${dashString(config.testcases[question])}Tests Passed${dashString(config.testcases[question])}${config.testcases[question]}`}</p>
+                </div>
+            }
+            { mode == "hostleaderboard" && 
+                <div>
+                    {Object.keys(leaderboardData.points).map((point, i) => (
+                        <p>{point + " " + leaderboardData.points[point]}</p>
+                    ))}
                 </div>
             }
         </div>
@@ -91,7 +132,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
                         </div> 
-                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : "Results"}</Mainbutton>
+                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : mode == "hostingame" ? "Results" : "View Leaderboard"}</Mainbutton>
                     </div>
                 </div>
 

@@ -174,7 +174,7 @@ io.on("connection", (socket) => {
                 let id = leaderboard[i].id;
                 socket.to(id).emit("view-score", leaderboard, oldleaderboard, points[id], i);
             }
-            socket.emit("view-leaderboard", leaderboard, oldleaderboard, points[socket.id], 0);
+            socket.emit("view-leaderboard", leaderboard, oldleaderboard, points, scores, rooms[room]);
         }
     })
 
