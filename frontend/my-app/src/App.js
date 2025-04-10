@@ -18,6 +18,7 @@ function App() {
   const [room, setRoom] = useState(null);
   const [data, setData] = useState({});
   const [endtime, setEndTime] = useState(0);
+  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     const socketInstance = io('http://localhost:3004'); // Replace with your server URL
@@ -43,7 +44,8 @@ function App() {
       })
       socket.on("time-change", (t) => {
         setEndTime(t);
-      })
+      });
+
       return () => {
         socket.off("room-change");
         socket.off("time-change");
@@ -62,20 +64,20 @@ function App() {
             <Title color="white" marginTop="275px">Codehoot!</Title>
           }
           {
-            ["start", "entername", "lobby", "hostlobby"].includes(mode) &&
+            ["start", "entername", "lobby", "hostlobby", "results"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName}/>
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} setQuestion={setQuestion}/>
           }
         </div>
-      {(["hostlobby", "hostingame", "hostresults", "hostleaderboard"].includes(mode))
+      {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
         && <Host players={players} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
       {["ingame", "results"].includes(mode) && (
         <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
         endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room} mode={mode}
-          setMode={setMode}
+          setMode={setMode} points={points} setPoints={setPoints}
         ></Coding>
       )}
     </div>

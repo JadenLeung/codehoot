@@ -4,14 +4,16 @@ import './Form.css';
 
 function Form({ setCode, code, question }) {
   useEffect(() => {
-    fetch(`http://127.0.0.1:5004/code?question=${question}`)
+    if (question) {
+      fetch(`http://127.0.0.1:5004/code?question=${question}`)
       .then((res) => res.text())
       .then((text) => setCode(text))
       .catch((err) => {
         console.error("Failed to load starter code:", err);
         setCode("// Failed to load starter code");
       });
-  }, []);
+    }
+  }, [question]);
 
   return (
     <div className="Form">

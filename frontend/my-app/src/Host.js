@@ -9,14 +9,19 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
 
     const [time, setTime] = useState(999);
     const [leaderboardData, setLeaderboardData] = useState({});
-
-    console.log(JSON.stringify(config), question, config.testcases[question])
     function startMatch() {
         if (mode == "hostlobby") {
             socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
         } else if (mode == "hostresults") {
-            setMode("hostleaderboard")
-        } else if (time == 0) {
+            if (question == "Q" + config.questions) {
+                setMode("hostpodium")
+            } else {
+                setMode("hostleaderboard")
+            }
+        } else if (mode == "hostleaderboard") {
+            const newquestion = "Q" + (+(question.slice(1)) + 1);
+            socket.emit("next-round", room, config.time[newquestion] * 1000, config.testcases[newquestion], config, newquestion);
+        } else if (time == 0 && mode == "hostingame") {
             socket.emit("view-leaderboard", room);
         } else {
             socket.emit("end-round", room);
@@ -45,7 +50,8 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
     }, [endtime]);
 
     useEffect(() => {
-        socket.on("started-match2", (t) => {
+        socket.on("started-match2", (t, q) => {
+            setQuestion(q);
             setEndTime(t)
             setMode("hostingame");
         });
@@ -121,6 +127,48 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                     ))}
                 </div>
             }
+            { mode == "hostpodium" && 
+                <div>
+                <div className="bargraph">
+                    {leaderboardData.leaderboard.length >= 3 && 
+                        <div className="bronze">
+                            <div className="player-box2">
+                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[2].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[2].id].name}</p>
+                            </div>
+                            <Rectangle height="150px" width="300px" 
+                                backgroundColor="#cd7f32"><p className="bartext2">3</p></Rectangle>
+                            <p className="bartext">{leaderboardData.leaderboard[2].points}</p>
+                        </div>
+                    }
+                    {leaderboardData.leaderboard.length >= 1 && 
+                        <div className="bronze">
+                            <div className="player-box2">
+                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[0].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[0].id].name}</p>
+                            </div>
+                            <Rectangle height="400px" width="300px" 
+                                backgroundColor="gold"><p className="bartext2">1</p></Rectangle>
+                            <p className="bartext">{leaderboardData.leaderboard[0].points}</p>
+                        </div>
+                    }
+                    {leaderboardData.leaderboard.length >= 2 && 
+                        <div className="bronze">
+                            <div className="player-box2">
+                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[1].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[1].id].name}</p>
+                            </div>
+                            <Rectangle height="250px" width="300px" 
+                                backgroundColor="#c0c0c0"><p className="bartext2">2</p></Rectangle>
+                            <p className="bartext">{leaderboardData.leaderboard[1].points}</p>
+                        </div>
+                    }
+
+
+                </div>
+                <p className="bartext">Good job to all participants!</p>
+                </div>
+            }
         </div>
         <div className="container">
             {players.length == 0 && mode == "hostlobby" && 
@@ -128,7 +176,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                     <p className="wait-text">Queue is empty</p>
                 </Rectangle>
             }
-            {players.length != 0 && 
+            {players.length != 0 && mode != "hostpodium" &&
                 <div>
                     { mode == "hostlobby" &&
                         <div className = "player-container">
@@ -145,7 +193,8 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
                         </div> 
-                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : mode == "hostingame" ? "Results" : mode == "hostresults" ? "View Leaderboard" : "Next Round"}</Mainbutton>
+                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? 
+                            "Skip" : mode == "hostingame" ? "Results" : mode == "hostresults" ? (question == "Q" + config.questions ? "Podium" : "View Leaderboard") : "Next Round"}</Mainbutton>
                     </div>
                 </div>
 

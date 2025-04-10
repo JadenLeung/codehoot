@@ -8,14 +8,14 @@ import config from './config';
 import Rectangle from './Rectangle';
 
 
-function Coding ({setCode, code, question, output, setOutput, endtime, socket, name, avatar, room, setMode, mode}) {
+function Coding ({setCode, code, question, output, setOutput, endtime, socket, 
+    name, avatar, room, setMode, mode, points, setPoints}) {
 
   const [time, setTime] = useState(0);
   const [leaderboardData, setLeaderboardData] = useState({});
   const [score, setScore] = useState(0);
 
   function getGrade(score) {
-    console.log("score is " + score)
     let finalgrade = "F"; // default
     const grades = Object.keys(config.grades)
       .map(Number)               // convert string keys to numbers
@@ -55,10 +55,11 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
   }, [endtime]);
 
   useEffect(() => {
-    socket.on("view-score", (leaderboard, oldleaderboard, points, index, correct) => {
+    socket.on("view-score", (leaderboard, oldleaderboard, p, index, correct) => {
       setScore(leaderboard[index]);
       setMode("results");
-      setLeaderboardData({ leaderboard, oldleaderboard, points, index, correct });
+      setPoints(prev => prev + p);
+      setLeaderboardData({ leaderboard, oldleaderboard, points: p, index, correct });
     });
 
     return () => {
@@ -79,7 +80,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
           }
           {
             mode == "results" && <Rectangle className="time" width="120px" marginTop="0px" backgroundColor="black">
-              <p className="score-text">0</p>
+              <p className="score-text">{points}</p>
             
             </Rectangle>
           }
@@ -101,7 +102,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
         <div className="leaderboard-client-container">
           <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct}/{config.testcases[question]}</Title></Rectangle>
           <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title>
-          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + leaderboardData.points}</Title></Rectangle>
+          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + JSON.stringify(leaderboardData.points)}</Title></Rectangle>
           <p className="ranktext">You're in {getPlace((leaderboardData.index + 1))}</p>
         </div>
       }

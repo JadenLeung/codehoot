@@ -1,4 +1,5 @@
 const config = {
+    questions: 2,
     time: {
         Q1: 30,
         Q2: 300

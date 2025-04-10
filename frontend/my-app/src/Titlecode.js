@@ -5,7 +5,7 @@ import Mainbutton from './Mainbutton';
 import Rectangle from './Rectangle';
 
 function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName}) {
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -79,9 +79,10 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         setErrorHeight("-70px");
       });
 
-      socket.on("started-match", (time) => {
-        if (mode == "lobby") {
+      socket.on("started-match", (time, q) => {
+        if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
+          setQuestion(q);
           setErrorHeight("-70px");
           setEndTime(time);
         } else if (mode == "changename") {
@@ -115,42 +116,44 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
 
   const picList = ["nomair", "watson", "urs", "aryo", "josh"]
 
-  return (
-    <>
-      <div className="container">
-        <div className="circle" style={{left:left.circle}}></div>
-        <div className="C" style={{right:right.text}}>CS136</div>
-        <div className="equilateral-triangle"  style={{left:left.triangle}}></div>
-        { mode != "lobby" && mode != "hostlobby" &&
-          <Rectangle marginTop="40px" width="280px">
-              <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : 16}
-                  onChange={(event) => {setText(mode == "start" ? event.target.value.toUpperCase() : event.target.value)}} 
-                  onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
-              <Mainbutton width = "250px" onClick={submitButton}>{buttonText}</Mainbutton>
-          </Rectangle>
-        }
-        { mode == "lobby" &&
+  if (mode != "results") {
+    return (
+      <>
+        <div className="container">
+          <div className="circle" style={{left:left.circle}}></div>
+          <div className="C" style={{right:right.text}}>CS136</div>
+          <div className="equilateral-triangle"  style={{left:left.triangle}}></div>
+          { mode != "lobby" && mode != "hostlobby" &&
+            <Rectangle marginTop="40px" width="280px">
+                <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : 16}
+                    onChange={(event) => {setText(mode == "start" ? event.target.value.toUpperCase() : event.target.value)}} 
+                    onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
+                <Mainbutton width = "250px" onClick={submitButton}>{buttonText}</Mainbutton>
+            </Rectangle>
+          }
+          { mode == "lobby" &&
 
-          <div>
-              <img src = {`/data/avatars/${avatar}.png`} className="image"></img>
-              <Title color="white">Welcome, {text}</Title>
-              <p className="avatar-text">Select your avatar</p>
-              {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
-              onClick={() => {changeAvatar(pic)}}/>))}
-              <br></br>
+            <div>
+                <img src = {`/data/avatars/${avatar}.png`} className="image"></img>
+                <Title color="white">Welcome, {text}</Title>
+                <p className="avatar-text">Select your avatar</p>
+                {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
+                onClick={() => {changeAvatar(pic)}}/>))}
+                <br></br>
+            </div>
+          }
+          <div className="circle2" style={{right:right.circle}}></div>
+          <div className="error" style={{bottom: errorHeight}}>
+            <p className="error-text">{error}</p>
           </div>
-        }
-        <div className="circle2" style={{right:right.circle}}></div>
-        <div className="error" style={{bottom: errorHeight}}>
-          <p className="error-text">{error}</p>
         </div>
-      </div>
-        { mode == "start" &&
-          <p className = "host-text" onClick={hostGame}>Click here to host a game</p>
-        }
+          { mode == "start" &&
+            <p className = "host-text" onClick={hostGame}>Click here to host a game</p>
+          }
 
-    </>
-  );
+      </>
+    );
+  }
 }
 
 export default Titlecode;

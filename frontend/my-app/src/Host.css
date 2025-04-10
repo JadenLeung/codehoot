@@ -39,6 +39,15 @@
     font-size: 30px;
 }
 
+
+.wait-text2 {
+    flex: 1;
+    text-align: center;
+    font-family: 'Montserrat';
+    color: white;
+    font-size: 30px;
+}
+
 .player-box {
     background-color: #260064;
     padding-right: 20px;
@@ -52,6 +61,18 @@
 
 }
 
+.player-box2 {
+    background-color: #260064;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: left;
+    margin: 10px;
+}
+
 .player-container {
     margin-top: 20px;
     display: flex;
@@ -63,9 +84,11 @@
 }
 
 .avatar {
-    height: 100px;
+    height: 101px;
     padding-right: 20px;
     border-radius: 5px;
+    margin-top:-1px;
+    margin-bottom:-1px;
 }
 
 .corner-container {
@@ -157,6 +180,11 @@
     font-size: 30px;
 }
 
+.bartext2 {
+    color: black;
+    font-size: 30px;
+}
+
 .leaderboardtext {
     margin-top: 10px;
     font-size: 40px;
@@ -185,4 +213,15 @@
 
 .leaderboard-profile {
     display: flex;
+}
+
+.player-box2 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.bronze {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

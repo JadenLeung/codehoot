@@ -111,8 +111,30 @@ io.on("connection", (socket) => {
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
             rooms[room].config = config;
-            io.to(room).emit('started-match', rooms[room].time); // only others in that room
-            socket.emit('started-match2', rooms[room].time);
+            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.emit('started-match2', rooms[room].time, rooms[room].question);
+        }
+    });
+
+    socket.on("next-round", (room, timeLimit, testcases, config, question) => {
+        room = String(room);
+        console.log("attempting to start next round", question);
+        if (rooms.hasOwnProperty(room) && rooms[room].stage == "results") {
+            socket.to(room).emit('started-match', rooms[room].time); 
+            rooms[room].stage = "ingame";
+            rooms[room].question = question;
+            rooms[room].time = Date.now() + timeLimit;
+            rooms[room].testcases = testcases;
+            rooms[room].config = config;
+            rooms[room].userids.forEach((id) => {
+                if (rooms[room].userdata[id].passed) {
+                    delete rooms[room].userdata[id].passed;
+                    delete rooms[room].userdata[id].time;
+                }
+            })
+            console.log("emitting", question);
+            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
 
