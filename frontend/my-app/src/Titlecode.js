@@ -79,6 +79,11 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         setErrorHeight("-70px");
       });
 
+      socket.on("kick-you", () => {
+        setMode("start");    
+        riseError("ⓘ You have been kicked (freed)");
+      });
+
       socket.on("started-match", (time, q) => {
         if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
