@@ -140,9 +140,41 @@ io.on("connection", (socket) => {
     })
 
     socket.on("view-leaderboard", (room) => {
-        let scores = calculateScores(room);
-        for (let i = 0; i < rooms[room].testcases; i++) {
-            let deduct = 0;
+        if (rooms[room] && rooms[room].stage == "ingame") {
+            rooms[room].stage = "results";
+            let oldleaderboard = [];
+            rooms[room].userids.forEach((id) => {
+                oldleaderboard.push({id : id, points: rooms[room].userdata[id].points})
+            });
+    
+            let scores = calculateScores(room);
+            let points = {};
+            for (let i = 0; i <= rooms[room].testcases; i++) {
+                let deduct = 0;
+                scores[i].forEach((userobj) => {
+                    points[userobj.id] = Math.round((rooms[room].config.maxPoints / rooms[room].testcases) * userobj.passed - deduct);
+                    if (i > 0 && deduct < rooms[room].config.tiebreakerMaxDeduct) {
+                        deduct += rooms[room].config.tiebreakerDeduct;
+                    }
+                })
+            }
+            console.log("points is ", points);
+            
+            let leaderboard = [];
+            rooms[room].userids.forEach((id) => {
+                rooms[room].userdata[id].points += points[id];
+                leaderboard.push({id : id, points: rooms[room].userdata[id].points})
+            });
+            leaderboard.sort((a, b) => {
+                return b.points - a.points;
+            });
+    
+            console.log("leaderboard is", leaderboard, "old is ", oldleaderboard);
+            for (let i = 0; i < leaderboard.length; i++) {
+                let id = leaderboard[i].id;
+                socket.to(id).emit("view-score", leaderboard, oldleaderboard, points[id], i);
+            }
+            socket.emit("view-leaderboard", leaderboard, oldleaderboard, points[socket.id], 0);
         }
     })
 
@@ -156,9 +188,9 @@ io.on("connection", (socket) => {
         if (rooms.hasOwnProperty(room) && rooms[room].stage != "lobby") {
             rooms[room].userids.forEach((id) => {
                 if (rooms[room].userdata[id] && rooms[room].userdata[id].passed && rooms[room].userdata[id].passed > 0) {
-                    scores[rooms[room].userdata[id].passed].push({id: id, time: rooms[room].userdata[id].time});
+                    scores[rooms[room].userdata[id].passed].push({id: id, time: rooms[room].userdata[id].time, passed: rooms[room].userdata[id].passed});
                 } else {
-                    scores[0].push({id: id, time: 999999});
+                    scores[0].push({id: id, time: 999999, passed: 0});
                 }
             });
         }
@@ -168,6 +200,7 @@ io.on("connection", (socket) => {
             });
         }
         console.log("scores is", scores);
+        return scores;
     }
 
     socket.on("disconnect", (reason) => {
@@ -185,6 +218,7 @@ io.on("connection", (socket) => {
                 } else if (rooms[room].userids.includes(player)){
                     io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", "", "leave");
                     rooms[room].userids = rooms[room].userids.filter((p) => p != player);
+                    delete rooms[room].userdata[player];
                 }
                 console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
             }
