@@ -6,3 +6,28 @@ button {
     margin-top: 5px;
     font-size: 20px;
 }
+
+.success {
+    position: fixed;  
+    margin-top: 40px;
+    width: 101%;
+    height: 30px;
+    margin-right: 10px;
+    background-color: green;
+    border-radius: 5px;
+    padding-bottom: 40px;
+    transition: bottom 0.3s ease;
+    margin-left: -10px;
+    display: flex;
+    justify-content: center;
+
+    
+  }
+
+  .success-text {
+    color: white;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    text-align: center;
+    font-size: 22px;
+  }

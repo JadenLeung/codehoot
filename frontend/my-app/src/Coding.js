@@ -6,6 +6,7 @@ import Form from './Form';
 import Output from './Output';
 import config from './config';
 import Rectangle from './Rectangle';
+import Medal from './Medal';
 
 
 function Coding ({setCode, code, question, output, setOutput, endtime, socket, 
@@ -30,8 +31,8 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
     return finalgrade;
   }
 
-  function getPlace(num) {
-    if (num < 5) {
+  function getPlace(num, gatekeep) {
+    if (num < 5 && gatekeep) {
       return " the top 5."
     }
     let str = num + "";
@@ -39,6 +40,8 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       str += "st place";
     } else if (num % 10 == 2) {
       str += "nd place";
+    } else if (num % 10 == 3) {
+      str += "rd place";
     } else {
       str += "th place";
     }
@@ -62,8 +65,13 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       setLeaderboardData({ leaderboard, oldleaderboard, points: p, index, correct });
     });
 
+    socket.on("podium", () => {
+      setMode("podium")
+    });
+
     return () => {
       socket.off("view-score");
+      socket.off("podium");
     };
   })
 
@@ -102,8 +110,18 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
         <div className="leaderboard-client-container">
           <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct}/{config.testcases[question]}</Title></Rectangle>
           <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title>
-          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + JSON.stringify(leaderboardData.points)}</Title></Rectangle>
-          <p className="ranktext">You're in {getPlace((leaderboardData.index + 1))}</p>
+          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + leaderboardData.points}</Title></Rectangle>
+          <p className="ranktext">You're in {getPlace((leaderboardData.index + 1), true)}</p>
+        </div>
+      }
+      {
+        mode == "podium" && 
+        <div className="leaderboard-client-container">
+          <Title>You got {getPlace((leaderboardData.index + 1), false)}</Title>
+          <Title>Final Score: {leaderboardData.points}</Title>
+          <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
+            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
+          </Medal>
         </div>
       }
     </div>
