@@ -4,7 +4,7 @@ const config = {
         Q2: 300
     },
     testcases: {
-        Q1: 10,
+        Q1: 2,
         Q2: 2
     },
     timeIncrement: 30,

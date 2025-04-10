@@ -14,6 +14,8 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
     function startMatch() {
         if (mode == "hostlobby") {
             socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
+        } else if (mode == "hostresults") {
+            setMode("hostleaderboard")
         } else if (time == 0) {
             socket.emit("view-leaderboard", room);
         } else {
@@ -89,10 +91,11 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
             }
             { mode == "hostresults" && 
                 <div>
+                    <Rectangle height="90px"><Title>Results</Title></Rectangle>
                 <div className="bargraph">
                     {leaderboardData.scores.map((arr, i) => (
                         <div key={i}>
-                            <Rectangle height={arr.length * (400 / players.length) + "px"} width="100px" 
+                            <Rectangle height={arr.length * (40 / players.length) + "vh"} width="100px" 
                                 backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
                             <p className="bartext">{arr.length}</p>
                         </div>

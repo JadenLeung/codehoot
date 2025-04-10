@@ -68,7 +68,7 @@ function App() {
               setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName}/>
           }
         </div>
-      {(["hostlobby", "hostingame", "hostresults"].includes(mode))
+      {(["hostlobby", "hostingame", "hostresults", "hostleaderboard"].includes(mode))
         && <Host players={players} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
