@@ -4,19 +4,23 @@ import './Form.css';
 
 function Form({ setCode, code, question }) {
   useEffect(() => {
-    if (question) {
-      fetch(`http://127.0.0.1:5004/code?question=${question}`)
-        .then((res) => res.json()) // 👈 THIS IS THE FIX
-        .then((data) => {
-          setCode(data.code); // or format it however you want
-          // optionally use data.in and data.expect as needed
-        })
-        .catch((err) => {
-          console.error("Failed to load starter code:", err);
-          setCode("// Failed to load starter code");
-        });
-    }
+    const fetchCode = async () => {
+      try {
+        if (question) {
+          let res = await fetch(`http://127.0.0.1:5004/code?question=${question}`);
+          let data = await res.json();
+          setCode(data.code);
+        }
+      } catch (err) {
+        console.error("Failed to fetch code:", err);
+        setCode("// Failed to load starter code");
+      }
+    };
+  
+    fetchCode(); // run it
+  
   }, [question]);
+  
   
 
   return (

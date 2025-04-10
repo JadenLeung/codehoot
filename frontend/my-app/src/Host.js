@@ -5,7 +5,7 @@ import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 import config from "./config.js";
 
-function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime, data, setData }) {
+function Host({ setPlayers, players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime, data, setData }) {
 
     const [time, setTime] = useState(999);
     const [leaderboardData, setLeaderboardData] = useState({});
@@ -27,6 +27,12 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
         } else {
             socket.emit("end-round", room);
         }
+    }
+
+    function removePlayer(id) {
+        console.log("ID is ", id, socket.id)
+        socket.emit("kick-player", id);
+
     }
 
     function addTime() {
@@ -184,7 +190,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                             {players.map((player) => (
                             <div className="player-box"  key={player}>
                                 <img src={`/data/avatars/${player.avatar}.png`} alt="Avatar" className="avatar"/>
-                                <p className="wait-text">{player.name}</p>
+                                <p className="wait-text strikethrough" onClick={() => {removePlayer(player.id)}}>{player.name}</p>
                             </div>
                             ))}
                         </div>

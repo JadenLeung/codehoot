@@ -33,6 +33,7 @@ function App() {
   useEffect(() => {
     if (socket) {
       socket.on("room-change", (d, id, name, avatar, action) => {
+        console.log("host", id)
         if (action == "join") {
           setData(d);
           setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);
@@ -71,7 +72,7 @@ function App() {
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
-        && <Host players={players} mode={mode} setMode={setMode} question={question} 
+        && <Host players={players} setPlayers={setPlayers} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
       {["ingame", "results", "podium"].includes(mode) && (

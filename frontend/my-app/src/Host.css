@@ -222,3 +222,8 @@
     flex-direction: column;
     align-items: center;
 }
+
+.strikethrough:hover {
+    text-decoration: line-through;
+    cursor: pointer;
+}
