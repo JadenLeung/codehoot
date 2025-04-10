@@ -74,7 +74,7 @@ function App() {
         && <Host players={players} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
-      {["ingame", "results"].includes(mode) && (
+      {["ingame", "results", "podium"].includes(mode) && (
         <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
         endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room} mode={mode}
           setMode={setMode} points={points} setPoints={setPoints}

@@ -1,12 +1,17 @@
 const config = {
     questions: 2,
     time: {
-        Q1: 30,
-        Q2: 300
+        Q1: 1000,
+        Q2: 1000
     },
     testcases: {
         Q1: 2,
         Q2: 2
+    },
+    medalColor: {
+        0: "gold",
+        1: "#C0C0C0",
+        2: "#cd7f32"
     },
     grades: {
         90: "A+",

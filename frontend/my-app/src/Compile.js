@@ -1,9 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './Compile.css';
 
 function Compile({code, setOutput, question, socket, endtime, room}) {
 
   const [time, setTime] = useState(0);
+  const [success, setSuccess] = useState("");
+  const [successHeight, setSuccessHeight] = useState("0px");
+
+   useEffect(() => {
+      setTimeout(() => {
+          if (successHeight == "-20px") {
+              setSuccessHeight("-70px");
+          }
+      }, 3000)
+    }, [successHeight]);
 
   async function submitButton() {
     let t = ((endtime - Date.now()) / 1000);
@@ -34,11 +44,12 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
 
   return (
     <div className = "button_container">
-      <button
-        onClick={submitButton}
-      >
+      <button onClick={submitButton}>
         Submit
       </button>
+      <div className="success" style={{bottom: successHeight}}>
+          <p className="success-text">New High Score!</p>
+      </div>
     </div>
   );
 }

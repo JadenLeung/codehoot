@@ -21,7 +21,8 @@ dev = true;
 // Create HTTPS server
 const io = new Server(dev ? server : httpsServer, {
     cors: { 
-        origin: ["http://localhost:3000","https://jadenleung.github.io"],
+        origin: '*',
+        // origin: ["http://localhost:3000","https://jadenleung.github.io"],
         methods: ["GET", "POST"]
     },
   // transports: ["polling"] // Forces long polling instead of WebSockets
@@ -225,6 +226,10 @@ io.on("connection", (socket) => {
         console.log("scores is", scores);
         return scores;
     }
+
+    socket.on("podium", (room) => {
+        socket.to(room).emit("podium");
+    })
 
     socket.on("disconnect", (reason) => {
         console.log(`User disconnected: ${socket.id}, Reason: ${reason}`, rooms);
