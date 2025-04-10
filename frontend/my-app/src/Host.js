@@ -5,7 +5,7 @@ import Rectangle from './Rectangle';
 import Mainbutton from './Mainbutton';
 import config from "./config.js";
 
-function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime, setData }) {
+function Host({ players, mode, setMode, question, setQuestion, room, socket, endtime, setEndTime, data, setData }) {
 
     const [time, setTime] = useState(999);
     const [leaderboardData, setLeaderboardData] = useState({});
@@ -105,9 +105,18 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                 </div>
             }
             { mode == "hostleaderboard" && 
-                <div>
-                    {Object.keys(leaderboardData.points).map((point, i) => (
-                        <p>{point + " " + leaderboardData.points[point]}</p>
+                <div className="leaderboard-container">
+                    <Rectangle height="90px" width="400px"><Title>Leaderboard</Title></Rectangle>
+                    {leaderboardData.leaderboard.map((obj, i) => (
+                        i < 10 && <Rectangle height="70px" width="800px">{
+                            <div className = "leaderboard-bar">
+                                <div className = "leaderboard-profile">
+                                    <img className="leaderboard-img" src={`/data/avatars/${data.userdata[obj.id].avatar}.png`}></img>
+                                    <p className="leaderboardtext">{data.userdata[obj.id].name}</p>
+                                </div>
+                                <p className="leaderboardtext">{obj.points}</p>
+                            </div>
+                        }</Rectangle>
                     ))}
                 </div>
             }
@@ -135,7 +144,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                             <i className="bi bi-person-fill"></i>
                             <p>{players.length}</p>
                         </div> 
-                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : mode == "hostingame" ? "Results" : "View Leaderboard"}</Mainbutton>
+                        <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? "Skip" : mode == "hostingame" ? "Results" : mode == "hostresults" ? "View Leaderboard" : "Next Round"}</Mainbutton>
                     </div>
                 </div>
 
