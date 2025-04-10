@@ -78,11 +78,14 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   return (
     <div>
       <div className="headercode">
+        <div className="profile_container">
           <div className="profile">
             <img className="profile-avatar" src={`/data/avatars/${avatar}.png`} alt="Avatar"/>
             <p className="name">{name}</p>
           </div>
-          <Title color = "white" marginTop = "10px">Codehoot!</Title>
+        </div>
+        <Title color = "white" marginTop = "10px">Codehoot!</Title>
+        <div className="timeholder"> 
           {
             mode == "ingame" && <p className="time">{Math.round(time)}</p>
           }
@@ -92,7 +95,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
             
             </Rectangle>
           }
-          
+          </div>
       </div>
       {
         mode == "ingame" && 

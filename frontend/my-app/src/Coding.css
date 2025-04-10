@@ -1,7 +1,6 @@
 .time {
     color: white;
     font-size: 30px;
-    
     border-radius: 50%;       /* Makes it round */
     padding: 15px;            /* Space inside the circle */
     text-align: center;       /* Center the text */
@@ -13,25 +12,46 @@
     align-items: center;
     justify-content: center;
     margin-right: 20px;
+    margin-left: auto;
+}
+
+.headercode {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-content: center;
+    margin-top: -50px;
+}
+
+.profile_container{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.timeholder{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
 }
 
 .profile {
     /* top: 0px;
     left: 20px;
     position: fixed; */
+    background-color: #44178D;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     margin-left: 20px;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+    justify-self : flex-start;
 }
 
-.headercode {
-    display: flex;
-    align-items: center;
-    /* justify-content: center; */
-    justify-content: space-between;
-    margin-top: -50px;
-}
+
 
 .name {
     color: white;
