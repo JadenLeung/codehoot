@@ -4,15 +4,21 @@ import './Compile.css';
 function Compile({code, setOutput, question, socket, endtime, room}) {
 
   const [time, setTime] = useState(0);
-  const [success, setSuccess] = useState("");
-  const [successHeight, setSuccessHeight] = useState("0px");
+  const [successHeight, setSuccessHeight] = useState("-70px");
+
+
+  function riseSuccess() {
+    if (successHeight == "-70px") {
+      setSuccessHeight("0px");
+    }
+  }
 
    useEffect(() => {
       setTimeout(() => {
-          if (successHeight == "-20px") {
+          if (successHeight == "0px") {
               setSuccessHeight("-70px");
           }
-      }, 3000)
+      }, 2000)
     }, [successHeight]);
 
   async function submitButton() {
@@ -33,7 +39,7 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
         setOutput(JSON.parse(data))
         if (JSON.parse(data).hasOwnProperty("correct")) {
           socket.emit("submit-score", t, JSON.parse(data).correct, room, (str) => {
-            alert(str);
+            riseSuccess();
           })
         }
         
