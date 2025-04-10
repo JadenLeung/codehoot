@@ -103,13 +103,14 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("start-match", (room, timeLimit, testcases) => {
+    socket.on("start-match", (room, timeLimit, testcases, config) => {
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "lobby") {
             socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
+            rooms[room].config = config;
             io.to(room).emit('started-match', rooms[room].time); // only others in that room
             socket.emit('started-match2', rooms[room].time);
         }
@@ -140,9 +141,12 @@ io.on("connection", (socket) => {
 
     socket.on("view-leaderboard", (room) => {
         let scores = calculateScores(room);
+        for (let i = 0; i < rooms[room].testcases; i++) {
+            let deduct = 0;
+        }
     })
 
-
+    // Returns an array 0 - # Test Cases, each one with an array of the user and their time
     function calculateScores(room) {
         room = String(room);
         let scores = [];
@@ -154,8 +158,13 @@ io.on("connection", (socket) => {
                 if (rooms[room].userdata[id] && rooms[room].userdata[id].passed && rooms[room].userdata[id].passed > 0) {
                     scores[rooms[room].userdata[id].passed].push({id: id, time: rooms[room].userdata[id].time});
                 } else {
-                    scores[0].push({id: id, time: "DNF"});
+                    scores[0].push({id: id, time: 999999});
                 }
+            });
+        }
+        for (let i = 0; i <= rooms[room].testcases; i++) {
+            scores[i].sort((a, b) => {
+                return b.time - a.time;
             });
         }
         console.log("scores is", scores);

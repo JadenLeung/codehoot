@@ -6,7 +6,7 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
   const [time, setTime] = useState(0);
 
   async function submitButton() {
-    let t = Math.round((endtime - Date.now()) / 1000);
+    let t = ((endtime - Date.now()) / 1000);
     setTime(t >= 0 ? t : 0);
     
     setOutput({state: "Compiling..."});

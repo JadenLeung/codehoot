@@ -8,6 +8,9 @@ const config = {
         Q2: 2
     },
     timeIncrement: 30,
+    tiebreakerDeduct: 10, // amount of time deducted if there is a tie in testcases passed
+    tiebreakerMaxDeduct: 100, // max amount of time deducted due to tiebrakerDeduct
+
 }
 
 export default config;

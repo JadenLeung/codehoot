@@ -11,7 +11,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
     console.log(JSON.stringify(config), question, config.testcases[question])
     function startMatch() {
         if (mode == "hostlobby") {
-            socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question]);
+            socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
         } else if (time == 0) {
             socket.emit("view-leaderboard", room);
         } else {
@@ -25,7 +25,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
 
     useEffect(() => {
       const interval = setInterval(() => {
-        let t = Math.round((endtime - Date.now()) / 1000);
+        let t = ((endtime - Date.now()) / 1000);
         setTime(t >= 0 ? t : 0);
       }, 100);
   
@@ -61,7 +61,7 @@ function Host({ players, mode, setMode, question, setQuestion, room, socket, end
                     <Rectangle>
                         <p className = "title">Question {question.substring(1)}</p>
                     </Rectangle>
-                    <p className="bigtime">{time}</p>
+                    <p className="bigtime">{Math.round(time)}</p>
                     { time > 0 &&
                         <p className="plustime" onClick={addTime}>+</p>
                     }

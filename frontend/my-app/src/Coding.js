@@ -12,7 +12,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
 
   useEffect(() => {
     const interval = setInterval(() => {
-      let t = Math.round((endtime - Date.now()) / 1000);
+      let t = ((endtime - Date.now()) / 1000);
       setTime(t >= 0 ? t : 0);
     }, 100);
 
@@ -27,7 +27,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket, n
             <p className="name">{name}</p>
           </div>
           <Title color = "white">Codehoot!</Title>
-          <p className="time">{time}</p>
+          <p className="time">{Math.round(time)}</p>
 
       </div>
           <Form setCode={setCode} code={code} question={question} />
