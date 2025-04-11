@@ -138,34 +138,34 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                 <div>
                 <div className="bargraph">
                     {leaderboardData.leaderboard.length >= 3 && 
-                        <div className="bronze">
+                        <div className="placement">
                             <div className="player-box2">
                                 <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[2].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[2].id].name}</p>
                             </div>
-                            <Rectangle height="100px" width="400px" 
+                            <Rectangle height="350px" width="375px" 
                                 backgroundColor="#cd7f32"><p className="bartext2">#3</p></Rectangle>
                             <p className="bartext">{leaderboardData.leaderboard[2].points}</p>
                         </div>
                     }
                     {leaderboardData.leaderboard.length >= 1 && 
-                        <div className="bronze">
+                        <div className="placement">
                             <div className="player-box2">
                                 <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[0].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[0].id].name}</p>
                             </div>
-                            <Rectangle height="350px" width="400px" 
+                            <Rectangle height="450px" width="375px" 
                                 backgroundColor="gold"><p className="bartext2">#1</p></Rectangle>
                             <p className="bartext">{leaderboardData.leaderboard[0].points}</p>
                         </div>
                     }
                     {leaderboardData.leaderboard.length >= 2 && 
-                        <div className="bronze">
+                        <div className="placement">
                             <div className="player-box2">
                                 <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[1].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[1].id].name}</p>
                             </div>
-                            <Rectangle height="200px" width="400px" 
+                            <Rectangle height="400px" width="375px" 
                                 backgroundColor="#c0c0c0"><p className="bartext2">#2</p></Rectangle>
                             <p className="bartext">{leaderboardData.leaderboard[1].points}</p>
                         </div>
