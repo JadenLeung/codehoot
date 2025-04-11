@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './Compile.css';
 import config from './config';
 
-function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) {
+function Compile({code, setCode, setOutput, question, socket, endtime, room, fetchCode}) {
 
   const [time, setTime] = useState(0);
   const [successHeight, setSuccessHeight] = useState("-70px");
@@ -20,6 +20,10 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
     if (confirm("Are you sure you want to proceed? Doing this will delete all your current code.")) {
       fetchCode();
     }
+  }
+  
+  function displaySolution() {
+    setCode({...code, code: code.solution});
   }
 
    useEffect(() => {
@@ -41,12 +45,12 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
     
     setOutput({state: "Compiling..."});
     try {
-        const response = await fetch("http://127.0.0.1:5004/submit", {
+        const response = await fetch(`http://127.0.0.1:${config.port}/submit`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code : code.code, question: question }), // sending JSON
+            body: JSON.stringify({ code : code.code, question: config.questionNames[question] }), // sending JSON
         });
         const data = await response.text();
         console.log(data)
@@ -70,6 +74,9 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
       <button onClick={fetchStartCode} className="reset">
         Reset
       </button>
+      {config.dev && <button onClick={displaySolution}>
+        Solution (Dev on)
+      </button>}
       <div className="success" style={{bottom: successHeight}}>
           <p className="success-text">New High Score!</p>
       </div>

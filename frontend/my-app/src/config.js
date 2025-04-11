@@ -1,13 +1,23 @@
 const config = {
-    questions: 2,
-    submitCooldown: 15,
+    dev: true,
+    port: 5004,
+    questions: 3,
+    submitCooldown: 1,
+    namelength: 15,
     time: {
         Q1: 1000,
-        Q2: 1000
+        Q2: 1000,
+        Q3: 1000,
+    },
+    questionNames: {
+        Q1: "Q1",
+        Q2: "is_bst",
+        Q3: "least_letter",
     },
     testcases: {
         Q1: 2,
-        Q2: 2
+        Q2: 9,
+        Q3: 6,
     },
     medalColor: {
         0: "gold",

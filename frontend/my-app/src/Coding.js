@@ -21,14 +21,14 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   const fetchCode = async () => {
     try {
       if (question) {
-        let res = await fetch(`http://127.0.0.1:5004/code?question=${question}`);
+        let res = await fetch(`http://127.0.0.1:${config.port}/code?question=${config.questionNames[question]}`);
         let data = await res.json();
         setCode(data);
       }
     } catch (err) {
       console.error("Failed to fetch code:", err);
       const error = `// Failed to load starter code\n// ${err}\n// Press 'Reset' to try again`;
-      setCode({code: error, in: error, expect: error})
+      setCode({code: error, in: error, expect: error, solution: error})
     }
   };
 
@@ -124,7 +124,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
             </Rectangle>
             <Form setCode={setCode} code={code} question={question} width="900px" file={file} fetchCode={fetchCode}/>
             {time > 0 && <div>
-                  <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} fetchCode={fetchCode}/>
+                  <Compile code={code} setCode={setCode} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} fetchCode={fetchCode}/>
                 </div>
             }
           </div>

@@ -3,8 +3,9 @@ import './Titlecode.css';
 import Title from './Title';
 import Mainbutton from './Mainbutton';
 import Rectangle from './Rectangle';
+import config from './config';
 
-function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, 
+function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
   setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion}) {
 
 
@@ -88,6 +89,7 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
           setQuestion(q);
+          setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);
         } else if (mode == "changename") {
@@ -130,7 +132,7 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
           <div className="equilateral-triangle"  style={{left:left.triangle}}></div>
           { mode != "lobby" && mode != "hostlobby" &&
             <Rectangle marginTop="40px" width="280px">
-                <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : 16}
+                <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : config.namelength}
                     onChange={(event) => {setText(mode == "start" ? event.target.value.toUpperCase() : event.target.value)}} 
                     onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
                 <Mainbutton width = "250px" onClick={submitButton}>{buttonText}</Mainbutton>

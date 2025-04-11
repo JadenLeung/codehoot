@@ -68,7 +68,7 @@ function App() {
             ["start", "entername", "lobby", "hostlobby", "results"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} setQuestion={setQuestion}/>
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} setQuestion={setQuestion} setOutput={setOutput}/>
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
