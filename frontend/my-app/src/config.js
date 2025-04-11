@@ -1,5 +1,6 @@
 const config = {
     questions: 2,
+    submitCooldown: 15,
     time: {
         Q1: 1000,
         Q2: 1000

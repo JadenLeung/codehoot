@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import './Compile.css';
+import config from './config';
 
 function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) {
 
   const [time, setTime] = useState(0);
   const [successHeight, setSuccessHeight] = useState("-70px");
+  const [submitCooldown, setSubmitCooldown] = useState(0);
 
 
   function riseSuccess() {
@@ -29,6 +31,11 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
     }, [successHeight]);
 
   async function submitButton() {
+    if (submitCooldown > Date.now()) {
+      alert("There is a " + config.submitCooldown + " second cooldown betwen submissions")
+      return;
+    }
+    setSubmitCooldown(Date.now() + config.submitCooldown * 1000);
     let t = ((endtime - Date.now()) / 1000);
     setTime(t >= 0 ? t : 0);
     
@@ -58,7 +65,7 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
   return (
     <div className = "button_container">
       <button onClick={submitButton}>
-        Submit
+        {submitCooldown > Date.now() ? Math.ceil((submitCooldown - Date.now()) / 1000) : "Submit"}
       </button>
       <button onClick={fetchStartCode} className="reset">
         Reset
