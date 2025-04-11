@@ -9,10 +9,13 @@
 //   in a given string of letters. If two or more letters are tied, the one with 
 //   the lowest ASCII value should be returned.
 // requires: str is a valid string
-//           str has atleast one letter
+//           str has at least one letter
 //           str only contains letters (a-z + A-Z) [not asserted]
 // time: O(n), O(nlogn) can get most points, O(n^2) will get some points
 // examples: "HelloWorld" -> 'd'
 //           "abc" -> 'a'
 //           "AABbCc" -> 'a'
-char least_letter(char *str);
+char least_letter(char *str) {
+    // Your implementation here
+    return '0';
+}

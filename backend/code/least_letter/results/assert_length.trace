@@ -1,1 +1,0 @@
-myprogram: least_letter.c:12: char least_letter(char *): Assertion `str[0]' failed.

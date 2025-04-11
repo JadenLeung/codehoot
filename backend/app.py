@@ -28,7 +28,7 @@ signal.signal(signal.SIGINT, terminate_subprocesses)
 def hello_world():
     return 'Hello World'
 
-@app.route('/public')
+@app.route('/solution')
 def get_public():
     question = request.args.get('question')
 
@@ -38,7 +38,8 @@ def get_code():
     with open(f"code/{question}/startcode.c", "r") as f:
         with open(f"code/{question}/tests/public.in", "r") as infile:
             with open(f"code/{question}/tests/public.expect", "r") as expectfile:
-                return jsonify({"code": f.read(), "in": infile.read(), "expect": expectfile.read()})
+                with open(f"code/{question}/solution.c", "r") as solution:
+                    return jsonify({"code": f.read(), "in": infile.read(), "expect": expectfile.read(), "solution": solution.read()})
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -105,8 +106,8 @@ def submit():
 
             # Check if the test is an assertion test
             if "assert" in file:
-                print(f"Assertion: return code for {file}: {run_process.returncode}")
-                if run_process.returncode == 0:
+                print(f"Assertion: return code for {file}: {run_process.returncode}", code.count("assert") , code.count("assert.h") )
+                if run_process.returncode == 0 or code.count("assert") - code.count("assert.h") == 0:
                     incorrect.add(i)
                 else:
                     correct.add(i)

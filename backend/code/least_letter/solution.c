@@ -1,4 +1,10 @@
-#include "least_letter.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <string.h>
+
 
 char to_lower_case(char c) {
     if (c >= 'A' && c <= 'Z') {

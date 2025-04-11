@@ -1,5 +1,3 @@
-#include "least_letter.h"
-
 int main(void) {
     int size = 0;
     int max_size = 1;
