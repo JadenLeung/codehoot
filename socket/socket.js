@@ -238,14 +238,20 @@ io.on("connection", (socket) => {
        
     });
 
+    socket.on("kick-player", (id) => {
+        console.log("Trying to remove", id)
+        removePlayer(id);
+        io.to(id).emit("kick-you");
+    })
+
     function removePlayer(player) {
         Object.keys(rooms).forEach((room) => {
             if (rooms[room]) {
                 if (player == rooms[room].host) {
                     delete rooms[room];
                 } else if (rooms[room].userids.includes(player)){
-                    io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", "", "leave");
                     rooms[room].userids = rooms[room].userids.filter((p) => p != player);
+                    io.to(rooms[room].host).emit("room-change", rooms[room], player, "", "", "leave");
                     delete rooms[room].userdata[player];
                 }
                 console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
