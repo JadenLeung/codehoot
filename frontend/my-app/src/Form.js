@@ -4,22 +4,24 @@ import './Form.css';
 
 function Form({ setCode, code, question, width, file }) {
   useEffect(() => {
-    const fetchCode = async () => {
-      try {
-        if (question) {
-          let res = await fetch(`http://127.0.0.1:5005/code?question=${question}`);
-          let data = await res.json();
-          setCode(data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch code:", err);
-        setCode("// Failed to load starter code");
-      }
-    };
   
     fetchCode(); // run it
   
   }, [question]);
+
+  const fetchCode = async () => {
+    try {
+      if (question) {
+        let res = await fetch(`http://127.0.0.1:5004/code?question=${question}`);
+        let data = await res.json();
+        setCode(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch code:", err);
+      const error = `// Failed to load starter code\n// ${err}`;
+      setCode({code: error, in: error, expect: error})
+    }
+  };
   
   
 
