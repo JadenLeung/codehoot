@@ -121,7 +121,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
         mode == "podium" && 
         <div className="leaderboard-client-container">
           <Title>You got {getPlace((leaderboardData.index + 1), false)}</Title>
-          <Title>Final Score: {leaderboardData.points}</Title>
+          <Title>Final Score: {points}</Title>
           <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
             <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
           </Medal>
