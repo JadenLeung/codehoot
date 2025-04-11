@@ -141,7 +141,7 @@ io.on("connection", (socket) => {
 
     socket.on("submit-score", (time, passed, room, cb) => {
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-            if (!rooms[room].userdata[socket.id].hasOwnProperty(passed) || passed > rooms[room].userdata[socket.id].passed) {
+            if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
                 rooms[room].userdata[socket.id].time = time;
                 rooms[room].userdata[socket.id].passed = passed;
                 console.log("Score submited", time, rooms[room].userdata[socket.id])

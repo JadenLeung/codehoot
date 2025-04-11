@@ -64,7 +64,7 @@ function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) 
 
   return (
     <div className = "button_container">
-      <button onClick={submitButton}>
+      <button onClick={submitButton} style={{width : "98px"}}>
         {submitCooldown > Date.now() ? Math.ceil((submitCooldown - Date.now()) / 1000) : "Submit"}
       </button>
       <button onClick={fetchStartCode} className="reset">
