@@ -7,7 +7,7 @@ function Form({ setCode, code, question }) {
     const fetchCode = async () => {
       try {
         if (question) {
-          let res = await fetch(`http://127.0.0.1:5004/code?question=${question}`);
+          let res = await fetch(`http://127.0.0.1:5005/code?question=${question}`);
           let data = await res.json();
           setCode(data.code);
         }
@@ -26,7 +26,8 @@ function Form({ setCode, code, question }) {
   return (
     <div className="Form">
       <Editor
-        height="400px"
+        height="500px"
+        width="70%"
         defaultLanguage="c"
         value={code}
         onChange={(val) => setCode(val)}

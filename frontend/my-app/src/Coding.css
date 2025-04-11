@@ -88,3 +88,8 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.vscode-navbar {
+    border-radius: 0px;
+    margin-bottom: -20px;
+}

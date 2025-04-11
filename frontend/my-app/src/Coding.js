@@ -100,6 +100,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       {
         mode == "ingame" && 
         <div>
+          <Rectangle backgroundColor ="#1e1e1e" className="vscode-navbar">dewf</Rectangle>
           <Form setCode={setCode} code={code} question={question} />
           {time > 0 && <div>
                 <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} />
