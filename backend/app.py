@@ -92,7 +92,16 @@ def submit():
             with open(file, "r") as input_file:
                 input_text = input_file.read()
             # Wait for the process to finish
-            stdout, stderr = run_process.communicate()
+
+            try:
+                stdout, stderr = run_process.communicate(timeout=2)
+
+            except subprocess.TimeoutExpired:
+                if  i == 0:
+                    return jsonify({"output": f"Timeout: 2 second limit reached"})
+                incorrect.add(i)
+                run_process.kill()
+                continue
 
             err = parse_asan(stderr)
 
