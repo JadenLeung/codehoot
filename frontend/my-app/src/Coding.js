@@ -18,6 +18,20 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   const [score, setScore] = useState(0);
   const [file, setFile] = useState("main.c");
 
+  const fetchCode = async () => {
+    try {
+      if (question) {
+        let res = await fetch(`http://127.0.0.1:5004/code?question=${question}`);
+        let data = await res.json();
+        setCode(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch code:", err);
+      const error = `// Failed to load starter code\n// ${err}\n// Press 'Reset' to try again`;
+      setCode({code: error, in: error, expect: error})
+    }
+  };
+
   function getGrade(score) {
     let finalgrade = "F"; // default
     const grades = Object.keys(config.grades)
@@ -108,9 +122,9 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
                   <button className={`navbar-button${file == name ? "-selected" : "-unselected"}`} onClick={() => {setFile(name)}}>{name}</button>
               ))}
             </Rectangle>
-            <Form setCode={setCode} code={code} question={question} width="900px" file={file}/>
+            <Form setCode={setCode} code={code} question={question} width="900px" file={file} fetchCode={fetchCode}/>
             {time > 0 && <div>
-                  <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} />
+                  <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} fetchCode={fetchCode}/>
                 </div>
             }
           </div>

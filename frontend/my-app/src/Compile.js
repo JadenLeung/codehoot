@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './Compile.css';
 
-function Compile({code, setOutput, question, socket, endtime, room}) {
+function Compile({code, setOutput, question, socket, endtime, room, fetchCode}) {
 
   const [time, setTime] = useState(0);
   const [successHeight, setSuccessHeight] = useState("-70px");
@@ -10,6 +10,13 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
   function riseSuccess() {
     if (successHeight == "-70px") {
       setSuccessHeight("0px");
+    }
+  }
+
+  function fetchStartCode() {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("Are you sure you want to proceed? Doing this will delete all your current code.")) {
+      fetchCode();
     }
   }
 
@@ -52,6 +59,9 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
     <div className = "button_container">
       <button onClick={submitButton}>
         Submit
+      </button>
+      <button onClick={fetchStartCode} className="reset">
+        Reset
       </button>
       <div className="success" style={{bottom: successHeight}}>
           <p className="success-text">New High Score!</p>
