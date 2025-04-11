@@ -71,24 +71,13 @@ def submit():
         
         files = glob.glob(f"./code/{question}/tests/*.in")
         files.sort()
-        assert_files = []
-        for file in files:
-            if "assert" in file:
-                assert_files.append(file)
 
-        for file in assert_files:
-            files.remove(file)
-
-        # files.remove(f"./code/{question}/tests/*.in"")
-
-
-        print(files)
-        
+        files.remove(f"./code/{question}/tests/public.in")
+        files.insert(0, f"./code/{question}/tests/public.in")
 
         correct = set([])
         incorrect = set([])
         for i, file in enumerate(files):
-            print(file)
             with open(file, "r") as input_file:
                 run_process = subprocess.Popen(
                     ['./a.out'],
@@ -114,17 +103,24 @@ def submit():
                 run_process.kill()
                 continue
 
+            # Check if the test is an assertion test
+            if "assert" in file:
+                print(f"Assertion: return code for {file}: {run_process.returncode}")
+                if run_process.returncode == 0:
+                    incorrect.add(i)
+                else:
+                    correct.add(i)
+                continue
+
             err = parse_asan(stderr)
 
             if run_process.returncode != 0:
                 return jsonify({"error": "Execution failed", "details": err}), 500
 
             basename, extension = os.path.splitext(file)
-            print(basename)
             res = stdout
             with open(basename + ".expect", "r") as expected:
                 expected = expected.read()
-                print(str(res == expected), expected)
                 if (res != expected):
                     if  i == 0:
                         return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
