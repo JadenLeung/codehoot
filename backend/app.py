@@ -71,6 +71,17 @@ def submit():
         
         files = glob.glob(f"./code/{question}/tests/*.in")
         files.sort()
+        assert_files = []
+        for file in files:
+            if "assert" in file:
+                assert_files.append(file)
+
+        for file in assert_files:
+            files.remove(file)
+
+        # files.remove(f"./code/{question}/tests/*.in"")
+
+
         print(files)
         
 

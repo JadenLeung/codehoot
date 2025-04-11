@@ -1,4 +1,3 @@
-#include "is_bst.h"
 
 struct btnode *read_node() {
     int read = 0;

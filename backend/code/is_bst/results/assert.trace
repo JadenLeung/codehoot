@@ -1,1 +1,0 @@
-myprogram: is_bst.c:17: _Bool is_bst(struct bt *): Assertion `bt' failed.
