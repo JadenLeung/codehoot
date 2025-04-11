@@ -7,6 +7,7 @@ import Output from './Output';
 import config from './config';
 import Rectangle from './Rectangle';
 import Medal from './Medal';
+import Mainbutton from './Mainbutton';
 
 
 function Coding ({setCode, code, question, output, setOutput, endtime, socket, 
@@ -15,6 +16,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   const [time, setTime] = useState(0);
   const [leaderboardData, setLeaderboardData] = useState({});
   const [score, setScore] = useState(0);
+  const [file, setFile] = useState("main.c");
 
   function getGrade(score) {
     let finalgrade = "F"; // default
@@ -99,14 +101,20 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       </div>
       {
         mode == "ingame" && 
-        <div>
-          <Rectangle backgroundColor ="#1e1e1e" className="vscode-navbar">dewf</Rectangle>
-          <Form setCode={setCode} code={code} question={question} />
-          {time > 0 && <div>
-                <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} />
-                <Output output={output} />
-              </div>
-          }
+        <div className="code-container">
+          <div>
+            <Rectangle backgroundColor ="#1e1e1e" className="vscode-navbar" width="900px" height="25px">
+              {["main.c", "public.in", "public.expect"].map((name) => (
+                  <button className={`navbar-button${file == name ? "-selected" : "-unselected"}`} onClick={() => {setFile(name)}}>{name}</button>
+              ))}
+            </Rectangle>
+            <Form setCode={setCode} code={code} question={question} width="900px" file={file}/>
+            {time > 0 && <div>
+                  <Compile code={code} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} />
+                </div>
+            }
+          </div>
+          <Rectangle backgroundColor="black" className="compiler-output" width="50%"><Output output={output} className="bruh"/></Rectangle>
         </div>
       }
       {

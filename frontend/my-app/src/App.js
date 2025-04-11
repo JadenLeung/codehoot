@@ -8,7 +8,7 @@ import Coding from './Coding';
 
 function App() {
   const [mode, setMode] = useState('start');
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState({in: "", expect: "", code: ""});
   const [name, setName] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');

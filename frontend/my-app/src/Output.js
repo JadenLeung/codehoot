@@ -1,7 +1,7 @@
 import React from 'react';
 import './Output.css';
 
-function Output({output}) {
+function Output({output, className = ""}) {
 
     function formattedOutput(text) {
       if (!text) {
@@ -18,7 +18,7 @@ function Output({output}) {
 
   return (
     <div>
-        <p className="output-text">{output.state ? output.state : output.hasOwnProperty("error") 
+        <p className={`output-text${className != "" ? " " + className : ""}`}>{output.state ? formattedOutput(output.state) : output.hasOwnProperty("error") 
                                 ?  formattedOutput(output.error + "\n" + output.details) : formattedOutput(output.output)}</p>
     </div>
   );

@@ -92,4 +92,35 @@
 .vscode-navbar {
     border-radius: 0px;
     margin-bottom: -20px;
+    display: flex;
+}
+
+.code-container {
+    display: flex;
+    justify-content: flex-start; /* this fixes the issue */
+    align-items: flex-start;
+}
+
+.compiler-output {
+    margin-left: 10px;
+    height: 520px;
+}
+
+.navbar-button-selected {
+    font-size: 15px;
+
+    height: 45px;
+    margin-top: -10px;
+    background-color:  #393939;
+    border-radius: 0px;
+    border: none;
+}
+
+.navbar-button-unselected {
+    font-size: 15px;
+    height: 45px;
+    margin-top: -10px;
+    background-color:  #121212;
+    border-radius: 0px;
+    border: none;
 }

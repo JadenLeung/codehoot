@@ -32,7 +32,7 @@ function Compile({code, setOutput, question, socket, endtime, room}) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code : code, question: question }), // sending JSON
+            body: JSON.stringify({ code : code.code, question: question }), // sending JSON
         });
         const data = await response.text();
         console.log(data)
