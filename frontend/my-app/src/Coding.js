@@ -90,7 +90,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
             mode == "ingame" && <p className="time">{Math.round(time)}</p>
           }
           {
-            mode == "results" && <Rectangle className="time" width="120px" marginTop="0px" backgroundColor="black">
+            mode == "results" && <Rectangle className="time results" width="120px" marginTop="0px" backgroundColor="black">
               <p className="score-text">{points}</p>
             
             </Rectangle>
@@ -112,7 +112,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
         mode == "results" && 
         <div className="leaderboard-client-container">
           <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct}/{config.testcases[question]}</Title></Rectangle>
-          <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title>
+          {/* <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title> */}
           <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + leaderboardData.points}</Title></Rectangle>
           <p className="ranktext">You're in {getPlace((leaderboardData.index + 1), true)}</p>
         </div>

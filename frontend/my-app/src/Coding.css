@@ -15,6 +15,11 @@
     margin-left: auto;
 }
 
+.results {
+    border-radius: 10px; 
+    padding: 5px;
+}
+
 .headercode {
     display: flex;
     align-items: center;
