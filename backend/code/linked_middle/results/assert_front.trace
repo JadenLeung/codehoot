@@ -1,0 +1,1 @@
+myprogram: linked_middle.c:19: int middle(struct llist *): Assertion `ll->front' failed.

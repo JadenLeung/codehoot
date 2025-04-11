@@ -1,0 +1,1 @@
+myprogram: stack_filter.c:5: void stack_filter(struct stack *, _Bool (*)(int)): Assertion `s' failed.
