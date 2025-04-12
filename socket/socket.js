@@ -114,11 +114,11 @@ io.on("connection", (socket) => {
             rooms[room].testcases = testcases;
             rooms[room].config = config;
             // io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
-            rooms[room].userids.forEach((id) => {
-                io.to(id).emit('started-match', rooms[room].time, rooms[room].question);
-                console.log("emitting to", id);
-            })
-            socket.emit('started-match2', rooms[room].time, rooms[room].question);
+            setTimeout(() => {
+                io.to(room).emit('started-match', rooms[room].time, rooms[room].question);
+                socket.emit('started-match2', rooms[room].time, rooms[room].question);
+            }, 1000);  // 100 milliseconds delay
+            
             console.log("emitting started-match2", rooms[room].time, Date.now(), rooms[room].time-Date.now(), rooms[room].question)
         }
     });
