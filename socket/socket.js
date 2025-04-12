@@ -260,11 +260,11 @@ io.on("connection", (socket) => {
     }
 });
 
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3001;
 
 if (!dev) {
     // Start HTTPS server (which includes Socket.IO)
-    httpsServer.listen(3004, () => {
+    httpsServer.listen(3001, () => {
         console.log('HTTPS server with Socket.IO running on port 3003');
     });
 } else {
