@@ -120,7 +120,6 @@ io.on("connection", (socket) => {
         room = String(room);
         console.log("attempting to start next round", question);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "results") {
-            socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
             rooms[room].question = question;
             rooms[room].time = Date.now() + timeLimit;
@@ -133,7 +132,7 @@ io.on("connection", (socket) => {
                 }
             })
             console.log("emitting", question);
-            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
