@@ -7,16 +7,16 @@ const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 
-dev = true;
+dev = false;
 
 // HTTPS Configuration
-// if (!dev) {
-//     var options = {
-//         key: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/privkey.pem"),
-//         cert: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/fullchain.pem")
-//     };
-//     var httpsServer = https.createServer(options, app);
-// }
+if (!dev) {
+    var options = {
+        key: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/fullchain.pem")
+    };
+    var httpsServer = https.createServer(options, app);
+}
 
 // Create HTTPS server
 const io = new Server(dev ? server : httpsServer, {
@@ -265,7 +265,7 @@ const PORT = process.env.PORT || 3001;
 if (!dev) {
     // Start HTTPS server (which includes Socket.IO)
     httpsServer.listen(3001, () => {
-        console.log('HTTPS server with Socket.IO running on port 3003');
+        console.log('HTTPS server with Socket.IO running on port 3001');
     });
 } else {
     server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
