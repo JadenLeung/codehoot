@@ -6,7 +6,7 @@ import Rectangle from './Rectangle';
 import config from './config';
 
 function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion}) {
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -28,9 +28,25 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
   }
 
   function submitButton() {
+    if (config.dev && text == "") {
+      let room = "CS136";
+      setRoom(room);
+      let t = Math.round(Math.random() * 10000);
+      setText(t);
+      socket.emit('join-room', room, t, "nomair", (res) => {
+        if (res == "Game already started" || res == "Game already ended") {
+          riseError("ⓘ " + res);
+          setMode("start");  
+          setText("");
+        } else if (res == "Name is taken") {
+          riseError("ⓘ " + res);
+        }
+      });
+      return;
+    }
     if (mode == "start") {
         if (text == "") {
-          riseError("ⓘ Assertion failed, Game PIN must not be null")
+          riseError("ⓘ Assertion failed, Game PIN must not be null");
         } else {
             socket.emit('attempt-join', text, (res) => {
               if (res) {
@@ -85,10 +101,11 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         riseError("ⓘ You have been kicked (freed)");
       });
 
-      socket.on("started-match", (time, q) => {
+      socket.on("started-match", (time, q, players) => {
         console.log(time, q);
         if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
+          setNumPlayers(players);
           setQuestion(q);
           setOutput("");
           setErrorHeight("-70px");

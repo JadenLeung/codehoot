@@ -7,7 +7,7 @@ const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 
-dev = false;
+dev = true;
 
 // HTTPS Configuration
 if (!dev) {
@@ -111,7 +111,7 @@ io.on("connection", (socket) => {
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
             rooms[room].config = config;
-            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
@@ -132,7 +132,7 @@ io.on("connection", (socket) => {
                 }
             })
             console.log("emitting", question);
-            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });

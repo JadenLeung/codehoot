@@ -11,7 +11,7 @@ import Mainbutton from './Mainbutton';
 
 
 function Coding ({setCode, code, question, output, setOutput, endtime, socket, 
-    name, avatar, room, setMode, mode, points, setPoints}) {
+    name, avatar, room, setMode, mode, points, setPoints, numPlayers}) {
 
   const [time, setTime] = useState(0);
   const [leaderboardData, setLeaderboardData] = useState({});
@@ -48,19 +48,28 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   }
 
   function getPlace(num, gatekeep) {
-    if (num < 5 && gatekeep) {
-      return " the top 5."
+    if (num <= 5 && gatekeep) {
+      return "You're in the top 5.";
     }
-    let str = num + "";
-    if (num % 10 == 1) {
-      str += "st place";
-    } else if (num % 10 == 2) {
-      str += "nd place";
-    } else if (num % 10 == 3) {
-      str += "rd place";
-    } else {
-      str += "th place";
+    if (!config.showRank && num >= numPlayers / 2) {
+      const inspiration = config.inspiration;
+      let random = inspiration[Math.floor(Math.random() * inspiration.length)];
+      if (random[0] == "/") {
+        return (<img src={random} className="meme-image" />);
+      }
+      return random;
     }
+    let str = "";
+    str = (gatekeep ? "You're in " : "You got ") + num;
+      if (num % 10 == 1) {
+        str += "st place";
+      } else if (num % 10 == 2) {
+        str += "nd place";
+      } else if (num % 10 == 3) {
+        str += "rd place";
+      } else {
+        str += "th place";
+      }
     return str;
   }
 
@@ -137,16 +146,18 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
           <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct}/{config.testcases[question]}</Title></Rectangle>
           {/* <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title> */}
           <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + leaderboardData.points}</Title></Rectangle>
-          <p className="ranktext">You're in {getPlace((leaderboardData.index + 1), true)}</p>
+          <p className="ranktext">{getPlace((leaderboardData.index + 1), true)}</p>
         </div>
       }
       {
         mode == "podium" && 
         <div className="leaderboard-client-container">
-          <Title>You got {getPlace((leaderboardData.index + 1), false)}</Title>
+          {config.showRank &&
+            <Title>{getPlace((leaderboardData.index + 1), false)}</Title>
+          }
           <Title>Final Score: {points}</Title>
           <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
-            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
+            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index < 3 || config.showRank ? leaderboardData.index + 1 : ""}</p>
           </Medal>
         </div>
       }
