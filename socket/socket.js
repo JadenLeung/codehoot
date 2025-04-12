@@ -105,27 +105,16 @@ io.on("connection", (socket) => {
     });
 
     socket.on("start-match", (room, timeLimit, testcases, config) => {
-        console.log("start match!", room)
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "lobby") {
-            socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
             rooms[room].config = config;
-            // io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
-            setTimeout(() => {
-                io.to(room).emit('started-match', "fawefaewf", "Q1");
-                socket.emit('started-match2', rooms[room].time, rooms[room].question);
-            }, 1000);  // 100 milliseconds delay
-            
-            console.log("emitting started-match2", rooms[room].time, Date.now(), rooms[room].time-Date.now(), rooms[room].question)
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
-
-    socket.on("test", () => {
-        console.log("testing");
-    })
 
     socket.on("next-round", (room, timeLimit, testcases, config, question) => {
         room = String(room);
