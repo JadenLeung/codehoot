@@ -113,7 +113,11 @@ io.on("connection", (socket) => {
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
             rooms[room].config = config;
-            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            // io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            rooms[room].userids.forEach((id) => {
+                io.to(id).emit('started-match', rooms[room].time, rooms[room].question);
+                console.log("emitting to", id);
+            })
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
             console.log("emitting started-match2", rooms[room].time, Date.now(), rooms[room].time-Date.now(), rooms[room].question)
         }
