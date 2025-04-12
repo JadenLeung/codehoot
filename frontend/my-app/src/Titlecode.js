@@ -86,6 +86,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       });
 
       socket.on("started-match", (time, q) => {
+        console.log(time, q);
         if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
           setQuestion(q);

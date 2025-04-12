@@ -5,6 +5,7 @@ import Title from './Title';
 import Titlecode from './Titlecode';
 import Host from './Host';
 import Coding from './Coding';
+import config from './config';
 
 function App() {
   const [mode, setMode] = useState('start');
@@ -21,7 +22,7 @@ function App() {
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:3004'); // Replace with your server URL
+    const socketInstance = io(config.websocket); // Replace with your server URL
     setSocket(socketInstance);
 
     // Cleanup the socket connection when the component unmounts

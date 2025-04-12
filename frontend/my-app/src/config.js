@@ -4,6 +4,8 @@ const config = {
     questions: 3,
     submitCooldown: 1,
     namelength: 15,
+    websocket: 'https://api.virtual-cube.net:3001/',
+    // websocket: 'http://localhost:3001',
     time: {
         Q1: 1000,
         Q2: 1000,
