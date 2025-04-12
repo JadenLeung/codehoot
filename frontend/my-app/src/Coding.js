@@ -51,7 +51,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
     if (num <= 5 && gatekeep) {
       return "You're in the top 5.";
     }
-    if (!config.showRank && num >= numPlayers / 2) {
+    if (num / numPlayers > config.showRank && num > 3) {
       const inspiration = config.inspiration;
       let random = inspiration[Math.floor(Math.random() * inspiration.length)];
       if (random[0] == "/") {
@@ -152,13 +152,16 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       {
         mode == "podium" && 
         <div className="leaderboard-client-container">
-          {config.showRank &&
+          {((leaderboardData.index + 1) / numPlayers <= config.showRank || leaderboardData.index <= 2) &&
             <Title>{getPlace((leaderboardData.index + 1), false)}</Title>
           }
           <Title>Final Score: {points}</Title>
-          <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
-            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index < 3 || config.showRank ? leaderboardData.index + 1 : ""}</p>
+          {
+            ((leaderboardData.index + 1) / numPlayers <= config.showRank || leaderboardData.index <= 2) && <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
+            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
           </Medal>
+          }
+          <Title>Thanks for playing!</Title>
         </div>
       }
     </div>
