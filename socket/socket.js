@@ -115,7 +115,7 @@ io.on("connection", (socket) => {
             rooms[room].config = config;
             io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
-            console.log("emitting started-match2", rooms[room].time, Date.now, rooms[room].time-Date.now())
+            console.log("emitting started-match2", rooms[room].time, Date.now(), rooms[room].time-Date.now(), rooms[room].question)
         }
     });
 
