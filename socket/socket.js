@@ -7,7 +7,7 @@ const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 
-dev = false;
+dev = true;
 
 // HTTPS Configuration
 if (!dev) {
@@ -105,6 +105,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("start-match", (room, timeLimit, testcases, config) => {
+        console.log("start match!", room)
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "lobby") {
             socket.to(room).emit('started-match', rooms[room].time); 
@@ -114,8 +115,13 @@ io.on("connection", (socket) => {
             rooms[room].config = config;
             io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
+            console.log("emitting started-match2")
         }
     });
+
+    socket.on("test", () => {
+        console.log("testing");
+    })
 
     socket.on("next-round", (room, timeLimit, testcases, config, question) => {
         room = String(room);
