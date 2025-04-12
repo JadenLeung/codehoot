@@ -1,6 +1,15 @@
-#include "limited_calculator.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <string.h>
 
-// See .h for details
+struct calculator {
+    int answer;
+    int max;
+};
+
 struct calculator *create_calculator(int max) {
     struct calculator *c = malloc(sizeof(struct calculator));
     c->answer = 0;
@@ -8,13 +17,11 @@ struct calculator *create_calculator(int max) {
     return c;
 }
 
-// See .h for details
 void destroy_calculator(struct calculator *c) {
     assert(c);
     free(c);
 }
 
-// See .h for details
 int get_answer(struct calculator *c) {
     assert(c);
 
@@ -33,13 +40,11 @@ static int limit(int max, int answer) {
     }
 }
 
-// See .h for details
 void add(int n, struct calculator *c) {
     assert(c);
     c->answer = limit(c->max, c->answer + n);
 }
 
-// See .h for details
 void subtract(int n, struct calculator *c) {
     assert(c);
     add(-n, c);

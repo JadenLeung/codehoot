@@ -1,25 +1,30 @@
 const config = {
     dev: true,
     port: 5004,
-    questions: 3,
+    questions: 4,
     submitCooldown: 1,
     namelength: 15,
+    timeout: 1, // # seconds until clang times out
     websocket: 'https://api.virtual-cube.net:3001/',
     // websocket: 'http://localhost:3001',
     time: {
-        Q1: 1000,
+        Q1: 20,
         Q2: 1000,
         Q3: 1000,
+        Q4: 1000,
     },
     questionNames: {
-        Q1: "Q1",
+        Q1: "Q2",
         Q2: "is_bst",
         Q3: "least_letter",
+        Q4: "limited_calculator",
     },
     testcases: {
         Q1: 2,
         Q2: 9,
-        Q3: 6,
+        Q3: 7,
+        Q4: 8,
+
     },
     medalColor: {
         0: "gold",

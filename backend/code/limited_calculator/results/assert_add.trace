@@ -1,1 +1,0 @@
-myprogram: limited_calculator.c:38: void add(int, struct calculator *): Assertion `c' failed.

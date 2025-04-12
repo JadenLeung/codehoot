@@ -1,1 +1,0 @@
-myprogram: limited_calculator.c:13: void destroy_calculator(struct calculator *): Assertion `c' failed.

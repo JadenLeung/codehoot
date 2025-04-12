@@ -46,6 +46,7 @@ def submit():
     data = request.get_json()
     code = data.get('code')
     question = data.get('question')
+    timeout = data.get('timeout')
 
 
     with open(f"code/headers.c", "r") as headers:
@@ -95,11 +96,11 @@ def submit():
             # Wait for the process to finish
 
             try:
-                stdout, stderr = run_process.communicate(timeout=2)
+                stdout, stderr = run_process.communicate(timeout=timeout)
 
             except subprocess.TimeoutExpired:
                 if  i == 0:
-                    return jsonify({"output": f"Timeout: 2 second limit reached"})
+                    return jsonify({"output": f"Timeout: {timeout} second limit reached"})
                 incorrect.add(i)
                 run_process.kill()
                 continue
