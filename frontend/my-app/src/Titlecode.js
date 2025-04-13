@@ -163,7 +163,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
                 <img src = {`/data/avatars/${avatar}.png`} className="image"></img>
                 <Title color="white">Welcome, {text}</Title>
                 <p className="avatar-text">Select your avatar</p>
-                {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
+                {picList.map((pic) => (<img key={pic} src={`${process.env.PUBLIC_URL}/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
                 onClick={() => {changeAvatar(pic)}}/>))}
                 <br></br>
             </div>
