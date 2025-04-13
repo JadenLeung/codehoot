@@ -25,4 +25,6 @@ struct bst {
 //              3     6
 //               \
 //                4
-int bst_height(struct bst *t);
+int bst_height(struct bst *t) {
+    // Your implementation here
+}

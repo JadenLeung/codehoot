@@ -1,1 +1,0 @@
-myprogram: linked_sum.c:5: int linked_sum(struct llist *): Assertion `ll' failed.

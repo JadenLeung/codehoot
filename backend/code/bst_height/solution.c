@@ -1,4 +1,20 @@
-#include "bst_height.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <limits.h>
+#include <assert.h>
+#include <string.h>
+#include <stdbool.h>
+
+struct bstnode {
+    int item;
+    struct bstnode *left;
+    struct bstnode *right;
+    int count;
+};
+  
+struct bst {
+    struct bstnode *root;
+};
 
 // bst_node_height(node) finds the height of the tree rooted at node
 // time: O(n)
@@ -15,7 +31,6 @@ int bst_node_height(struct bstnode *node) {
     }
 }
 
-// See .h for details
 int bst_height(struct bst *t) {
     assert(t);
 

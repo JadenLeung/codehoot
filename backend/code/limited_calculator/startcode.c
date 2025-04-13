@@ -10,7 +10,7 @@ struct calculator {
     int max;
 };
 
-// create_calculator() initializes memory for a new calculator
+// create_calculator() initializes memory for a new calculator, with its answer being 0
 // effects: allocates memory, caller must free
 struct calculator *create_calculator(int max) {
     // Your implementation here

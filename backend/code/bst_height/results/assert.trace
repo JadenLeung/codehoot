@@ -1,1 +1,0 @@
-myprogram: bst_height.c:20: int bst_height(struct bst *): Assertion `t' failed.

@@ -18,4 +18,14 @@ struct llist {
 // requires: ll is a valid llist
 // time: O(n)
 // examples: 1-2-3-4   ->    10
-int linked_sum(struct llist *ll);
+int linked_sum(struct llist *ll) {
+    assert(ll);
+
+    struct llnode *node = ll->front;
+    int sum = 0;
+    while (node) {
+        sum += node->item;
+        node = node->next;
+    }
+    return sum;
+}
