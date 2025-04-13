@@ -1,14 +1,35 @@
 const config = {
-    questions: 2,
-    submitCooldown: 15,
+    dev: true,
+    port: 5004,
+    questions: 4,
+    showRank: 0.2, // Decimal from 0-1. If 0.4, the top 40% of people get to see their scores.
+    submitCooldown: 1,
+    namelength: 15,
+    timeout: 1, // # seconds until clang times out
+    websocket: 'https://api.virtual-cube.net:3001/',
+    // websocket: 'http://localhost:3001',
     time: {
-        Q1: 1000,
-        Q2: 1000
+        Q1: 20,
+        Q2: 1000,
+        Q3: 1000,
+        Q4: 1000,
+    },
+    questionNames: {
+        Q1: "Q2",
+        Q2: "is_bst",
+        Q3: "least_letter",
+        Q4: "limited_calculator",
     },
     testcases: {
         Q1: 2,
-        Q2: 2
+        Q2: 9,
+        Q3: 7,
+        Q4: 8,
+
     },
+    inspiration: ["In modularity, you want low coupling, high cohesion", "You cannot directly dereference a void pointer.", 
+        "String literals are stored in the read-only section of memory", "const int *p is a pointer to a constant integer", "Realloc has 2 effects: allocating and deallocating memory",
+        "/data/avatars/nomair2.png", "/data/avatars/chin.png"],
     medalColor: {
         0: "gold",
         1: "#C0C0C0",

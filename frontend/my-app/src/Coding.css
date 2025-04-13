@@ -78,8 +78,17 @@
 }
 
 .ranktext {
-    color:white;
+    color: white;
     font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: row; /* or column, depending on layout */
+}
+
+.meme-image {
+    height: 200px;
 }
 
 .score-text {

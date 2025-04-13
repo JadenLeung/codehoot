@@ -7,16 +7,16 @@ const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 
-dev = true;
+dev = false;
 
 // HTTPS Configuration
-// if (!dev) {
-//     var options = {
-//         key: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/privkey.pem"),
-//         cert: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/fullchain.pem")
-//     };
-//     var httpsServer = https.createServer(options, app);
-// }
+if (!dev) {
+    var options = {
+        key: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/api.virtual-cube.net/fullchain.pem")
+    };
+    var httpsServer = https.createServer(options, app);
+}
 
 // Create HTTPS server
 const io = new Server(dev ? server : httpsServer, {
@@ -107,12 +107,11 @@ io.on("connection", (socket) => {
     socket.on("start-match", (room, timeLimit, testcases, config) => {
         room = String(room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "lobby") {
-            socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
             rooms[room].time = Date.now() + timeLimit;
             rooms[room].testcases = testcases;
             rooms[room].config = config;
-            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
@@ -121,7 +120,6 @@ io.on("connection", (socket) => {
         room = String(room);
         console.log("attempting to start next round", question);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "results") {
-            socket.to(room).emit('started-match', rooms[room].time); 
             rooms[room].stage = "ingame";
             rooms[room].question = question;
             rooms[room].time = Date.now() + timeLimit;
@@ -134,7 +132,7 @@ io.on("connection", (socket) => {
                 }
             })
             console.log("emitting", question);
-            io.to(room).emit('started-match', rooms[room].time, rooms[room].question); // only others in that room
+            socket.to(room).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
@@ -260,12 +258,12 @@ io.on("connection", (socket) => {
     }
 });
 
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3001;
 
 if (!dev) {
     // Start HTTPS server (which includes Socket.IO)
-    httpsServer.listen(3004, () => {
-        console.log('HTTPS server with Socket.IO running on port 3003');
+    httpsServer.listen(3001, () => {
+        console.log('HTTPS server with Socket.IO running on port 3001');
     });
 } else {
     server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

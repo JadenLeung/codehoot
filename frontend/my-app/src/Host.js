@@ -12,6 +12,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
     function startMatch() {
         if (mode == "hostlobby") {
             socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
+            socket.emit("test");
         } else if (mode == "hostresults") {
             if (question == "Q" + config.questions) {
                 setMode("hostpodium");

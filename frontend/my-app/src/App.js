@@ -5,6 +5,7 @@ import Title from './Title';
 import Titlecode from './Titlecode';
 import Host from './Host';
 import Coding from './Coding';
+import config from './config';
 
 function App() {
   const [mode, setMode] = useState('start');
@@ -19,9 +20,10 @@ function App() {
   const [data, setData] = useState({});
   const [endtime, setEndTime] = useState(0);
   const [points, setPoints] = useState(0);
+  const [numPlayers, setNumPlayers] = useState(0);
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:3004'); // Replace with your server URL
+    const socketInstance = io(config.websocket); // Replace with your server URL
     setSocket(socketInstance);
 
     // Cleanup the socket connection when the component unmounts
@@ -68,7 +70,8 @@ function App() {
             ["start", "entername", "lobby", "hostlobby", "results"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} setQuestion={setQuestion}/>
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} 
+              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers}/>
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
@@ -78,7 +81,7 @@ function App() {
       {["ingame", "results", "podium"].includes(mode) && (
         <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
         endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room} mode={mode}
-          setMode={setMode} points={points} setPoints={setPoints}
+          setMode={setMode} points={points} setPoints={setPoints} numPlayers={numPlayers}
         ></Coding>
       )}
     </div>

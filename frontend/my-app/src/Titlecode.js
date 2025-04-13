@@ -3,9 +3,10 @@ import './Titlecode.css';
 import Title from './Title';
 import Mainbutton from './Mainbutton';
 import Rectangle from './Rectangle';
+import config from './config';
 
-function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion}) {
+function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -27,9 +28,25 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
   }
 
   function submitButton() {
+    if (config.dev && text == "") {
+      let room = "CS136";
+      setRoom(room);
+      let t = Math.round(Math.random() * 10000);
+      setText(t);
+      socket.emit('join-room', room, t, "nomair", (res) => {
+        if (res == "Game already started" || res == "Game already ended") {
+          riseError("ⓘ " + res);
+          setMode("start");  
+          setText("");
+        } else if (res == "Name is taken") {
+          riseError("ⓘ " + res);
+        }
+      });
+      return;
+    }
     if (mode == "start") {
         if (text == "") {
-          riseError("ⓘ Assertion failed, Game PIN must not be null")
+          riseError("ⓘ Assertion failed, Game PIN must not be null");
         } else {
             socket.emit('attempt-join', text, (res) => {
               if (res) {
@@ -84,10 +101,13 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
         riseError("ⓘ You have been kicked (freed)");
       });
 
-      socket.on("started-match", (time, q) => {
+      socket.on("started-match", (time, q, players) => {
+        console.log(time, q);
         if (mode == "lobby" || mode == "results") {
           setMode("ingame");    
+          setNumPlayers(players);
           setQuestion(q);
+          setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);
         } else if (mode == "changename") {
@@ -130,7 +150,7 @@ function Titlecode({ output, mode, setMode, buttonText, placeholderText, avatar,
           <div className="equilateral-triangle"  style={{left:left.triangle}}></div>
           { mode != "lobby" && mode != "hostlobby" &&
             <Rectangle marginTop="40px" width="280px">
-                <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : 16}
+                <input className="input-code" placeholder={placeholderText} type="text" value={text} maxLength={mode == "start" ? 6 : config.namelength}
                     onChange={(event) => {setText(mode == "start" ? event.target.value.toUpperCase() : event.target.value)}} 
                     onKeyDown={(event) => {event.key == "Enter" && submitButton()}}></input>
                 <Mainbutton width = "250px" onClick={submitButton}>{buttonText}</Mainbutton>
