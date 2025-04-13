@@ -1,4 +1,3 @@
-#include "linked_middle.h"
 
 int main(void) {
     int read = 0;

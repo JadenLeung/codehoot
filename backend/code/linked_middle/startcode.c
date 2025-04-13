@@ -20,4 +20,7 @@ struct llist {
 // time: O(n)
 // examples: 1 - 2 - 3   ->   2
 //           5 - 4 - 7 - 2   ->  (4 + 7) / 2 = 5
-int middle(struct llist *ll);
+int middle(struct llist *ll) {
+    // Your implementation here
+    return 0;
+}

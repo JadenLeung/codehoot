@@ -1,1 +1,0 @@
-myprogram: linked_middle.c:18: int middle(struct llist *): Assertion `ll' failed.
