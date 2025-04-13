@@ -2,6 +2,8 @@ import subprocess
 import signal
 import os
 import glob
+import shutil
+import tempfile
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -46,97 +48,108 @@ def submit():
     data = request.get_json()
     code = data.get('code')
     question = data.get('question')
-    timeout = data.get('timeout')
 
+    # List of forbidden keywords or patterns in C code
+    forbidden_keywords = [
+        "system(", "fork(", "exec", "popen(", "socket(", "kill(",
+        "#include <unistd", "#include <sys", "#include <signal", "#include <fcntl",
+        "open(", "creat(", "unlink(", "rename(",
+        "fopen(", "freopen(", "fclose(", "fread(", "fwrite("
+    ]
 
-    with open(f"code/headers.c", "r") as headers:
-        with open("main.c", "w") as f:
-            f.write(headers.read())
+    # Check for any forbidden keywords
+    for keyword in forbidden_keywords:
+        if keyword in code:
+            return jsonify({
+                "error": "Forbidden code detected",
+                "details": f"Use of dangerous function or header: '{keyword}'"
+            }), 400
 
-    
-    with open("main.c", "a") as f:
-        f.write(code)
+    # Create a temporary directory
+    with tempfile.TemporaryDirectory() as tmpdir:
 
-    with open(f"code/{question}/main.c", "r") as harness_code:
-        with open("main.c", "a") as f:
-            f.write(harness_code.read())
+        with open(os.path.join(tmpdir, "main.c"), "w") as f:
+            with open(f"code/headers.c", "r") as headers:
+                f.write(headers.read())
+            f.write(code)
+            with open(f"code/{question}/main.c", "r") as harness_code:
+                f.write(harness_code.read())
 
-    try:
-        # Compile the code with AddressSanitizer enabled
-        compile_process = subprocess.run(
-            ['clang', '-fsanitize=address', '-fsanitize=leak', '-std=c99', '-g', '-Wall', '-Werror', 'main.c'],
-            capture_output=True, text=True
-        )
+        try:
+            # Compile the code with AddressSanitizer enabled
+            compile_process = subprocess.run(
+                ['clang', '-fsanitize=address', '-fsanitize=leak', '-std=c99', '-g', '-Wall', '-Werror', os.path.join(tmpdir, "main.c")],
+                cwd=tmpdir,
+                capture_output=True, text=True
+            )
 
-        if compile_process.returncode != 0 or len(compile_process.stderr) > 0:
-            return jsonify({"error": "Compilation failed", "details": compile_process.stderr}), 500
-        
-        files = glob.glob(f"./code/{question}/tests/*.in")
-        files.sort()
+            if compile_process.returncode != 0 or len(compile_process.stderr) > 0:
+                return jsonify({"error": "Compilation failed", "details": compile_process.stderr}), 500
+            
+            files = glob.glob(f"./code/{question}/tests/*.in")
+            files.sort()
 
-        files.remove(f"./code/{question}/tests/public.in")
-        files.insert(0, f"./code/{question}/tests/public.in")
+            files.remove(f"./code/{question}/tests/public.in")
+            files.insert(0, f"./code/{question}/tests/public.in")
 
-        correct = set([])
-        incorrect = set([])
-        for i, file in enumerate(files):
-            with open(file, "r") as input_file:
-                run_process = subprocess.Popen(
-                    ['./a.out'],
-                    stdin=input_file,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True
-                )
-                subprocesses.append(run_process)  # Add process to the list
+            correct = set([])
+            incorrect = set([])
+            for i, file in enumerate(files):
+                with open(file, "r") as input_file:
+                    input_text = input_file.read()
 
+                # Execute the binary
+                try:
+                    run_process = subprocess.Popen(
+                        ['./a.out'],
+                        stdin=subprocess.PIPE,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        cwd=tmpdir,  # Ensure the process runs in the tmpdir
+                        text=True
+                    )
+                    subprocesses.append(run_process)  # Add process to the list
 
-            with open(file, "r") as input_file:
-                input_text = input_file.read()
-            # Wait for the process to finish
+                    stdout, stderr = run_process.communicate(input=input_text, timeout=2)
 
-            try:
-                stdout, stderr = run_process.communicate(timeout=timeout)
-
-            except subprocess.TimeoutExpired:
-                if  i == 0:
-                    return jsonify({"output": f"Timeout: {timeout} second limit reached"})
-                incorrect.add(i)
-                run_process.kill()
-                continue
-
-            # Check if the test is an assertion test
-            if "assert" in file:
-                print(f"Assertion: return code for {file}: {run_process.returncode}", code.count("assert") , code.count("assert.h") )
-                if run_process.returncode == 0 or code.count("assert") - 1 == 0:
-                    incorrect.add(i)
-                else:
-                    correct.add(i)
-                continue
-
-            err = parse_asan(stderr)
-
-            if run_process.returncode != 0:
-                return jsonify({"error": "Execution failed", "details": err}), 500
-                incorrect.add(i)
-
-            basename, extension = os.path.splitext(file)
-            res = stdout
-            with open(basename + ".expect", "r") as expected:
-                expected = expected.read()
-                if (res != expected):
+                except subprocess.TimeoutExpired:
                     if  i == 0:
-                        return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
+                        return jsonify({"output": f"Timeout: 2 second limit reached"})
                     incorrect.add(i)
-                else:
-                    correct.add(i)
-                    
+                    run_process.kill()
+                    continue
 
-        return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
-        "correct": len(correct), "incorrect": len(incorrect), "numTests": len(correct) + len(incorrect)})
+                # Check if the test is an assertion test
+                if "assert" in file:
+                    print(f"Assertion: return code for {file}: {run_process.returncode}", code.count("assert") , code.count("assert.h") )
+                    if run_process.returncode == 0 or code.count("assert") - code.count("assert.h") == 0:
+                        incorrect.add(i)
+                    else:
+                        correct.add(i)
+                    continue
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+                err = parse_asan(stderr)
+
+                if run_process.returncode != 0:
+                    return jsonify({"error": "Execution failed", "details": err}), 500
+
+                basename, extension = os.path.splitext(file)
+                res = stdout
+                with open(basename + ".expect", "r") as expected:
+                    expected = expected.read()
+                    if (res != expected):
+                        if  i == 0:
+                            return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
+                        incorrect.add(i)
+                    else:
+                        correct.add(i)
+                        
+
+            return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
+            "correct": len(correct), "incorrect": len(incorrect), "numTests": len(correct) + len(incorrect)})
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
 
 def parse_asan(message):
@@ -146,4 +159,5 @@ def parse_asan(message):
 
 
 if __name__ == '__main__':
-    app.run(port=5004, debug=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
