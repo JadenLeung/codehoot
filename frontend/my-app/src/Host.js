@@ -81,10 +81,10 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
     <div>
         <div className="container">
             { mode == "hostlobby" && 
-                <Rectangle width="900px">
+                <Rectangle width="1100px">
                     <div className="banner">
                         <div className="box">
-                            <p className = "title">Join at {window.location.href.replace("http://", "")}</p>
+                            <p className = "title">Join at {window.location.href.replace("https://", "")}</p>
                         </div>
                         <div className="box">
                             <p className = "title">Game PIN:</p>
@@ -126,7 +126,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                         i < 10 && <Rectangle height="70px" width="800px">{
                             <div className = "leaderboard-bar">
                                 <div className = "leaderboard-profile">
-                                    <img className="leaderboard-img" src={`/data/avatars/${data.userdata[obj.id].avatar}.png`}></img>
+                                    <img className="leaderboard-img" src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[obj.id].avatar}.png`}></img>
                                     <p className="leaderboardtext">{data.userdata[obj.id].name}</p>
                                 </div>
                                 <p className="leaderboardtext">{obj.points}</p>
@@ -141,7 +141,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                     {leaderboardData.leaderboard.length >= 3 && 
                         <div className="placement">
                             <div className="player-box2">
-                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[2].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[2].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[2].id].name}</p>
                             </div>
                             <Rectangle height="350px" width="375px" 
@@ -152,7 +152,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                     {leaderboardData.leaderboard.length >= 1 && 
                         <div className="placement">
                             <div className="player-box2">
-                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[0].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[0].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[0].id].name}</p>
                             </div>
                             <Rectangle height="450px" width="375px" 
@@ -163,7 +163,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                     {leaderboardData.leaderboard.length >= 2 && 
                         <div className="placement">
                             <div className="player-box2">
-                                <img src={`/data/avatars/${data.userdata[leaderboardData.leaderboard[1].id].avatar}.png`} alt="Avatar" className="avatar"/>
+                                <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[1].id].avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text2">{data.userdata[leaderboardData.leaderboard[1].id].name}</p>
                             </div>
                             <Rectangle height="400px" width="375px" 
@@ -190,7 +190,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                         <div className = "player-container">
                             {players.map((player) => (
                             <div className="player-box"  key={player}>
-                                <img src={`/data/avatars/${player.avatar}.png`} alt="Avatar" className="avatar"/>
+                                <img src={`${process.env.PUBLIC_URL}/data/avatars/${player.avatar}.png`} alt="Avatar" className="avatar"/>
                                 <p className="wait-text strikethrough" onClick={() => {removePlayer(player.id)}}>{player.name}</p>
                             </div>
                             ))}

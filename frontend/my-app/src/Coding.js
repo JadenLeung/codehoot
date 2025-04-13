@@ -55,7 +55,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       const inspiration = config.inspiration;
       let random = inspiration[Math.floor(Math.random() * inspiration.length)];
       if (random[0] == "/") {
-        return (<img src={random} className="meme-image" />);
+        return (<img src={process.env.PUBLIC_URL + random} className="meme-image" />);
       }
       return random;
     }
@@ -105,7 +105,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       <div className="headercode">
         <div className="profile_container">
           <div className="profile">
-            <img className="profile-avatar" src={`/data/avatars/${avatar}.png`} alt="Avatar"/>
+            <img className="profile-avatar" src={`${process.env.PUBLIC_URL}/data/avatars/${avatar}.png`} alt="Avatar"/>
             <p className="name">{name}</p>
           </div>
         </div>

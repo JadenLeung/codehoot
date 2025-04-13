@@ -33,6 +33,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       setRoom(room);
       let t = Math.round(Math.random() * 10000);
       setText(t);
+      setName(t);
       socket.emit('join-room', room, t, "nomair", (res) => {
         if (res == "Game already started" || res == "Game already ended") {
           riseError("ⓘ " + res);
