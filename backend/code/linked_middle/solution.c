@@ -1,4 +1,17 @@
-#include "linked_middle.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+struct llnode {
+  int item;
+  struct llnode *next;
+};
+
+struct llist {
+  struct llnode *front;
+};
 
 // length(node) finds the number of nodes that come after node (including node)
 //   requires: node is not NULL

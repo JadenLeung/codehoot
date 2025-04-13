@@ -1,8 +1,9 @@
-#include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
 #include <stdbool.h>
-
-// stack.c (IMPLEMENTATION)
+#include <string.h>
 
 struct stack {
   int len;
@@ -51,4 +52,22 @@ int stack_pop(struct stack *s) {
   assert(s->len);
   s->len -= 1;
   return s->data[s->len];
+}
+
+
+void stack_filter(struct stack *s, bool (*filter)(int)) {
+    assert(s);
+    assert(filter);
+    
+    struct stack *temp = create_stack();
+    while (!stack_is_empty(s)) {
+        int top = stack_pop(s);
+        if (filter(top)) {
+            stack_push(top, temp);
+        }
+    }
+    while (!stack_is_empty(temp)) {
+        stack_push(stack_pop(temp), s);
+    }
+    stack_destroy(temp);
 }

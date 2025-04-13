@@ -1,1 +1,0 @@
-myprogram: stack_filter.c:6: void stack_filter(struct stack *, _Bool (*)(int)): Assertion `filter' failed.

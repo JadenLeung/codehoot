@@ -1,5 +1,3 @@
-#include "stack_filter.h"
-
 bool is_even(int n) {
     if (n % 2 == 0) {
         return true;
@@ -35,6 +33,7 @@ int main(void) {
     char filter = '\0';
     if (scanf("%c", &filter) != 1) {
         stack_filter(s, NULL);
+        stack_destroy(s);
         return 0;
     }
 

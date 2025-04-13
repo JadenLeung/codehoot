@@ -108,7 +108,7 @@ def submit():
             # Check if the test is an assertion test
             if "assert" in file:
                 print(f"Assertion: return code for {file}: {run_process.returncode}", code.count("assert") , code.count("assert.h") )
-                if run_process.returncode == 0 or code.count("assert") - code.count("assert.h") == 0:
+                if run_process.returncode == 0 or code.count("assert") - 1 == 0:
                     incorrect.add(i)
                 else:
                     correct.add(i)
@@ -118,6 +118,7 @@ def submit():
 
             if run_process.returncode != 0:
                 return jsonify({"error": "Execution failed", "details": err}), 500
+                incorrect.add(i)
 
             basename, extension = os.path.splitext(file)
             res = stdout
