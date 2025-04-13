@@ -24,13 +24,16 @@
 .banner {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .box {
     padding-left: 40px;
     padding-right: 40px;
+    flex-wrap: wrap;
+    margin: 10px;
 }
 
 .wait-text {
