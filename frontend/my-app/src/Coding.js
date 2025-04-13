@@ -21,7 +21,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
   const fetchCode = async () => {
     try {
       if (question) {
-        let res = await fetch(`http://127.0.0.1:${config.port}/code?question=${config.questionNames[question]}`);
+        let res = await fetch(`${config.flask}/code?question=${config.questionNames[question]}`);
         let data = await res.json();
         setCode(data);
       }

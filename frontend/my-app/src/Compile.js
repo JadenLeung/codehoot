@@ -45,7 +45,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
     
     setOutput({state: "Compiling..."});
     try {
-        const response = await fetch(`http://127.0.0.1:${config.port}/submit`, {
+        const response = await fetch(`${config.flask}/submit`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

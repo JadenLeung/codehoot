@@ -9,11 +9,15 @@ RUN useradd -m flaskuser && \
     mkdir -p /python-docker && \
     chown -R flaskuser:flaskuser /python-docker
 
-# Install necessary utilities
+# Install necessary utilities, gcc, and valgrind
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     bash \
     python3-pip \
+    gcc \
+    valgrind \
+    make \
+    libc6-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Switch to non-root user
