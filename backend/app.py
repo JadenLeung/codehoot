@@ -126,6 +126,10 @@ def submit():
                         correct.add(i)
                     continue
 
+
+
+                stdout += parse_valgrind(stderr)
+
                 # Parse Valgrind output for memory issues
                 valgrind_errors = parse_valgrind(stderr)
 
@@ -151,9 +155,9 @@ def submit():
 
 
 def parse_valgrind(message):
-    if "ERROR SUMMARY" in message:
-        return message.split("ERROR SUMMARY", 1)[1]
-    return message
+    if "definitely lost" in message:
+        return "\n" + message
+    return ""
 
 
 if __name__ == '__main__':
