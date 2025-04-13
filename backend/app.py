@@ -46,6 +46,7 @@ def submit():
     data = request.get_json()
     code = data.get('code')
     question = data.get('question')
+    timeout = data.get('timeout')
 
     # List of forbidden keywords or patterns in C code
     forbidden_keywords = [
@@ -108,11 +109,11 @@ def submit():
                     )
                     subprocesses.append(run_process)  # Add process to the list
 
-                    stdout, stderr = run_process.communicate(input=input_text, timeout=10)
+                    stdout, stderr = run_process.communicate(input=input_text, timeout=timeout)
 
                 except subprocess.TimeoutExpired:
                     if i == 0:
-                        return jsonify({"output": f"Timeout: 10 second limit reached"})
+                        return jsonify({"output": f"Timeout: {timeout} second limit reached"})
                     incorrect.add(i)
                     run_process.kill()
                     continue

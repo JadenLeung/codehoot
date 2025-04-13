@@ -27,8 +27,15 @@ USER flaskuser
 COPY --chown=flaskuser:flaskuser requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy rest of the application
-COPY --chown=flaskuser:flaskuser . .
+# Copy the application code
+COPY --chown=flaskuser:flaskuser code/ /python-docker/code/
+COPY --chown=flaskuser:flaskuser app.py /python-docker/app.py
+
+# Make code/ directory read-only
+RUN chmod -R 0555 /python-docker/code
+RUN chmod 0555 /python-docker/app.py
+
+RUN chmod 1775 /python-docker
 
 # Expose the default Cloud Run port (8080)
 EXPOSE 8080

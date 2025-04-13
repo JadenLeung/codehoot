@@ -9,7 +9,7 @@ import config from './config';
 
 function App() {
   const [mode, setMode] = useState('start');
-  const [code, setCode] = useState({in: "", expect: "", code: ""});
+  const [code, setCode] = useState({in: "", expect: "", code: "// Fetching code from server..."});
   const [name, setName] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
@@ -71,7 +71,7 @@ function App() {
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
               setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} 
-              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers}/>
+              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers} setCode={setCode}/>
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))

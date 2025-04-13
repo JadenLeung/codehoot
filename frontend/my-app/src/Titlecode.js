@@ -6,7 +6,7 @@ import Rectangle from './Rectangle';
 import config from './config';
 
 function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers}) {
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers, setCode}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -107,6 +107,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
           setMode("ingame");    
           setNumPlayers(players);
           setQuestion(q);
+          setCode(prev => ({...prev, code: "// Fetching code from server..."}))
           setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);
