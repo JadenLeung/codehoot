@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/codehoot/static/css/main.cf2dd87e.css",
+    "main.js": "/codehoot/static/js/main.79c0ef3b.js",
+    "index.html": "/codehoot/index.html",
+    "main.cf2dd87e.css.map": "/codehoot/static/css/main.cf2dd87e.css.map",
+    "main.79c0ef3b.js.map": "/codehoot/static/js/main.79c0ef3b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cf2dd87e.css",
+    "static/js/main.79c0ef3b.js"
+  ]
+}
