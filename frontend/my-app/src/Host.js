@@ -105,14 +105,16 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                 </div>
             }
             { mode == "hostresults" && 
-                <div>
-                    <Rectangle height="90px"><Title>Results</Title></Rectangle>
+                <div className="result-container">
+                    <div className = "resultbox-container"> 
+                        <Rectangle height="90px"><Title>Results</Title></Rectangle>
+                    </div>
                 <div className="bargraph">
                     {leaderboardData.scores.map((arr, i) => (
                         <div key={i}>
-                            <Rectangle height={arr.length * (40 / players.length) + "vh"} width="100px" 
-                                backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
                             <p className="bartext">{arr.length}</p>
+                            <Rectangle height={arr.length * (45 / players.length) + "vh"} width="100px" 
+                                backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
                         </div>
                     ))}
                 </div>

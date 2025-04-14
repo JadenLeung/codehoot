@@ -172,7 +172,7 @@
 }
 
 .bargraph {
-    margin-top: 20px;
+    margin-top: -10px;
     display: flex;
     justify-content: space-between;
     align-items: end;
@@ -231,4 +231,13 @@
 .strikethrough:hover {
     text-decoration: line-through;
     cursor: pointer;
+}
+
+.result-container {
+    margin-top: -50px;
+}
+
+.resultbox-container {
+    display: flex;
+    justify-content: center;
 }
