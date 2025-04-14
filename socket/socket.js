@@ -150,6 +150,10 @@ io.on("connection", (socket) => {
                 rooms[room].userdata[socket.id].passed = passed;
                 console.log("Score submited", time, rooms[room].userdata[socket.id])
                 cb("highscore");
+                if (rooms[room].testcases == passed) {
+                    console.log("emiiting")
+                    io.to(rooms[room].host).emit('perfect-score', rooms[room].userdata[socket.id].name);
+                }
             }
         }
     });

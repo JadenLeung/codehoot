@@ -241,3 +241,10 @@
     display: flex;
     justify-content: center;
 }
+.pass-message {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    color: white;
+    transition: opacity 1s
+}

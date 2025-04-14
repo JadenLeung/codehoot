@@ -9,6 +9,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
 
     const [time, setTime] = useState(999);
     const [leaderboardData, setLeaderboardData] = useState({});
+    const [passMessage, setPassMessage] = useState({message: "", opacity: 0});
     function startMatch() {
         if (mode == "hostlobby") {
             socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
@@ -28,6 +29,14 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
         } else {
             socket.emit("end-round", room);
         }
+    }
+
+    function showMessage(message) {
+        setPassMessage({ message, opacity: 1 });
+    
+        setTimeout(() => {
+            setPassMessage(prev => ({ ...prev, opacity: (prev.opacity == 1 ? 0 : prev.opacity)}));
+        }, 3000);
     }
 
     function removePlayer(id) {
@@ -77,6 +86,10 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             setLeaderboardData({ leaderboard, oldleaderboard, points, scores });
             console.log("Viewing leaderboard", { leaderboard, oldleaderboard, points, scores })
         });
+        socket.on("perfect-score", (name) => {
+            showMessage(name + " passed all test cases!")
+            console.log(name + " passed all test cases!");
+        });
 
         return (() => {
             socket.off("started-match2");
@@ -103,6 +116,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             }
             { mode == "hostingame" && 
                 <div className="hostlobby-container">
+                    <p className="pass-message" style={{opacity:passMessage.opacity}}>{passMessage.message}</p>
                     <Rectangle>
                         <p className = "title">Question {question.substring(1)}</p>
                     </Rectangle>
