@@ -137,16 +137,16 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
                 </div>
             }
           </div>
-          <Rectangle backgroundColor="black" className="compiler-output" width="50%"><Output output={output} className="bruh"/></Rectangle>
+          <Rectangle backgroundColor="black" className="compiler-output scrollable" width="50%"><Output output={output} className="bruh"/></Rectangle>
         </div>
       }
       {
         mode == "results" && 
         <div className="leaderboard-client-container">
-          <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct}/{config.testcases[question]}</Title></Rectangle>
+          <Rectangle height="90px" width="360px"  marginBottom="30px"><Title color="black">Score: {leaderboardData.correct ?? 0}/{config.testcases[question]}</Title></Rectangle>
           {/* <Title color="red"><span style={{color:"white"}}>Grade: </span>{getGrade(leaderboardData.correct/config.testcases[question] * 100)}</Title> */}
-          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + leaderboardData.points}</Title></Rectangle>
-          <p className="ranktext">{getPlace((leaderboardData.index + 1), true)}</p>
+          <Rectangle height="90px" width="300px" marginTop="50px" backgroundColor="black" opacity="0.6"><Title color="white">+{" " + (leaderboardData.points ?? 0)}</Title></Rectangle>
+          <p className="ranktext">{typeof(leaderboardData.index) == "number" ? getPlace((leaderboardData.index + 1), true) : "Currently unranked"}</p>
         </div>
       }
       {

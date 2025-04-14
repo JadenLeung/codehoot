@@ -8,8 +8,8 @@ const config = {
     submitCooldown: 1,
     namelength: 15,
     timeout: 1, // # seconds until clang times out
-    websocket: 'https://api.virtual-cube.net:3001/',
-    // websocket: 'http://localhost:3001',
+    // websocket: 'https://api.virtual-cube.net:3001/',
+    websocket: 'http://localhost:3001',
     time: {
         Q1: 150,
         Q2: 500,

@@ -102,9 +102,9 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         riseError("ⓘ You have been kicked (freed)");
       });
 
-      socket.on("started-match", (time, q, players) => {
-        console.log(time, q);
-        if (mode == "lobby" || mode == "results") {
+      socket.on("started-match", (time, q, players, force = false) => {
+        console.log(time, q, force);
+        if (mode == "lobby" || mode == "results" || force) {
           setMode("ingame");    
           setNumPlayers(players);
           setQuestion(q);

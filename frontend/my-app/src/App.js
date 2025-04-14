@@ -35,7 +35,7 @@ function App() {
   useEffect(() => {
     if (socket) {
       socket.on("room-change", (d, id, name, avatar, action) => {
-        console.log("host", id)
+        console.log("host", id, "data is", d, id, name, avatar, action)
         if (action == "join") {
           setData(d);
           setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);

@@ -48,6 +48,14 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
         return str;
     }
 
+    function getArrayLength(points) {
+        let len = 0;
+        points.forEach((arr) => {
+            len += arr.length;
+        })
+        return len;
+    }
+
     useEffect(() => {
       const interval = setInterval(() => {
         let t = ((endtime - Date.now()) / 1000);
@@ -113,7 +121,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                     {leaderboardData.scores.map((arr, i) => (
                         <div key={i}>
                             <p className="bartext">{arr.length}</p>
-                            <Rectangle height={arr.length * (45 / players.length) + "vh"} width="100px" 
+                            <Rectangle height={arr.length * (45 / getArrayLength(leaderboardData.scores)) + "vh"} width="100px" 
                                 backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
                         </div>
                     ))}
@@ -125,7 +133,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                 <div className="leaderboard-container">
                     <Rectangle height="90px" width="400px"><Title>Leaderboard</Title></Rectangle>
                     {leaderboardData.leaderboard.map((obj, i) => (
-                        i < 10 && <Rectangle height="70px" width="800px">{
+                        i < 10 && data.userdata[obj.id] && <Rectangle height="70px" width="800px">{
                             <div className = "leaderboard-bar">
                                 <div className = "leaderboard-profile">
                                     <img className="leaderboard-img" src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[obj.id].avatar}.png`}></img>

@@ -91,6 +91,11 @@
     height: 200px;
 }
 
+.scrollable {
+    overflow: auto;
+    max-height: 100%; /* Optional */
+  }
+
 .score-text {
     color:white;
     font-size: 30px;
