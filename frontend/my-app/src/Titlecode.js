@@ -6,7 +6,8 @@ import Rectangle from './Rectangle';
 import config from './config';
 
 function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers, setCode}) {
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers, setCode,
+  setPoints}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -112,16 +113,27 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
           setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);
+          localStorage.id = socket.id;
         } else if (mode == "changename") {
           setMode("start");
           riseError("ⓘ Game already started");
         }
       });
 
+      socket.on("already-joined", (n, a, p, r) => {
+        localStorage.id = socket.id;
+        setName(n);
+        setAvatar(a);
+        setRoom(r);
+        setPoints(p)
+      });
+
       return () => {
         socket.off("created-room");
         socket.off("joined-room");
+        socket.off("kick-you");
         socket.off("started-match");
+        socket.off("already-joined")
       };
     }
   }, [socket, mode]);

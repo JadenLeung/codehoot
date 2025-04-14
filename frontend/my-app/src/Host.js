@@ -162,7 +162,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             { mode == "hostpodium" && 
                 <div>
                 <div className="bargraph">
-                    {leaderboardData.leaderboard.length >= 3 && 
+                    {leaderboardData.leaderboard.length >= 3 && data.userdata[leaderboardData.leaderboard[2].id] &&
                         <div className="placement">
                             <div className="player-box2">
                                 <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[2].id].avatar}.png`} alt="Avatar" className="avatar"/>
@@ -173,7 +173,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                             <p className="bartext">{leaderboardData.leaderboard[2].points}</p>
                         </div>
                     }
-                    {leaderboardData.leaderboard.length >= 1 && 
+                    {leaderboardData.leaderboard.length >= 1 && data.userdata[leaderboardData.leaderboard[0].id] &&
                         <div className="placement">
                             <div className="player-box2">
                                 <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[0].id].avatar}.png`} alt="Avatar" className="avatar"/>
@@ -184,7 +184,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                             <p className="bartext">{leaderboardData.leaderboard[0].points}</p>
                         </div>
                     }
-                    {leaderboardData.leaderboard.length >= 2 && 
+                    {leaderboardData.leaderboard.length >= 2 && data.userdata[leaderboardData.leaderboard[1].id] &&
                         <div className="placement">
                             <div className="player-box2">
                                 <img src={`${process.env.PUBLIC_URL}/data/avatars/${data.userdata[leaderboardData.leaderboard[1].id].avatar}.png`} alt="Avatar" className="avatar"/>

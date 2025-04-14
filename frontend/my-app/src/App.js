@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     const socketInstance = io(config.websocket); // Replace with your server URL
     setSocket(socketInstance);
-
+    
     // Cleanup the socket connection when the component unmounts
     return () => {
       socketInstance.disconnect();
@@ -34,7 +34,15 @@ function App() {
 
   useEffect(() => {
     if (socket) {
+      if (localStorage.id) {
+        console.log("Checking for", localStorage.id);
+        socket.emit("check-joined", localStorage.id);
+      }
       socket.on("room-change", (d, id, name, avatar, action) => {
+        console.log("mode is ", mode)
+        if (mode == "hostpodium") {
+          return;
+        }
         console.log("host", id, "data is", d, id, name, avatar, action)
         if (action == "join") {
           setData(d);
@@ -54,7 +62,7 @@ function App() {
         socket.off("time-change");
       };
     }
-  }, [socket]);
+  }, [socket, mode]);
 
   if (mode === "start") {
     document.body.style.backgroundColor = '#511ca2';
@@ -71,7 +79,7 @@ function App() {
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
               setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} 
-              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers} setCode={setCode}/>
+              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers} setCode={setCode} setPoints={setPoints}/>
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
