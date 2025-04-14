@@ -40,6 +40,26 @@ let rooms = {};
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
+    socket.on("check-joined", (id) => {
+        console.log("Checking for ", id)
+        for (let room in rooms) {
+            if (rooms[room].deleteduserdata.hasOwnProperty(id)) {
+                rooms[room].userids.push(socket.id);
+                rooms[room].userdata[socket.id] = rooms[room].deleteduserdata[id];
+                rooms[room].userdata[socket.id].passed = 0;
+                delete rooms[room].deleteduserdata[id];
+                socket.join(String(room));
+                io.to(socket.id).emit("already-joined", rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, rooms[room].userdata[socket.id].points, room);
+                io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, "join");
+                if (rooms[room].stage == "ingame") {
+                    io.to(socket.id).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length, true);
+                } else {
+                    io.to(socket.id).emit("joined-room", rooms[room].stage);
+                }
+                console.log(`${socket.id} joined room ${room}. Updated Data: ${JSON.stringify(rooms)}`);
+            }
+        }
+    });
 
     socket.on("create-room", () => {
         createRoom();
@@ -51,7 +71,7 @@ io.on("connection", (socket) => {
                 continue;
             }
             let room = "CS" + i;
-            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1, testcases: -1};
+            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1, testcases: -1, deleteduserdata: {}};
             console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
             socket.join(room);
             socket.emit("created-room", room, rooms[room]);
@@ -144,6 +164,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("submit-score", (time, passed, room, cb) => {
+        console.log("Here", room);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
             if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
                 rooms[room].userdata[socket.id].time = time;
@@ -219,6 +240,7 @@ io.on("connection", (socket) => {
         }
         if (rooms.hasOwnProperty(room) && rooms[room].stage != "lobby") {
             rooms[room].userids.forEach((id) => {
+                console.log("Here, id is ", id)
                 if (rooms[room].userdata[id] && rooms[room].userdata[id].passed && rooms[room].userdata[id].passed > 0) {
                     scores[rooms[room].userdata[id].passed].push({id: id, time: rooms[room].userdata[id].time, passed: rooms[room].userdata[id].passed});
                 } else {
@@ -261,6 +283,7 @@ io.on("connection", (socket) => {
                 } else if (rooms[room].userids.includes(player)){
                     rooms[room].userids = rooms[room].userids.filter((p) => p != player);
                     io.to(rooms[room].host).emit("room-change", rooms[room], player, "", "", "leave");
+                    rooms[room].deleteduserdata[player] = rooms[room].userdata[player];
                     delete rooms[room].userdata[player];
                 }
                 console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
