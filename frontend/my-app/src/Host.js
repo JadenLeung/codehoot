@@ -81,10 +81,10 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
     <div>
         <div className="container">
             { mode == "hostlobby" && 
-                <Rectangle width="1200px">
+                <Rectangle width="1300px">
                     <div className="banner">
                         <div className="box">
-                            <p className = "title">Join at {window.location.href.replace("https://", "")}</p>
+                            <p className = "title">Join at jadenleung.github.io/codehoot</p>
                         </div>
                         <div className="box">
                             <p className = "title">Game PIN:</p>
