@@ -131,16 +131,23 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                     <div className = "resultbox-container"> 
                         <Rectangle height="90px"><Title>Results</Title></Rectangle>
                     </div>
-                <div className="bargraph">
-                    {leaderboardData.scores.map((arr, i) => (
-                        <div key={i}>
-                            <p className="bartext">{arr.length}</p>
-                            <Rectangle height={arr.length * (45 / getArrayLength(leaderboardData.scores)) + "vh"} width="100px" 
-                                backgroundColor={config.colors[i % config.colors.length]} key={i}></Rectangle>
-                        </div>
-                    ))}
-                </div>
-                <p className="bartext">{`0${dashString(config.testcases[question])}Tests Passed${dashString(config.testcases[question])}${config.testcases[question]}`}</p>
+                    <div className="bargraph">
+                        {leaderboardData.scores.map((arr, i) => (
+                            <div key={i}>
+                                <p style={{fontSize: "30px", 
+                                           marginBottom: "-10px", 
+                                           marginTop: "10px", 
+                                           color: "white"}}>{arr.length}</p>
+                                <Rectangle height={arr.length * (40 / players.length) + "vh"} width="100px" 
+                                    backgroundColor={`rgb(${255 - Math.round(255 * Math.pow((i / (config.testcases[question] - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.testcases[question] - 1)), .5)))}, 0)`} key={i}>
+                                </Rectangle>
+                                <p style={{color: `rgb(${255 - Math.round(255 * Math.pow((i / (config.testcases[question] - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.testcases[question] - 1)), .5)))}, 0)`,
+                                           fontSize: "30px",
+                                           fontWeight: "bold"}}>{i}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="bartext">Tests Passed</p>
                 </div>
             }
             { mode == "hostleaderboard" && 

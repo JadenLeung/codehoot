@@ -183,6 +183,8 @@
 .bartext {
     color: white;
     font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 0px;
 }
 
 .bartext2 {
