@@ -153,7 +153,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }, [mode]);
 
-  const picList = ["nomair", "watson", "urs", "aryo", "moreland", "josh", "jaden", "nathan", "darius"/*, "bradley", "chengfeng"*/]
+  const picList = ["aryo", "watson", "urs", "nomair", "morland", "josh", "cooper", "jaden", "darius", "nathan"/*, "bradley", "chengfeng"*/]
 
   if (mode != "results") {
     return (
