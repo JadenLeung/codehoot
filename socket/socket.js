@@ -7,7 +7,7 @@ const fs = require("fs");
 const app = express();
 const server = http.createServer(app);
 
-dev = true;
+dev = false;
 
 try {
     // HTTPS Configuration
