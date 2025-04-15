@@ -170,18 +170,18 @@ try {
 
         socket.on("submit-score", (time, passed, room, cb) => {
             console.log("Here", room);
-            if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-                if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
-                    rooms[room].userdata[socket.id].time = time;
-                    rooms[room].userdata[socket.id].passed = passed;
-                    console.log("Score submited", time, rooms[room].userdata[socket.id])
-                    cb("highscore");
-                    if (rooms[room].testcases == passed) {
-                        console.log("emiiting")
-                        io.to(rooms[room].host).emit('perfect-score', rooms[room].userdata[socket.id].name);
+                if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame" && rooms[room].userdata && rooms[room].userdata[socket.id]) {
+                    if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
+                        rooms[room].userdata[socket.id].time = time;
+                        rooms[room].userdata[socket.id].passed = passed;
+                        console.log("Score submited", time, rooms[room].userdata[socket.id])
+                        cb("highscore");
+                        if (rooms[room].testcases == passed) {
+                            console.log("emiiting")
+                            io.to(rooms[room].host).emit('perfect-score', rooms[room].userdata[socket.id].name);
+                        }
                     }
                 }
-            }
         });
 
         socket.on("end-round", (room) => {
