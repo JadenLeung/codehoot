@@ -157,9 +157,13 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
           }
           <Title>Final Score: {points}</Title>
           {
-            ((leaderboardData.index + 1) / numPlayers <= config.showRank || leaderboardData.index <= 2) && <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
-            <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
-          </Medal>
+            ((leaderboardData.index + 1) / numPlayers <= config.showRank || leaderboardData.index <= 2) && 
+            <div>
+              <Medal backgroundColor={config.medalColor[leaderboardData.index] ?? "purple"}>
+                <p className="medal-text" style ={{color: "white", fontSize: "60px" }}>{leaderboardData.index + 1}</p>
+              </Medal>
+              <img src = {`${process.env.PUBLIC_URL}/data/medals/nathan-${leaderboardData.index + 1}.png`} style = {{height:"100px", marginTop: "20px"}}></img>
+            </div>
           }
           <Title>Thanks for playing!</Title>
         </div>
