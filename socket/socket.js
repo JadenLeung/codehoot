@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
         console.log("Checking for ", id)
         for (let room in rooms) {
             if (rooms[room].deleteduserdata.hasOwnProperty(id)) {
-                if (rooms[room].userids.hasOwnProperty(id)) {
+                if (rooms[room].userids.hasOwnProperty(id) || rooms[room].userids.some((i) => rooms[room].userdata[i].name == rooms[room].deleteduserdata[id].name)) {
                     delete rooms[room].deleteduserdata[id];
                     return;
                 }
