@@ -61,11 +61,11 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
     }
     let str = "";
     str = (gatekeep ? "You're in " : "You got ") + num;
-      if (num % 10 == 1) {
+      if (num == 1) {
         str += "st place";
-      } else if (num % 10 == 2) {
+      } else if (num == 2) {
         str += "nd place";
-      } else if (num % 10 == 3) {
+      } else if (num == 3) {
         str += "rd place";
       } else {
         str += "th place";

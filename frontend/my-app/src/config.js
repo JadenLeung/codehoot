@@ -5,7 +5,7 @@ const config = {
     port: 5005,
     questions: 7,
     showRank: 0.2, // Decimal from 0-1. If 0.4, the top 40% of people get to see their scores.
-    submitCooldown: 1,
+    submitCooldown: 20,
     namelength: 15,
     timeout: 3, // # seconds until clang times out
     websocket: 'https://api.virtual-cube.net:3001/',
