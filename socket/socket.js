@@ -121,7 +121,7 @@ try {
         }
 
         socket.on("change-avatar", (room, avatar) => {
-            if (rooms[room] && rooms[room].userdata && rooms[room].userdata[socket.id].avatar && avatar) {
+            if (rooms[room] && rooms[room].userdata && rooms[room].userdata[socket.id] && rooms[room].userdata[socket.id].avatar && avatar) {
                 rooms[room].userdata[socket.id].avatar = avatar;
                 io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", avatar, "avatar");
             }
