@@ -138,3 +138,14 @@
     border-radius: 0px;
     border: none;
 }
+
+.next-button {
+    height: 60px;
+    font-size: 30px;
+    margin-top: 40px;
+    margin-left: 5px;
+}
+
+.codehoot-title:hover {
+    cursor: pointer;
+}

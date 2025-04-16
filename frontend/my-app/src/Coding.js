@@ -10,7 +10,7 @@ import Medal from './Medal';
 import Mainbutton from './Mainbutton';
 
 
-function Coding ({setCode, code, question, output, setOutput, endtime, socket, 
+function Coding ({setCode, code, question, setQuestion, output, setOutput, endtime, setEndTime, socket, 
     name, avatar, room, setMode, mode, points, setPoints, numPlayers}) {
 
   const [time, setTime] = useState(0);
@@ -31,6 +31,17 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
       setCode({code: error, in: error, expect: error, solution: error})
     }
   };
+
+  function soloNext(dx) {
+    const q = "Q" + (+(question.slice(1)) + dx);
+    if (q == "Q" + (config.questions + 1) || q == "Q0") {
+      return;
+    }
+    setQuestion(q);
+    setOutput("");
+    setCode(prev => ({...prev, code: "// Fetching code from server..."}));
+    setEndTime(Date.now() + config.time[q] * 1000);
+  }
 
   function getGrade(score) {
     let finalgrade = "F"; // default
@@ -104,15 +115,23 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
     <div>
       <div className="headercode">
         <div className="profile_container">
-          <div className="profile">
-            <img className="profile-avatar" src={`${process.env.PUBLIC_URL}/data/avatars/${avatar}.png`} alt="Avatar"/>
-            <p className="name">{name}</p>
-          </div>
+          { mode != "soloingame" &&
+            <div className="profile">
+              <img className="profile-avatar" src={`${process.env.PUBLIC_URL}/data/avatars/${avatar}.png`} alt="Avatar"/>
+              <p className="name">{name}</p>
+            </div>
+          }
         </div>
-        <Title color = "white" marginTop = "10px">Codehoot!</Title>
+        <Title color = "white" marginTop = "10px" onClick={() => {socket.emit("kick-player", socket.id); setMode("start")}} className="codehoot-title">Codehoot!</Title>
         <div className="timeholder"> 
           {
-            mode == "ingame" && <p className="time">{Math.round(time)}</p>
+            ["ingame", "soloingame"].includes(mode) && <p className="time">{Math.round(time)}</p>
+          }
+          {
+            ["soloingame"].includes(mode) && <button className="next-button" onClick={() => soloNext(-1)}>Prev</button>
+          }
+          {
+            ["soloingame"].includes(mode) && <button className="next-button" onClick={() => soloNext(1)}>Next</button>
           }
           {
             mode == "results" && <Rectangle className="time results" width="120px" marginTop="0px" backgroundColor="black">
@@ -123,7 +142,7 @@ function Coding ({setCode, code, question, output, setOutput, endtime, socket,
           </div>
       </div>
       {
-        mode == "ingame" && 
+        ["ingame", "soloingame"].includes(mode) && 
         <div className="code-container">
           <div>
             <Rectangle backgroundColor ="#1e1e1e" className="vscode-navbar" width="900px" height="25px">

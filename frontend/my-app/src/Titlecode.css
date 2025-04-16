@@ -108,11 +108,15 @@
   .host-text {
     color: white;
     font-family: 'Montserrat';
-    margin-top:230px;
+    margin-top:210px;
     text-align: center;
   }
 
   .host-text:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .solo-mode {
+    margin-top: 20px;
   }

@@ -78,7 +78,7 @@ function App() {
             ["start", "entername", "lobby", "hostlobby", "results"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} 
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} quesiton={question} 
               setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers} setCode={setCode} setPoints={setPoints}/>
           }
         </div>
@@ -86,10 +86,10 @@ function App() {
         && <Host players={players} setPlayers={setPlayers} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
-      {["ingame", "results", "podium"].includes(mode) && (
-        <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
+      {["ingame", "results", "podium", "soloingame"].includes(mode) && (
+        <Coding setCode={setCode} code={code} question={question} setQuestion={setQuestion} output={output} setOutput={setOutput}
         endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room} mode={mode}
-          setMode={setMode} points={points} setPoints={setPoints} numPlayers={numPlayers}
+          setMode={setMode} points={points} setPoints={setPoints} numPlayers={numPlayers} setEndTime={setEndTime}
         ></Coding>
       )}
     </div>

@@ -23,6 +23,11 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }
 
+  function startSolo() {
+    setEndTime(Date.now() + config.time["Q1"] * 1000);
+    setMode("soloingame");
+  }
+
   function changeAvatar(avatar) {
     setAvatar(avatar);
     socket.emit("change-avatar", room, avatar);
@@ -100,7 +105,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
 
       socket.on("kick-you", () => {
         setMode("start");    
-        riseError("ⓘ You have been kicked (freed)");
+        riseError("ⓘ You have been freed (left the game)");
       });
 
       socket.on("started-match", (time, q, players, force = false) => {
@@ -186,6 +191,9 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
             <p className="error-text">{error}</p>
           </div>
         </div>
+         { mode == "start" &&
+            <button className = "solo-mode" onClick={startSolo}>Solo Mode</button>
+          }
           { mode == "start" &&
             <p className = "host-text" onClick={hostGame}>Click here to host a game</p>
           }
