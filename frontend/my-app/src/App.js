@@ -32,12 +32,22 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (socket) {
-      if (localStorage.id) {
+    useEffect(() => {
+      for (let question in config.time) {
+        console.log("deleting", question)
+        delete localStorage[question];
+      }
+    }, []);
+
+    useEffect(() => {
+      if (socket) {
         console.log("Checking for", localStorage.id);
         socket.emit("check-joined", localStorage.id);
       }
+    }, [socket]);
+
+  useEffect(() => {
+    if (socket) {
       socket.on("room-change", (d, id, name, avatar, action) => {
         console.log("mode is ", mode)
         if (mode == "hostpodium") {

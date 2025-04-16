@@ -104,6 +104,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       });
 
       socket.on("kick-you", () => {
+        delete localStorage.id;
         setMode("start");    
         riseError("ⓘ You have been freed (left the game)");
       });
