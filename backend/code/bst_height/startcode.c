@@ -20,11 +20,11 @@ struct bst {
 //   a height of 0. A bst with 1 node should have a height of 1
 // requires: t is a valid bst
 // time: O(n)
-// examples: t:    5       ->    3
-//               /   \
-//              3     6
-//               \
-//                4
+// examples: t:    5                            
+//               /  \        ->    3           
+//              3    6                        
+//             /                              
+//            4
 int bst_height(struct bst *t) {
-    // Your implementation here
+    return 4;
 }
