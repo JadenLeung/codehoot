@@ -113,7 +113,21 @@
     display: flex;
     justify-content: flex-start; /* this fixes the issue */
     align-items: flex-start;
+    margin-top: -40px;
 }
+
+@media (max-width: 1300px) {
+    .code-container {
+      flex-direction: column;
+      margin-left: 0px;
+      gap: 0px;
+      padding: 0px;
+      margin-left: 0px;
+    }
+    .compiler-output {
+        gap: 2000px;
+    }
+  }
 
 .compiler-output {
     margin-left: 10px;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import './Form.css';
 
-function Form({ setCode, code, question, width, file, fetchCode }) {
+function Form({ setCode, code, question, width, file, fetchCode, height }) {
   useEffect(() => {
   
     fetchCode(); // run it
@@ -12,7 +12,7 @@ function Form({ setCode, code, question, width, file, fetchCode }) {
   return (
     <div className="Form">
       <Editor
-        height="500px"
+        height={height}
         width={width}
         defaultLanguage="c"
         value={file == "main.c" ? code.code : file == "public.in" ? code.in : code.expect}

@@ -17,6 +17,9 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   const [leaderboardData, setLeaderboardData] = useState({});
   const [score, setScore] = useState(0);
   const [file, setFile] = useState("main.c");
+  const maxwidth = 1300;
+  const [wwidth, setWwidth] = useState(window.innerWidth);
+
 
   const fetchCode = async () => {
     try {
@@ -38,6 +41,11 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
       localStorage[question] = code.code;
     }
   }, [code]);
+
+  useEffect(() => {
+    setWwidth(window.innerWidth);
+    console.log("width is ", window.innerWidth, window.innerWidth > maxwidth);
+  }, [window.innerWidth])
 
   function soloNext(dx) {
     const q = "Q" + (+(question.slice(1)) + dx);
@@ -161,13 +169,15 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
                   <button className={`navbar-button${file == name ? "-selected" : "-unselected"}`} onClick={() => {setFile(name)}}>{name}</button>
               ))}
             </Rectangle>
-            <Form setCode={setCode} code={code} question={question} width="900px" file={file} fetchCode={fetchCode}/>
+            <Form setCode={setCode} code={code} question={question} width="900px" file={file} fetchCode={fetchCode} height={wwidth > maxwidth ? "500px" : "400px"}/>
             {time > 0 && <div>
                   <Compile code={code} setCode={setCode} setOutput={setOutput} question={question} socket={socket} endtime={endtime} room={room} fetchCode={fetchCode}/>
                 </div>
             }
           </div>
-          <Rectangle backgroundColor="black" className="compiler-output scrollable" width="50%"><Output output={output} className="bruh"/></Rectangle>
+          <Rectangle backgroundColor="black" className="compiler-output scrollable" 
+            marginLeft={window.innerWidth > maxwidth ? "10px" : "0px"}  marginTop={window.innerWidth > maxwidth ? "40px" : "5px"} 
+            width={window.innerWidth > maxwidth ? "50%" : "900px"} height={wwidth > maxwidth ? "525px" : "400px"}><Output output={output} className="bruh"/></Rectangle>
         </div>
       }
       {
