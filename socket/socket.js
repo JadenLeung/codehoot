@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
                 io.to(socket.id).emit("already-joined", rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, rooms[room].userdata[socket.id].points, room);
                 io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, "join");
                 if (rooms[room].stage == "ingame") {
-                    io.to(socket.id).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length, true);
+                    io.to(socket.id).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length, true, false);
                 } else {
                     io.to(socket.id).emit("joined-room", rooms[room].stage);
                 }
