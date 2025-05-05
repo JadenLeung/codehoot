@@ -24,7 +24,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   const fetchCode = async () => {
     try {
       console.log(question, !localStorage[question])
-      if (question && !(localStorage[question] && mode == "soloingame")) {
+      if (question && !(localStorage[question])) {
         let res = await fetch(`${config.flask}/code?question=${config.questionNames[question]}`);
         let data = await res.json();
         setCode(data);
@@ -37,7 +37,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   };
 
   useEffect(() => {
-    if (mode.includes("ingame")) {
+    if (mode.includes("ingame") && code.code != "// Fetching code from server...") {
       localStorage[question] = code.code;
     }
   }, [code]);

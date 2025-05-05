@@ -25,6 +25,10 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
 
   function startSolo() {
     setEndTime(Date.now() + config.time["Q1"] * 1000);
+    for (let question in config.time) {
+      console.log("deleting", question)
+      delete localStorage[question];
+    }
     setMode("soloingame");
   }
 
@@ -109,13 +113,22 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         riseError("ⓘ You have been freed (left the game)");
       });
 
-      socket.on("started-match", (time, q, players, force = false) => {
+      socket.on("started-match", (time, q, players, force = false, reset = true) => {
         console.log(time, q, force);
         if (mode == "lobby" || mode == "results" || force) {
+          if (reset) {
+            for (let question in config.time) {
+              console.log("deleting", question)
+              delete localStorage[question];
+            }
+            setCode(prev => ({...prev, code: "// Fetching code from server..."}));
+          } else {
+            console.log("herere", q, localStorage)
+            setCode(prev => ({...prev, code: localStorage[q]}));
+          }
           setMode("ingame");    
           setNumPlayers(players);
           setQuestion(q);
-          setCode(prev => ({...prev, code: "// Fetching code from server..."}))
           setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);

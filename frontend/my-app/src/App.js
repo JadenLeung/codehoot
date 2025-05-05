@@ -32,12 +32,12 @@ function App() {
     };
   }, []);
 
-    useEffect(() => {
-      for (let question in config.time) {
-        console.log("deleting", question)
-        delete localStorage[question];
-      }
-    }, []);
+    // useEffect(() => {
+    //   for (let question in config.time) {
+    //     console.log("deleting", question)
+    //     delete localStorage[question];
+    //   }
+    // }, []);
 
     useEffect(() => {
       if (socket) {
