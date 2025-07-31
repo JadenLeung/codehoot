@@ -30,6 +30,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       delete localStorage[question];
     }
     setMode("soloingame");
+    setOutput("");
   }
 
   function changeAvatar(avatar) {
