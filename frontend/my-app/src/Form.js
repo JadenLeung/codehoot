@@ -16,7 +16,11 @@ function Form({ setCode, code, question, width, file, fetchCode, height }) {
         width={width}
         defaultLanguage="c"
         value={file == "main.c" ? code.code : file == "public.in" ? code.in : code.expect}
-        onChange={(val) => setCode(prev => ({...prev, code: val}))}
+        onChange={(val) => {
+          if (file === "main.c") {
+            setCode(prev => ({ ...prev, code: val }));
+          }
+        }}
         theme="vs-dark"
         options={{
           minimap: { enabled: false },

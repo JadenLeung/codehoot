@@ -18,7 +18,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
   function fetchStartCode() {
     // eslint-disable-next-line no-restricted-globals
     if (confirm("Are you sure you want to proceed? Doing this will delete all your current code.")) {
-      fetchCode();
+      fetchCode(true);
     }
   }
   

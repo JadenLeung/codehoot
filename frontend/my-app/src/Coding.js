@@ -21,10 +21,10 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   const [wwidth, setWwidth] = useState(window.innerWidth);
 
 
-  const fetchCode = async () => {
+  const fetchCode = async (reset = false) => {
     try {
       console.log(question, !localStorage[question])
-      if (question && !(localStorage[question])) {
+      if (question && !(localStorage[question] && !reset)) {
         let res = await fetch(`${config.flask}/code?question=${config.qdata[question].name}`);
         let data = await res.json();
         setCode(data);
