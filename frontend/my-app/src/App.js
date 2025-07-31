@@ -32,13 +32,6 @@ function App() {
     };
   }, []);
 
-    // useEffect(() => {
-    //   for (let question in config.time) {
-    //     console.log("deleting", question)
-    //     delete localStorage[question];
-    //   }
-    // }, []);
-
     useEffect(() => {
       if (socket) {
         console.log("Checking for", localStorage.id);
