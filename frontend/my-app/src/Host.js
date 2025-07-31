@@ -12,7 +12,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
     const [passMessage, setPassMessage] = useState({message: "", opacity: 0});
     function startMatch() {
         if (mode == "hostlobby") {
-            socket.emit("start-match", room, config.time[question] * 1000, config.testcases[question], config);
+            socket.emit("start-match", room, config.qdata[question].time * 1000, config.qdata[question].testcases, config);
             socket.emit("test");
         } else if (mode == "hostresults") {
             if (question == "Q" + config.questions) {
@@ -23,7 +23,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             }
         } else if (mode == "hostleaderboard") {
             const newquestion = "Q" + (+(question.slice(1)) + 1);
-            socket.emit("next-round", room, config.time[newquestion] * 1000, config.testcases[newquestion], config, newquestion);
+            socket.emit("next-round", room, config.qdata[newquestion].time * 1000, config.qdata[newquestion].testcases, config, newquestion);
         } else if (time == 0 && mode == "hostingame") {
             socket.emit("view-leaderboard", room);
         } else {
@@ -139,9 +139,9 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                                            marginTop: "10px", 
                                            color: "white"}}>{arr.length}</p>
                                 <Rectangle height={arr.length * (40 / players.length) + "vh"} width="100px" 
-                                    backgroundColor={`rgb(${255 - Math.round(255 * Math.pow((i / (config.testcases[question] - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.testcases[question] - 1)), .5)))}, 0)`} key={i}>
+                                    backgroundColor={`rgb(${255 - Math.round(255 * Math.pow((i / (config.qdata[question].testcases - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.qdata[question].testcases - 1)), .5)))}, 0)`} key={i}>
                                 </Rectangle>
-                                <p style={{color: `rgb(${255 - Math.round(255 * Math.pow((i / (config.testcases[question] - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.testcases[question] - 1)), .5)))}, 0)`,
+                                <p style={{color: `rgb(${255 - Math.round(255 * Math.pow((i / (config.qdata[question].testcases - 1)), 4))}, ${Math.round((255 * Math.pow((i / (config.qdata[question].testcases - 1)), .5)))}, 0)`,
                                            fontSize: "30px",
                                            fontWeight: "bold"}}>{i}</p>
                             </div>

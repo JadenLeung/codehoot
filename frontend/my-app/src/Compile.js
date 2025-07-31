@@ -50,7 +50,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code : code.code, question: config.questionNames[question], timeout: config.timeout }), // sending JSON
+            body: JSON.stringify({ code : code.code, question: config.qdata[question].name, timeout: config.timeout }), // sending JSON
         });
         const data = await response.text();
         console.log(data)

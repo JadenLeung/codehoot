@@ -10,30 +10,15 @@ const config = {
     timeout: 3, // # seconds until clang times out
     websocket: 'https://api.virtual-cube.net:3001/',
     // websocket: 'http://localhost:3001',
-    time: {
-        Q1: 150,
-        Q2: 500,
-        Q3: 500,
-        Q4: 500,
-        Q5: 800,
-        Q6: 600,
+    qdata: {
+        Q1: { time: 150, name: "linked_sum", testcases: 6 },
+        Q2: { time: 500, name: "linked_middle", testcases: 7 },
+        Q3: { time: 500, name: "bst_height", testcases: 6 },
+        Q4: { time: 500, name: "is_bst", testcases: 9 },
+        Q5: { time: 800, name: "least_letter", testcases: 7 },
+        Q6: { time: 600, name: "limited_calculator", testcases: 8 },
     },
-    questionNames: {
-        Q1: "linked_sum",
-        Q2: "linked_middle",
-        Q3: "bst_height",
-        Q4: "is_bst",
-        Q5: "least_letter",
-        Q6: "limited_calculator",
-    },
-    testcases: {
-        Q1: 6,
-        Q2: 7,
-        Q3: 6,
-        Q4: 9,
-        Q5: 7,
-        Q6: 8,
-    },
+    
     inspiration: ["In modularity, you want low coupling, high cohesion", "You cannot directly dereference a void pointer.", 
         "String literals are stored in the read-only section of memory", "const int *p is a pointer to a constant integer", "Realloc has 2 effects: allocating and deallocating memory",
         "/data/avatars/nomair2.png", "/data/avatars/chin.png"],

@@ -24,8 +24,8 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
   }
 
   function startSolo() {
-    setEndTime(Date.now() + config.time["Q1"] * 1000);
-    for (let question in config.time) {
+    setEndTime(Date.now() + config.qdata["Q1"].time * 1000);
+    for (let question in config.qdata) {
       console.log("deleting", question)
       delete localStorage[question];
     }
@@ -117,7 +117,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         console.log(time, q, force);
         if (mode == "lobby" || mode == "results" || force) {
           if (reset) {
-            for (let question in config.time) {
+            for (let question in config.qdata) {
               console.log("deleting", question)
               delete localStorage[question];
             }
