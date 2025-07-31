@@ -205,7 +205,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
 
 
                 </div>
-                <p className="bartext">Good job to all participants!</p>
+                    <p className="bartext">Good job to all participants!</p>
                 </div>
             }
         </div>
