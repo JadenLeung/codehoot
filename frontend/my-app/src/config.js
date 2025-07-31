@@ -1,7 +1,7 @@
 const config = {
     dev: true,
-    // flask: "https://flask-app-978883622231.northamerica-northeast2.run.app/",
-    flask: "http://127.0.0.1:8080",
+    flask: "https://flask-app-978883622231.northamerica-northeast2.run.app/",
+    // flask: "http://127.0.0.1:8080",
     port: 5005,
     showRank: 0.2, // Decimal from 0-1. If 0.4, the top 40% of people get to see their scores.
     submitCooldown: 0,
