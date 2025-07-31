@@ -49,7 +49,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
 
   function soloNext(dx) {
     const q = "Q" + (+(question.slice(1)) + dx);
-    if (q == "Q" + (config.questions + 1) || q == "Q0") {
+    if (q == "Q" + (Object.keys(config.qdata).length + 1) || q == "Q0") {
       return;
     }
     setQuestion(q);
