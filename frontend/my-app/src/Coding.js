@@ -38,7 +38,8 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
 
   useEffect(() => {
     if (mode.includes("ingame") && code.code != "// Fetching code from server...") {
-      localStorage[question] = code.code;
+      console.log(code);
+      localStorage[question] = JSON.stringify(code);
     }
   }, [code]);
 
@@ -54,7 +55,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
     }
     setQuestion(q);
     if (localStorage[q]) {
-      setCode(prev => ({...prev, code: localStorage[q]}));
+      setCode(JSON.parse(localStorage[q]));
     } else {
       setCode(prev => ({...prev, code: "// Fetching code from server..."}));
     }

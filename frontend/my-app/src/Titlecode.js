@@ -124,8 +124,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
             }
             setCode(prev => ({...prev, code: "// Fetching code from server..."}));
           } else {
-            console.log("herere", q, localStorage)
-            setCode(prev => ({...prev, code: localStorage[q]}));
+            setCode(JSON.parse(localStorage[q]));
           }
           setMode("ingame");    
           setNumPlayers(players);
