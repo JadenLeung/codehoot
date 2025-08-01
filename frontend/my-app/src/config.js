@@ -12,7 +12,7 @@ const config = {
     qdata: {
         Q1: { time: 150, name: "linked_sum", testcases: 6 },
         Q2: { time: 500, name: "linked_middle", testcases: 7 },
-        Q3: { time: 500, name: "bsearch", testcases: 4 },
+        Q3: { time: 500, name: "bsearch", testcases: 5 },
         Q4: { time: 500, name: "bst_height", testcases: 6 },
         Q5: { time: 500, name: "is_bst", testcases: 9 },
         Q6: { time: 800, name: "least_letter", testcases: 7 },
