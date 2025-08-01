@@ -1,10 +1,10 @@
 const config = {
-    dev: true,
+    dev: false,
     flask: "https://flask-app-978883622231.northamerica-northeast2.run.app/",
     // flask: "http://127.0.0.1:8080",
     port: 5005,
     showRank: 0.2, // Decimal from 0-1. If 0.4, the top 40% of people get to see their scores.
-    submitCooldown: 0,
+    submitCooldown: 20,
     namelength: 15,
     timeout: 3, // # seconds until clang times out
     websocket: 'https://api.virtual-cube.net:3001/',

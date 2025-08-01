@@ -13,7 +13,7 @@ function App() {
   const [name, setName] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
-  const [avatar, setAvatar] = useState('nomair');
+  const [avatar, setAvatar] = useState('C');
   const [players, setPlayers] = useState([]);
   const [socket, setSocket] = useState(null);
   const [room, setRoom] = useState(null);

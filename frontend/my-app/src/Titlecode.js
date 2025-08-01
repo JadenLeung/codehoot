@@ -45,7 +45,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       let t = Math.round(Math.random() * 10000);
       setText(t);
       setName(t);
-      socket.emit('join-room', room, t, "nomair", (res) => {
+      socket.emit('join-room', room, t, "C", (res) => {
         if (res == "Game already started" || res == "Game already ended") {
           riseError("ⓘ " + res);
           setMode("start");  
@@ -76,7 +76,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         if (text == "") {
           riseError("ⓘ Assertion failed, nickname must not be null");
         } else {
-          socket.emit('join-room', room, text, "nomair", (res) => {
+          socket.emit('join-room', room, text, "C", (res) => {
             if (res == "Game already started" || res == "Game already ended") {
               riseError("ⓘ " + res);
               setMode("start");  
@@ -172,7 +172,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }, [mode]);
 
-  const picList = ["aryo", "watson", "urs", "nomair", "morland", "josh", "cooper", "jacob", "kevin", "tom", "jaden", "darius", "brad", "nathan"]
+  const picList = ["C", "c++", "python", "racket", "java", "scratch", "html", "miles", "jaden", "darius"]
 
   if (mode != "results") {
     return (
