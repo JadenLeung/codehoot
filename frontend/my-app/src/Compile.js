@@ -75,7 +75,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
         Reset
       </button>
       {config.dev && <button onClick={displaySolution}>
-        Solution (Dev on)
+        Solution
       </button>}
       <div className="success" style={{bottom: successHeight}}>
           <p className="success-text">New High Score!</p>
