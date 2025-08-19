@@ -1,5 +1,5 @@
 const config = {
-    dev: false,
+    dev: true,
     flask: "https://flask-app-978883622231.northamerica-northeast2.run.app/",
     // flask: "http://127.0.0.1:8080",
     port: 5005,
