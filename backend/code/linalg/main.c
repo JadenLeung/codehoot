@@ -12,8 +12,8 @@ void print_matrix(struct matrix m) {
 
 int main(void) {
     int height, width;
-    int bigarr[10000];
-    int bigarr2[10000];
+    int bigarr[50];
+    int bigarr2[50];
 
     // Read first matrix
     scanf("%d %d", &height, &width);
