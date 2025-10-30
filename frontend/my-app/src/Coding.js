@@ -42,6 +42,10 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   }, [code]);
 
   useEffect(() => {
+    setFile("main.c");
+  }, [question]);
+
+  useEffect(() => {
     setWwidth(window.innerWidth);
   }, [window.innerWidth])
 
@@ -51,6 +55,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
       return;
     }
     setQuestion(q);
+    setFile("main.c");
     if (localStorage[q]) {
       setCode(JSON.parse(localStorage[q]));
     } else {
