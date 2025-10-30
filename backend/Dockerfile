@@ -41,4 +41,4 @@ RUN chmod 1775 /python-docker
 EXPOSE 8080
 
 # Run the app
-CMD ["python3", "app.py"]
+CMD ["bash", "-c", "ulimit -s 8192 && exec python3 app.py"]

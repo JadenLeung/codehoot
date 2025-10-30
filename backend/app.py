@@ -26,7 +26,7 @@ signal.signal(signal.SIGINT, terminate_subprocesses)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World'
+    return 'Hello World 2'
 
 @app.route('/solution')
 def get_public():
@@ -143,6 +143,7 @@ def submit():
                     expected = expected.read()
                     if (res != expected):
                         if i == 0:
+                            print("Expect is ", expected, " while res is ", res)
                             return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
                         incorrect.add(i)
                     else:
