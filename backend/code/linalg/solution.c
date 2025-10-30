@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-struct matrix{
+struct matrix {
     int values[100];
     int height;
     int width;
