@@ -1,5 +1,5 @@
 const config = {
-    dev: true,
+    dev: false,
     flask: "https://flask-app-978883622231.northamerica-northeast2.run.app/",
     // flask: "http://127.0.0.1:6080",
     port: 5005,
@@ -10,7 +10,7 @@ const config = {
     websocket: 'https://api.virtual-cube.net:3001/',
     // websocket: 'http://localhost:3001',
     qdata: {
-        Q1: { time: 5, name: "char_limit", testcases: 4 },
+        Q1: { time: 100, name: "char_limit", testcases: 4 },
         Q2: { time: 300, name: "starts_with", testcases: 8 },
         Q3: { time: 600, name: "space_check", testcases: 5 },
         Q4: { time: 600, name: "initialized", testcases: 4 },
