@@ -4,7 +4,7 @@ int main(void) {
 
     scanf("%99s %99s", str1, str2);
     if (strcmp(str1, "assert") == 0) {
-        starts_with(NULL, NULL)
+        starts_with(NULL, NULL);
     } else if (starts_with(str1, str2)) {
         printf("true\n");
     } else {

@@ -1,0 +1,5 @@
+struct posn {
+    int a;
+    int b;
+}
+

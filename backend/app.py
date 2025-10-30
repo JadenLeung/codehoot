@@ -141,9 +141,9 @@ def submit():
                 res = stdout
                 with open(basename + ".expect", "r") as expected:
                     expected = expected.read()
-                    if (res != expected):
+                    if (res.strip() != expected.strip()):
+                        print("Expect is ", expected, " while res is ", res, " for test case ", input_text)
                         if i == 0:
-                            print("Expect is ", expected, " while res is ", res)
                             return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
                         incorrect.add(i)
                     else:

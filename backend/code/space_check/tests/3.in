@@ -1,0 +1,8 @@
+// if()badspacing that should be ignored
+if(true) // if()badspacing that should not be ignored
+for () while ()
+if (true) {
+
+}else() {
+
+}

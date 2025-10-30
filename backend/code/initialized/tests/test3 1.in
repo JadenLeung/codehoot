@@ -1,0 +1,8 @@
+int main(void){
+    int* d = 0;
+    struct posn e;
+    bool f;
+    print("g");
+    char h;
+    char i = 'a';
+}
