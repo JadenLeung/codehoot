@@ -4,7 +4,7 @@ const config = {
     // flask: "http://127.0.0.1:6080",
     port: 5005,
     showRank: 0.2, // Decimal from 0-1. If 0.4, the top 40% of people get to see their scores.
-    submitCooldown: 0,
+    submitCooldown: 15,
     namelength: 15,
     timeout: 3, // # seconds until clang times out
     websocket: 'https://api.virtual-cube.net:3001/',
@@ -29,7 +29,7 @@ const config = {
         "You cannot directly dereference a void pointer.", 
         "String literals are stored in the read-only section of memory", 
         "const int *p is a pointer to a constant integer", 
-        "Realloc has 2 effects: allocating and deallocating memory",
+        "Students have lost tons of points forgetting tp assert requirements",
         "/data/avatars/nomair2.png", "/data/avatars/chin.png"],
     medalColor: {
         0: "gold",

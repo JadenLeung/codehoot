@@ -24,9 +24,13 @@ function Form({ setCode, code, question, width, file, fetchCode, height }) {
         defaultLanguage="c"
         value={fileobj[file]}
         onChange={(val) => {
-          if (file === "main.c") {
-            setCode(prev => ({ ...prev, code: val }));
-          }
+          setCode((prev) => {
+            if (file === "main.c") return { ...prev, code: val };
+            if (file === "public.in") return { ...prev, in: val };
+            if (file === "public.expect") return { ...prev, expect: val };
+            if (file === "solution.c") return { ...prev, solution: val };
+            return prev;
+          });
         }}
         theme="vs-dark"
         options={{
