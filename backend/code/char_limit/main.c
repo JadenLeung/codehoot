@@ -7,7 +7,9 @@ int main(void) {
         if (len > 0 && str[len - 1] == '\n') {
             str[len - 1] = '\0'; // Remove newline
         }
-        if (!char_limit(str)) {
+        if (strcmp(str, "assert") == 0) {
+            char_limit(NULL);
+        } else if (!char_limit(str)) {
             printf("Exceeded character limit on line %d\n", line);
         }
         ++line;
