@@ -53,7 +53,6 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
             body: JSON.stringify({ code : code.code, question: config.qdata[question].name, timeout: config.timeout }), // sending JSON
         });
         const data = await response.text();
-        console.log(data)
         setOutput(JSON.parse(data))
         if (JSON.parse(data).hasOwnProperty("correct")) {
           socket.emit("submit-score", t, JSON.parse(data).correct, room, (str) => {

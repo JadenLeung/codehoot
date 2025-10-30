@@ -23,7 +23,6 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
 
   const fetchCode = async (reset = false) => {
     try {
-      console.log(question, !localStorage[question])
       if (question && !(localStorage[question] && !reset)) {
         let res = await fetch(`${config.flask}/code?question=${config.qdata[question].name}`);
         let data = await res.json();
@@ -38,14 +37,12 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
 
   useEffect(() => {
     if (mode.includes("ingame") && code.code != "// Fetching code from server...") {
-      console.log(code);
       localStorage[question] = JSON.stringify(code);
     }
   }, [code]);
 
   useEffect(() => {
     setWwidth(window.innerWidth);
-    console.log("width is ", window.innerWidth, window.innerWidth > maxwidth);
   }, [window.innerWidth])
 
   function soloNext(dx) {
@@ -131,6 +128,11 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
     };
   })
 
+  let tabs = ["main.c", "public.in", "public.expect"];
+  if (time == 0) {
+    tabs.push("solution.c");
+  }
+
   return (
     <div>
       <div className="headercode">
@@ -166,8 +168,8 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
         <div className="code-container">
           <div>
             <Rectangle backgroundColor ="#1e1e1e" className="vscode-navbar" width="900px" height="25px">
-              {["main.c", "public.in", "public.expect"].map((name) => (
-                  <button className={`navbar-button${file == name ? "-selected" : "-unselected"}`} onClick={() => {setFile(name)}}>{name}</button>
+              {tabs.map((name) => (
+                  <button className={`navbar-button${file == name ? "-selected" : "-unselected"}`} onClick={() => {setFile(name)}} key={name}>{name}</button>
               ))}
             </Rectangle>
             <Form setCode={setCode} code={code} question={question} width="900px" file={file} fetchCode={fetchCode} height={wwidth > maxwidth ? "500px" : "400px"}/>

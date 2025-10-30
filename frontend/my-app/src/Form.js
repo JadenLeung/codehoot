@@ -8,6 +8,13 @@ function Form({ setCode, code, question, width, file, fetchCode, height }) {
     fetchCode(); // run it
   
   }, [question]);
+
+  const fileobj = {
+    "main.c": code.code,
+    "public.in": code.in,
+    "public.expect": code.expect,
+    "solution.c": code.solution,
+  }
   
   return (
     <div className="Form">
@@ -15,7 +22,7 @@ function Form({ setCode, code, question, width, file, fetchCode, height }) {
         height={height}
         width={width}
         defaultLanguage="c"
-        value={file == "main.c" ? code.code : file == "public.in" ? code.in : code.expect}
+        value={fileobj[file]}
         onChange={(val) => {
           if (file === "main.c") {
             setCode(prev => ({ ...prev, code: val }));

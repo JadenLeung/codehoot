@@ -34,7 +34,6 @@ function App() {
 
     useEffect(() => {
       if (socket) {
-        console.log("Checking for", localStorage.id);
         socket.emit("check-joined", localStorage.id);
       }
     }, [socket]);
@@ -42,11 +41,9 @@ function App() {
   useEffect(() => {
     if (socket) {
       socket.on("room-change", (d, id, name, avatar, action) => {
-        console.log("mode is ", mode)
         if (mode == "hostpodium") {
           return;
         }
-        console.log("host", id, "data is", d, id, name, avatar, action)
         if (action == "join") {
           setData(d);
           setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);

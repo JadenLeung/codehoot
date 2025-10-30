@@ -40,7 +40,6 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
     }
 
     function removePlayer(id) {
-        console.log("ID is ", id, socket.id)
         socket.emit("kick-player", id);
 
     }
@@ -84,11 +83,9 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             setData(d);
             setMode("hostresults");
             setLeaderboardData({ leaderboard, oldleaderboard, points, scores });
-            console.log("Viewing leaderboard", { leaderboard, oldleaderboard, points, scores })
         });
         socket.on("perfect-score", (name) => {
             showMessage(name + " passed all test cases!")
-            console.log(name + " passed all test cases!");
         });
 
         return (() => {

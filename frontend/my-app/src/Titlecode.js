@@ -26,7 +26,6 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
   function startSolo() {
     setEndTime(Date.now() + config.qdata["Q1"].time * 1000);
     for (let question in config.qdata) {
-      console.log("deleting", question)
       delete localStorage[question];
     }
     setMode("soloingame");
@@ -100,7 +99,6 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         setErrorHeight("-70px");
         setRoom(r);
         setData(d);
-        console.log("data:", r, d)
       });
 
       socket.on("joined-room", (stage) => {
@@ -115,11 +113,9 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       });
 
       socket.on("started-match", (time, q, players, force = false, reset = true) => {
-        console.log(time, q, force);
         if (mode == "lobby" || mode == "results" || force) {
           if (reset) {
             for (let question in config.qdata) {
-              console.log("deleting", question)
               delete localStorage[question];
             }
             setCode(prev => ({...prev, code: "// Fetching code from server..."}));

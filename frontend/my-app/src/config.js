@@ -10,7 +10,7 @@ const config = {
     websocket: 'https://api.virtual-cube.net:3001/',
     // websocket: 'http://localhost:3001',
     qdata: {
-        Q1: { time: 100, name: "char_limit", testcases: 4 },
+        Q1: { time: 5, name: "char_limit", testcases: 4 },
         Q2: { time: 300, name: "starts_with", testcases: 8 },
         Q3: { time: 600, name: "space_check", testcases: 5 },
         Q4: { time: 600, name: "initialized", testcases: 4 },
@@ -25,8 +25,11 @@ const config = {
         // Q11: { time: 500, name: "is_bst", testcases: 9 },
     },
 
-    inspiration: ["In modularity, you want low coupling, high cohesion", "You cannot directly dereference a void pointer.", 
-        "String literals are stored in the read-only section of memory", "const int *p is a pointer to a constant integer", "Realloc has 2 effects: allocating and deallocating memory",
+    inspiration: ["In modularity, you want low coupling, high cohesion", 
+        "You cannot directly dereference a void pointer.", 
+        "String literals are stored in the read-only section of memory", 
+        "const int *p is a pointer to a constant integer", 
+        "Realloc has 2 effects: allocating and deallocating memory",
         "/data/avatars/nomair2.png", "/data/avatars/chin.png"],
     medalColor: {
         0: "gold",
