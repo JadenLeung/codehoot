@@ -21,6 +21,9 @@ struct matrix{
 //   May modify matrix_product
 
 bool matrix_mult(const struct matrix * m1, const struct matrix * m2, struct matrix * matrix_product) {
+    assert(m1);
+    assert(m2);
+    assert(matrix_product);
 
     // matrix multiplication condition
     if (m1->width != m2->height){

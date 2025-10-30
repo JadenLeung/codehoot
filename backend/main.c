@@ -3,61 +3,48 @@
 #include <assert.h>
 #include <limits.h>
 #include <stdbool.h>
-#include <string.h>
 
+struct llnode {
+  int item;
+  struct llnode *next;
+};
 
-char to_lower_case(char c) {
-    if (c >= 'A' && c <= 'Z') {
-        return (c - 'A') + 'a';
-    }
-    return c;
+struct llist {
+  struct llnode *front;
+};
+
+// middle(ll) returns the middle value of a linked list. In the case that the
+//   number of nodes is even and there are two middle values, the average of
+//   the two middles (with integer division) should be returned
+// requires: ll is a valid linked list with atleast one node
+// time: O(n)
+// examples: 1 - 2 - 3   ->   2
+//           5 - 4 - 7 - 2   ->  (4 + 7) / 2 = 5
+int middle(struct llist *ll) {
+    // Your implementation here
+    return 0;
 }
-
-char least_letter(char *str) {
-    assert(str);
-    assert(str[0]);
-
-    const int num_letters = 26;
-    int counts[26] = {0};
-    while (*str) {
-        counts[to_lower_case(*str) - 'a'] += 1;
-        str++;
+int main(void) {
+    int read = 0;
+    struct llist ll = {0};
+    while (scanf("%d", &read) == 1) {
+        
+        struct llnode *new_node = malloc(sizeof(struct llnode));
+        new_node->item = read;
+        new_node->next = ll.front;
+        ll.front = new_node;
     }
 
-    int min = INT_MAX;
-    int max_index = 0;
-    for (int i = 0; i < num_letters; i++) {
-        if (counts[i] < min && counts[i] > 0) {
-            
-            min = counts[i];
-            max_index = i;
-        }
-    }
-
-    return 'a' + max_index;
-}int main(void) {
-    int size = 0;
-    int max_size = 1;
-    char *str = malloc(sizeof(char));
-    char read = '\0';
-    while (scanf("%c", &read) == 1) {
-        if (size >= max_size) {
-            str = realloc(str, (max_size * 2) * sizeof(char));
-            max_size *= 2;
-        }
-        str[size] = read;
-        size++;
-    }
-    if (size >= max_size) {
-        str = realloc(str, max_size *= 2);
-        max_size *= 2;
-    }
-    str[size] = '\0';
-    if (strcmp(str, "assert") == 0) {
-        least_letter(NULL);
+    if (scanf("%d", &read) == 0) {
+        middle(NULL);
         return 0;
     }
 
-    printf("The least common letter in \"%s\" is '%c'\n", str, least_letter(str));
-    free(str);
+    printf("Middle: %d\n", middle(&ll));
+    while (ll.front) {
+        struct llnode *temp = ll.front;
+        ll.front = ll.front->next;
+        free(temp);
+    }
 }
+

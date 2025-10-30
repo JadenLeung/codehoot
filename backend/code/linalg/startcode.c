@@ -10,10 +10,10 @@ struct matrix{
 };
 
 // matrix_mult(m1, m2, matrix_product) is a function that takes in 2 matrices 
-//  and if possible, will perform matrix multiplication on them. the values of  
-//  the multiplication will be stored in matrix_product's values, and the height
-//  and width of matrix product will be stored in matrix_product's fields 
-//  respectively. returns true if the matrix multiplication is successful.
+// and if possible, will perform matrix multiplication on them. the values of  
+// the multiplication will be stored in matrix_product's values, and the height
+// and width of matrix product will be stored in matrix_product's fields 
+// respectively. returns true if the matrix multiplication is successful.
 //
 // Requires:
 //   all pointers are not null

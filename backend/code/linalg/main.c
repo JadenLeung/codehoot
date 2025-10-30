@@ -1,12 +1,12 @@
 // print_matrix(m) prints out a matrix.
 // effects: Produces output
 void print_matrix(struct matrix m) {
-    for (int i = 0; i < m.height; i++) {
+    for (int i = 0; i < m.height; i++){
         printf("[ ");
-        for (int j = 0; j < m.width; j++) {
-            printf("%3d ", m.values[(m.width * i) + j]);
+        for (int j = 0; j < m.width; j++){
+            printf("%2d ", m.values[(m.width * i) + j] );
         }
-        printf(" ]\n");
+        printf("]\n");
     }
 }
 
@@ -19,6 +19,15 @@ int main(void) {
     scanf("%d %d", &height, &width);
     for (int i = 0; i < height * width; i++) {
         scanf("%d", &bigarr[i]);
+    }
+
+    if (height == -1) {
+        if (matrix_mult(NULL, NULL, NULL)) {
+            printf("HUH");
+        } else {
+            printf("Matrix multiplication not possible.\n");
+        }
+        return 0;
     }
 
     struct matrix m1 = {{0}, height, width};
