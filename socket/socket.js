@@ -9,6 +9,11 @@ const server = http.createServer(app);
 
 dev = false;
 
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught Exception:", err);
+});
+
+
 // HTTPS Configuration
 if (!dev) {
     var options = {
@@ -25,11 +30,11 @@ const io = new Server(dev ? server : httpsServer, {
         // origin: ["http://localhost:3000","https://jadenleung.github.io"],
         methods: ["GET", "POST"]
     },
-  // transports: ["polling"] // Forces long polling instead of WebSockets
+// transports: ["polling"] // Forces long polling instead of WebSockets
 });
 
 app.get("/", (req, res) => {
-                  res.json({ message: "Codehoot World 1" });
+                res.json({ message: "Codehoot World 1" });
 });
 
 app.use(cors());
@@ -40,6 +45,29 @@ let rooms = {};
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
+    socket.on("check-joined", (id) => {
+        for (let room in rooms) {
+            if (rooms[room].deleteduserdata.hasOwnProperty(id)) {
+                if (rooms[room].userids.hasOwnProperty(id) || rooms[room].userids.some((i) => rooms[room].userdata[i].name == rooms[room].deleteduserdata[id].name)) {
+                    delete rooms[room].deleteduserdata[id];
+                    return;
+                }
+                rooms[room].userids.push(socket.id);
+                rooms[room].userdata[socket.id] = rooms[room].deleteduserdata[id];
+                rooms[room].userdata[socket.id].passed = 0;
+                delete rooms[room].deleteduserdata[id];
+                socket.join(String(room));
+                io.to(socket.id).emit("already-joined", rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, rooms[room].userdata[socket.id].points, room);
+                io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, rooms[room].userdata[socket.id].name, rooms[room].userdata[socket.id].avatar, "join");
+                if (rooms[room].stage == "ingame") {
+                    io.to(socket.id).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length, true, false);
+                } else {
+                    io.to(socket.id).emit("joined-room", rooms[room].stage);
+                }
+                console.log(`${socket.id} joined room ${room}.`);
+            }
+        }
+    });
 
     socket.on("create-room", () => {
         createRoom();
@@ -51,8 +79,8 @@ io.on("connection", (socket) => {
                 continue;
             }
             let room = "CS" + i;
-            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1, testcases: -1};
-            console.log(`${socket.id} is joining room ${room}. Rooms has info ${JSON.stringify(rooms)}`);
+            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1, testcases: -1, deleteduserdata: {}};
+            console.log(`${socket.id} is joining room ${room}.`);
             socket.join(room);
             socket.emit("created-room", room, rooms[room]);
             break;
@@ -69,20 +97,22 @@ io.on("connection", (socket) => {
 
     function joinRoom(room, name, avatar, cb) {
         room = String(room);
-        console.log("Attempting to join room, data is ", rooms[room])
         if (rooms.hasOwnProperty(room)) {
-            if (rooms[room].stage != "lobby") {
-                cb("Game already started");
-            } else if (rooms[room].userids.some((id) => rooms[room].userdata[id].name == name)) {
+            // if (rooms[room].stage != "lobby") {
+            //     cb("Game already started");
+            // } else 
+            if (rooms[room].userids.some((id) => rooms[room].userdata[id].name == name)) {
                 cb("Name is taken");
             } else if (!rooms[room].userids.includes(socket.id)) {
                 rooms[room].userids.push(socket.id);
                 rooms[room].userdata[socket.id] = {name: name, avatar: avatar, points: 0};
                 socket.join(String(room));
-                console.log("Current rooms after joining", io.sockets.adapter.rooms, socket.id);
                 io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, name, avatar, "join");
-                io.to(socket.id).emit("joined-room", rooms[room].stage);
-                console.log(`${socket.id} joined room ${room}. Updated Data: ${JSON.stringify(rooms)}`);
+                if (rooms[room].stage == "ingame") {
+                    io.to(socket.id).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length, true);
+                } else {
+                    io.to(socket.id).emit("joined-room", rooms[room].stage);
+                }
             }
         } else {
             cb("Game already ended");
@@ -90,7 +120,7 @@ io.on("connection", (socket) => {
     }
 
     socket.on("change-avatar", (room, avatar) => {
-        if (rooms[room]) {
+        if (rooms[room] && rooms[room].userdata && rooms[room].userdata[socket.id] && rooms[room].userdata[socket.id].avatar && avatar) {
             rooms[room].userdata[socket.id].avatar = avatar;
             io.to(rooms[room].host).emit("room-change", rooms[room], socket.id, "", avatar, "avatar");
         }
@@ -118,7 +148,6 @@ io.on("connection", (socket) => {
 
     socket.on("next-round", (room, timeLimit, testcases, config, question) => {
         room = String(room);
-        console.log("attempting to start next round", question);
         if (rooms.hasOwnProperty(room) && rooms[room].stage == "results") {
             rooms[room].stage = "ingame";
             rooms[room].question = question;
@@ -131,21 +160,22 @@ io.on("connection", (socket) => {
                     delete rooms[room].userdata[id].time;
                 }
             })
-            console.log("emitting", question);
             socket.to(room).emit('started-match', rooms[room].time, rooms[room].question, rooms[room].userids.length); // only others in that room
             socket.emit('started-match2', rooms[room].time, rooms[room].question);
         }
     });
 
     socket.on("submit-score", (time, passed, room, cb) => {
-        if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame") {
-            if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
-                rooms[room].userdata[socket.id].time = time;
-                rooms[room].userdata[socket.id].passed = passed;
-                console.log("Score submited", time, rooms[room].userdata[socket.id])
-                cb("highscore");
+            if (rooms.hasOwnProperty(room) && rooms[room].stage == "ingame" && rooms[room].userdata && rooms[room].userdata[socket.id]) {
+                if (!rooms[room].userdata[socket.id].hasOwnProperty("passed") || passed > rooms[room].userdata[socket.id].passed) {
+                    rooms[room].userdata[socket.id].time = time;
+                    rooms[room].userdata[socket.id].passed = passed;
+                    cb("highscore");
+                    if (rooms[room].testcases == passed) {
+                        io.to(rooms[room].host).emit('perfect-score', rooms[room].userdata[socket.id].name);
+                    }
+                }
             }
-        }
     });
 
     socket.on("end-round", (room) => {
@@ -221,11 +251,11 @@ io.on("connection", (socket) => {
                 return b.time - a.time;
             });
         }
-        console.log("scores is", scores);
         return scores;
     }
 
     socket.on("podium", (room) => {
+        rooms[room].stage = "podium";
         socket.to(room).emit("podium");
     })
 
@@ -233,11 +263,10 @@ io.on("connection", (socket) => {
         console.log(`User disconnected: ${socket.id}, Reason: ${reason}`, rooms);
         removePlayer(socket.id);
         console.log(io.engine.clientsCount)
-       
+    
     });
 
     socket.on("kick-player", (id) => {
-        console.log("Trying to remove", id)
         removePlayer(id);
         io.to(id).emit("kick-you");
     })
@@ -250,9 +279,10 @@ io.on("connection", (socket) => {
                 } else if (rooms[room].userids.includes(player)){
                     rooms[room].userids = rooms[room].userids.filter((p) => p != player);
                     io.to(rooms[room].host).emit("room-change", rooms[room], player, "", "", "leave");
+                    rooms[room].deleteduserdata[player] = rooms[room].userdata[player];
                     delete rooms[room].userdata[player];
                 }
-                console.log(`Deleted room ${room}. Rooms has info ${JSON.stringify(rooms)}`)
+                console.log(`Deleting player ${player}. Rooms has info ${JSON.stringify(rooms)}`)
             }
         })
     }

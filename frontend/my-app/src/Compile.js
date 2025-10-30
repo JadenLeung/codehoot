@@ -18,7 +18,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
   function fetchStartCode() {
     // eslint-disable-next-line no-restricted-globals
     if (confirm("Are you sure you want to proceed? Doing this will delete all your current code.")) {
-      fetchCode();
+      fetchCode(true);
     }
   }
   
@@ -45,12 +45,12 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
     
     setOutput({state: "Compiling..."});
     try {
-        const response = await fetch(`http://127.0.0.1:${config.port}/submit`, {
+        const response = await fetch(`${config.flask}/submit`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ code : code.code, question: config.questionNames[question], timeout: config.timeout }), // sending JSON
+            body: JSON.stringify({ code : code.code, question: config.qdata[question].name, timeout: config.timeout }), // sending JSON
         });
         const data = await response.text();
         console.log(data)
@@ -75,7 +75,7 @@ function Compile({code, setCode, setOutput, question, socket, endtime, room, fet
         Reset
       </button>
       {config.dev && <button onClick={displaySolution}>
-        Solution (Dev on)
+        Solution
       </button>}
       <div className="success" style={{bottom: successHeight}}>
           <p className="success-text">New High Score!</p>

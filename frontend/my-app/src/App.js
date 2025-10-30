@@ -9,11 +9,11 @@ import config from './config';
 
 function App() {
   const [mode, setMode] = useState('start');
-  const [code, setCode] = useState({in: "", expect: "", code: ""});
+  const [code, setCode] = useState({in: "", expect: "", code: "// Fetching code from server..."});
   const [name, setName] = useState('');
   const [output, setOutput] = useState({});
   const [question, setQuestion] = useState('Q1');
-  const [avatar, setAvatar] = useState('nomair');
+  const [avatar, setAvatar] = useState('C');
   const [players, setPlayers] = useState([]);
   const [socket, setSocket] = useState(null);
   const [room, setRoom] = useState(null);
@@ -25,17 +25,28 @@ function App() {
   useEffect(() => {
     const socketInstance = io(config.websocket); // Replace with your server URL
     setSocket(socketInstance);
-
+    
     // Cleanup the socket connection when the component unmounts
     return () => {
       socketInstance.disconnect();
     };
   }, []);
 
+    useEffect(() => {
+      if (socket) {
+        console.log("Checking for", localStorage.id);
+        socket.emit("check-joined", localStorage.id);
+      }
+    }, [socket]);
+
   useEffect(() => {
     if (socket) {
       socket.on("room-change", (d, id, name, avatar, action) => {
-        console.log("host", id)
+        console.log("mode is ", mode)
+        if (mode == "hostpodium") {
+          return;
+        }
+        console.log("host", id, "data is", d, id, name, avatar, action)
         if (action == "join") {
           setData(d);
           setPlayers(prevPlayers => [...prevPlayers, { id, name, avatar }]);
@@ -54,7 +65,7 @@ function App() {
         socket.off("time-change");
       };
     }
-  }, [socket]);
+  }, [socket, mode]);
 
   if (mode === "start") {
     document.body.style.backgroundColor = '#511ca2';
@@ -70,18 +81,18 @@ function App() {
             ["start", "entername", "lobby", "hostlobby", "results"].includes(mode) &&
             <Titlecode setMode={setMode} mode = {mode} buttonText={mode === "start" ? "Enter" : "OK, go!" } socket={socket}
               placeholderText={mode === "start" ? "Game PIN" : "Nickname" } avatar={avatar} setAvatar={setAvatar} 
-              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} 
-              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers}/>
+              setRoom={setRoom} setData={setData} room={room} data={data} setEndTime={setEndTime} setName={setName} quesiton={question} 
+              setQuestion={setQuestion} setOutput={setOutput} setNumPlayers={setNumPlayers} setCode={setCode} setPoints={setPoints}/>
           }
         </div>
       {(["hostlobby", "hostingame", "hostresults", "hostleaderboard", "hostpodium"].includes(mode))
         && <Host players={players} setPlayers={setPlayers} mode={mode} setMode={setMode} question={question} 
           setQuestion={setQuestion} room={room} data={data} setData={setData} socket={socket} endtime={endtime} setEndTime={setEndTime}/>
       }
-      {["ingame", "results", "podium"].includes(mode) && (
-        <Coding setCode={setCode} code={code} question={question} output={output} setOutput={setOutput}
+      {["ingame", "results", "podium", "soloingame"].includes(mode) && (
+        <Coding setCode={setCode} code={code} question={question} setQuestion={setQuestion} output={output} setOutput={setOutput}
         endtime={endtime} data={data} socket={socket} name={name} avatar={avatar} room={room} mode={mode}
-          setMode={setMode} points={points} setPoints={setPoints} numPlayers={numPlayers}
+          setMode={setMode} points={points} setPoints={setPoints} numPlayers={numPlayers} setEndTime={setEndTime}
         ></Coding>
       )}
     </div>

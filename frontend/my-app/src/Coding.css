@@ -91,6 +91,11 @@
     height: 200px;
 }
 
+.scrollable {
+    overflow: auto;
+    max-height: 100%; /* Optional */
+  }
+
 .score-text {
     color:white;
     font-size: 30px;
@@ -108,7 +113,21 @@
     display: flex;
     justify-content: flex-start; /* this fixes the issue */
     align-items: flex-start;
+    margin-top: -40px;
 }
+
+@media (max-width: 1300px) {
+    .code-container {
+      flex-direction: column;
+      margin-left: 0px;
+      gap: 0px;
+      padding: 0px;
+      margin-left: 0px;
+    }
+    .compiler-output {
+        gap: 2000px;
+    }
+  }
 
 .compiler-output {
     margin-left: 10px;
@@ -132,4 +151,15 @@
     background-color:  #121212;
     border-radius: 0px;
     border: none;
+}
+
+.next-button {
+    height: 60px;
+    font-size: 30px;
+    margin-top: 40px;
+    margin-left: 5px;
+}
+
+.codehoot-title:hover {
+    cursor: pointer;
 }

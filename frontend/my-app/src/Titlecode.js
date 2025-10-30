@@ -6,7 +6,8 @@ import Rectangle from './Rectangle';
 import config from './config';
 
 function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avatar, 
-  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers}) {
+  setAvatar, socket, setRoom, room, setData, setEndTime, setName, setQuestion, setNumPlayers, setCode,
+  setPoints}) {
 
 
   const [errorHeight, setErrorHeight] = useState("-70px");
@@ -22,6 +23,16 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }
 
+  function startSolo() {
+    setEndTime(Date.now() + config.qdata["Q1"].time * 1000);
+    for (let question in config.qdata) {
+      console.log("deleting", question)
+      delete localStorage[question];
+    }
+    setMode("soloingame");
+    setOutput("");
+  }
+
   function changeAvatar(avatar) {
     setAvatar(avatar);
     socket.emit("change-avatar", room, avatar);
@@ -33,7 +44,8 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       setRoom(room);
       let t = Math.round(Math.random() * 10000);
       setText(t);
-      socket.emit('join-room', room, t, "nomair", (res) => {
+      setName(t);
+      socket.emit('join-room', room, t, "C", (res) => {
         if (res == "Game already started" || res == "Game already ended") {
           riseError("ⓘ " + res);
           setMode("start");  
@@ -64,7 +76,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
         if (text == "") {
           riseError("ⓘ Assertion failed, nickname must not be null");
         } else {
-          socket.emit('join-room', room, text, "nomair", (res) => {
+          socket.emit('join-room', room, text, "C", (res) => {
             if (res == "Game already started" || res == "Game already ended") {
               riseError("ⓘ " + res);
               setMode("start");  
@@ -97,29 +109,50 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
       });
 
       socket.on("kick-you", () => {
+        delete localStorage.id;
         setMode("start");    
-        riseError("ⓘ You have been kicked (freed)");
+        riseError("ⓘ You have been freed (left the game)");
       });
 
-      socket.on("started-match", (time, q, players) => {
-        console.log(time, q);
-        if (mode == "lobby" || mode == "results") {
+      socket.on("started-match", (time, q, players, force = false, reset = true) => {
+        console.log(time, q, force);
+        if (mode == "lobby" || mode == "results" || force) {
+          if (reset) {
+            for (let question in config.qdata) {
+              console.log("deleting", question)
+              delete localStorage[question];
+            }
+            setCode(prev => ({...prev, code: "// Fetching code from server..."}));
+          } else {
+            setCode(JSON.parse(localStorage[q]));
+          }
           setMode("ingame");    
           setNumPlayers(players);
           setQuestion(q);
           setOutput("");
           setErrorHeight("-70px");
           setEndTime(time);
+          localStorage.id = socket.id;
         } else if (mode == "changename") {
           setMode("start");
           riseError("ⓘ Game already started");
         }
       });
 
+      socket.on("already-joined", (n, a, p, r) => {
+        localStorage.id = socket.id;
+        setName(n);
+        setAvatar(a);
+        setRoom(r);
+        setPoints(p)
+      });
+
       return () => {
         socket.off("created-room");
         socket.off("joined-room");
+        socket.off("kick-you");
         socket.off("started-match");
+        socket.off("already-joined")
       };
     }
   }, [socket, mode]);
@@ -139,7 +172,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }, [mode]);
 
-  const picList = ["nomair", "watson", "urs", "aryo", "josh"]
+  const picList = ["C", "c++", "python", "racket", "java", "scratch", "html", "miles", "jaden", "carter", "leo", "darius"]
 
   if (mode != "results") {
     return (
@@ -159,10 +192,10 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
           { mode == "lobby" &&
 
             <div>
-                <img src = {`/data/avatars/${avatar}.png`} className="image"></img>
+                <img src = {`${process.env.PUBLIC_URL}/data/avatars/${avatar}.png`} className="image"></img>
                 <Title color="white">Welcome, {text}</Title>
                 <p className="avatar-text">Select your avatar</p>
-                {picList.map((pic) => (<img key={pic} src={`/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
+                {picList.map((pic) => (<img key={pic} src={`${process.env.PUBLIC_URL}/data/avatars/${pic}.png`} className="image" id={pic} alt={pic} 
                 onClick={() => {changeAvatar(pic)}}/>))}
                 <br></br>
             </div>
@@ -172,6 +205,9 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
             <p className="error-text">{error}</p>
           </div>
         </div>
+         { mode == "start" &&
+            <button className = "solo-mode" onClick={startSolo}>Solo Mode</button>
+          }
           { mode == "start" &&
             <p className = "host-text" onClick={hostGame}>Click here to host a game</p>
           }

@@ -10,8 +10,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-os.environ['ASAN_OPTIONS'] = 'detect_leaks=1:verbosity=2'
-
 # Global variable to store subprocesses
 subprocesses = []
 
@@ -28,7 +26,7 @@ signal.signal(signal.SIGINT, terminate_subprocesses)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World'
+    return 'Hello World 2'
 
 @app.route('/solution')
 def get_public():
@@ -48,6 +46,7 @@ def submit():
     data = request.get_json()
     code = data.get('code')
     question = data.get('question')
+    timeout = data.get('timeout')
 
     # List of forbidden keywords or patterns in C code
     forbidden_keywords = [
@@ -76,9 +75,9 @@ def submit():
                 f.write(harness_code.read())
 
         try:
-            # Compile the code with AddressSanitizer enabled
+            # Compile the code with gcc
             compile_process = subprocess.run(
-                ['clang', '-fsanitize=address', '-fsanitize=leak', '-std=c99', '-g', '-Wall', '-Werror', os.path.join(tmpdir, "main.c")],
+                ['gcc', '-std=c99', '-g', '-Wall', '-Werror', os.path.join(tmpdir, "main.c"), '-o', os.path.join(tmpdir, "a.out")],
                 cwd=tmpdir,
                 capture_output=True, text=True
             )
@@ -98,10 +97,10 @@ def submit():
                 with open(file, "r") as input_file:
                     input_text = input_file.read()
 
-                # Execute the binary
+                # Execute the binary with Valgrind
                 try:
                     run_process = subprocess.Popen(
-                        ['./a.out'],
+                        ['valgrind', '--leak-check=full', '--show-leak-kinds=all', os.path.join(tmpdir, "a.out")],
                         stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
@@ -110,11 +109,11 @@ def submit():
                     )
                     subprocesses.append(run_process)  # Add process to the list
 
-                    stdout, stderr = run_process.communicate(input=input_text, timeout=2)
+                    stdout, stderr = run_process.communicate(input=input_text, timeout=timeout)
 
                 except subprocess.TimeoutExpired:
-                    if  i == 0:
-                        return jsonify({"output": f"Timeout: 2 second limit reached"})
+                    if i == 0:
+                        return jsonify({"output": f"Timeout: {timeout} second limit reached"})
                     incorrect.add(i)
                     run_process.kill()
                     continue
@@ -128,23 +127,28 @@ def submit():
                         correct.add(i)
                     continue
 
-                err = parse_asan(stderr)
+
+
+                stdout += parse_valgrind(stderr)
+
+                # Parse Valgrind output for memory issues
+                valgrind_errors = parse_valgrind(stderr)
 
                 if run_process.returncode != 0:
-                    return jsonify({"error": "Execution failed", "details": err}), 500
+                    return jsonify({"error": "Execution failed", "details": valgrind_errors}), 500
 
                 basename, extension = os.path.splitext(file)
                 res = stdout
                 with open(basename + ".expect", "r") as expected:
                     expected = expected.read()
                     if (res != expected):
-                        if  i == 0:
+                        if i == 0:
+                            print("Expect is ", expected, " while res is ", res)
                             return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
                         incorrect.add(i)
                     else:
                         correct.add(i)
                         
-
             return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
             "correct": len(correct), "incorrect": len(incorrect), "numTests": len(correct) + len(incorrect)})
 
@@ -152,10 +156,10 @@ def submit():
             return jsonify({"error": str(e)}), 500
 
 
-def parse_asan(message):
-    if "ERROR" in message:
-        return message.split("ERROR", 1)[1]
-    return message
+def parse_valgrind(message):
+    if "definitely lost" in message:
+        return "\n" + message
+    return ""
 
 
 if __name__ == '__main__':

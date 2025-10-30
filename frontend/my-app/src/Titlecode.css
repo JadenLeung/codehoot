@@ -72,6 +72,7 @@
     font-family: 'Montserrat';
     font-weight: bold;
     transition: right 1s ease;
+    z-index: -1;
   }
 
   .error {
@@ -107,11 +108,15 @@
   .host-text {
     color: white;
     font-family: 'Montserrat';
-    margin-top:230px;
+    margin-top:190px;
     text-align: center;
   }
 
   .host-text:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .solo-mode {
+    margin-top: 20px;
   }
