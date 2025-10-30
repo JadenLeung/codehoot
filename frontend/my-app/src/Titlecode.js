@@ -172,7 +172,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
     }
   }, [mode]);
 
-  const picList = ["C", "c++", "python", "racket", "java", "scratch", "html", "miles", "jaden", "carter", "leo", "darius"]
+  const picList = ["C", "c++", "python", "racket", "java", "scratch", "html", "nomair", "tom", "jaden"]
 
   if (mode != "results") {
     return (
