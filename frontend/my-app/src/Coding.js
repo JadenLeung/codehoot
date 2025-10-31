@@ -134,7 +134,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   })
 
   let tabs = ["main.c", "public.in", "public.expect"];
-  if (time == 0) {
+  if (time == 0 || config.showSolutionTab) {
     tabs.push("solution.c");
   }
 
