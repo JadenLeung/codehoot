@@ -65,7 +65,7 @@ function App() {
   }, [socket, mode]);
 
   if (mode === "start") {
-    document.body.style.backgroundColor = '#511ca2';
+    document.body.style.backgroundColor = '#ff7f2a';
   }
 
   return (

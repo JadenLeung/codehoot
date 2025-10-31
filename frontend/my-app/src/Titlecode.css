@@ -4,6 +4,9 @@
     align-items: center;
 }
 
+/* Import spooky 'Creepster' font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
 .rectangle {
     margin-top: 40px;
     padding-top: 10px;
@@ -36,7 +39,7 @@
     bottom: -000px;
     border-left: 500px solid transparent;  /* Left transparent border */
     border-right: 500px solid transparent; /* Right transparent border */
-    border-bottom: 700px solid #451592;    /* Bottom border with color (equilateral triangle) */
+    border-bottom: 700px solid #e0661f;    /* Bottom border with color (slightly darker than background) */
     z-index: -1;
     transition: left 1s ease;
   }
@@ -47,7 +50,7 @@
     top: -500px;                   /* Distance from the top of the page */
     width: 1000px;                /* Width of the circle */
     height: 1000px;               /* Height of the circle */
-    background-color: #4a1798;   /* Circle color */
+    background-color: #f0702a;   /* Circle color (slightly less dark) */
     border-radius: 50%;          /* Makes the shape round */
     z-index: -2;               /* Ensure the circle appears above other elements */
     transition: left 1s ease;
@@ -58,7 +61,7 @@
     bottom: -1000px;                   /* Distance from the top of the page */
     width: 1500px;                /* Width of the circle */
     height: 1500px;               /* Height of the circle */
-    background-color: #4a1798;   /* Circle color */
+  background-color: #f0702a;   /* Circle color (slightly less dark) */
     border-radius: 50%;          /* Makes the shape round */
     z-index: -2;               /* Ensure the circle appears above other elements */
     transition: right 1s ease;
@@ -68,9 +71,10 @@
     top: 40px;
     font-size: 100px;
     position: fixed; 
-    color: #4c1a9b;
-    font-family: 'Montserrat';
+  color: #1a1a1a; /* Dark color for CS136 */
+    font-family: 'Creepster', 'Montserrat', cursive;
     font-weight: bold;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4), 0 0 10px rgba(234,116,36,0.1);
     transition: right 1s ease;
     z-index: -1;
   }
