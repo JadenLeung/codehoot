@@ -139,18 +139,26 @@ def submit():
 
                 basename, extension = os.path.splitext(file)
                 res = stdout
+                errors = ""
                 with open(basename + ".expect", "r") as expected:
                     expected = expected.read()
                     if (res.strip() != expected.strip()):
                         print("Expect is ", expected, " while res is ", res, " for test case ", input_text)
                         if i == 0:
-                            return jsonify({"output": f"Failed public test case:\n{input_text} \nExpected:\n{expected}\nYour Output:\n{res}"})
+                            return jsonify({"output": f"Failed public test case:\n{input_text}\n\nExpected:\n{expected}\nYour Output:\n{res}"})
+                        elif errors == "":
+                            errors = f"Failed test case {i + 1}:\n{input_text}\n\nExpected:\n{expected}\nYour Output:\n{res}"
                         incorrect.add(i)
                     else:
                         correct.add(i)
                         
-            return jsonify({"output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed", 
-            "correct": len(correct), "incorrect": len(incorrect), "numTests": len(correct) + len(incorrect)})
+            return jsonify({
+                "output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed" + (f"\n{errors}" if errors != "" else ""),
+                "correct": len(correct),
+                "incorrect": len(incorrect),
+                "numTests": len(correct) + len(incorrect)
+            })
+
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
