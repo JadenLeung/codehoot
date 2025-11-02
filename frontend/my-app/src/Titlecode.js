@@ -24,7 +24,7 @@ function Titlecode({ setOutput, mode, setMode, buttonText, placeholderText, avat
   }
 
   function startSolo() {
-    setEndTime(Date.now() + config.qdata["Q1"].time * 1000);
+    setEndTime(Date.now() + config.qdata[0].time * 1000);
     for (let question in config.qdata) {
       delete localStorage[question];
     }

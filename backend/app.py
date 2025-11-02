@@ -47,6 +47,7 @@ def submit():
     code = data.get('code')
     question = data.get('question')
     timeout = data.get('timeout')
+    friendly = data.get('friendly', True)
 
     # List of forbidden keywords or patterns in C code
     forbidden_keywords = [
@@ -73,7 +74,6 @@ def submit():
             f.write(code)
             with open(f"code/{question}/main.c", "r") as harness_code:
                 f.write(harness_code.read())
-
         try:
             # Compile the code with gcc
             compile_process = subprocess.run(
@@ -93,6 +93,7 @@ def submit():
 
             correct = set([])
             incorrect = set([])
+            errors = ""
             for i, file in enumerate(files):
                 with open(file, "r") as input_file:
                     input_text = input_file.read()
@@ -122,6 +123,8 @@ def submit():
                 if "assert" in file:
                     print(f"Assertion: return code for {file}: {run_process.returncode}", code.count("assert") , code.count("assert.h") )
                     if run_process.returncode == 0 or code.count("assert") - code.count("assert.h") == 0:
+                        if errors == "":
+                            errors = f"Did not correctly assert requirements for test case {i + 1}"
                         incorrect.add(i)
                     else:
                         correct.add(i)
@@ -139,11 +142,9 @@ def submit():
 
                 basename, extension = os.path.splitext(file)
                 res = stdout
-                errors = ""
                 with open(basename + ".expect", "r") as expected:
                     expected = expected.read()
                     if (res.strip() != expected.strip()):
-                        print("Expect is ", expected, " while res is ", res, " for test case ", input_text)
                         if i == 0:
                             return jsonify({"output": f"Failed public test case:\n{input_text}\n\nExpected:\n{expected}\nYour Output:\n{res}"})
                         elif errors == "":
@@ -153,7 +154,7 @@ def submit():
                         correct.add(i)
                         
             return jsonify({
-                "output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed" + (f"\n{errors}" if errors != "" else ""),
+                "output": f"{len(correct)}/{len(correct) + len(incorrect)} cases passed" + (f"\n\n{errors}" if errors != "" and friendly else ""),
                 "correct": len(correct),
                 "incorrect": len(incorrect),
                 "numTests": len(correct) + len(incorrect)
@@ -171,5 +172,5 @@ def parse_valgrind(message):
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 6080))
+    port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port)

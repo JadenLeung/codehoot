@@ -23,7 +23,7 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
 
   const fetchCode = async (reset = false) => {
     try {
-      if (question && !(localStorage[question] && !reset)) {
+      if (!(localStorage[question] && !reset)) {
         let res = await fetch(`${config.flask}/code?question=${config.qdata[question].name}`);
         let data = await res.json();
         setCode(data);
@@ -50,8 +50,8 @@ function Coding ({setCode, code, question, setQuestion, output, setOutput, endti
   }, [window.innerWidth])
 
   function soloNext(dx) {
-    const q = "Q" + (+(question.slice(1)) + dx);
-    if (q == "Q" + (Object.keys(config.qdata).length + 1) || q == "Q0") {
+    const q = question + dx;
+    if (q >= Object.keys(config.qdata).length || q <= -1) {
       return;
     }
     setQuestion(q);

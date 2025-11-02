@@ -15,14 +15,14 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
             socket.emit("start-match", room, config.qdata[question].time * 1000, config.qdata[question].testcases, config);
             socket.emit("test");
         } else if (mode == "hostresults") {
-            if (question == "Q" + Object.keys(config.qdata).length) {
+            if (question == Object.keys(config.qdata).length - 1) {
                 setMode("hostpodium");
                 socket.emit("podium", room);
             } else {
                 setMode("hostleaderboard")
             }
         } else if (mode == "hostleaderboard") {
-            const newquestion = "Q" + (+(question.slice(1)) + 1);
+            const newquestion = question + 1;
             socket.emit("next-round", room, config.qdata[newquestion].time * 1000, config.qdata[newquestion].testcases, config, newquestion);
         } else if (time == 0 && mode == "hostingame") {
             socket.emit("view-leaderboard", room);
@@ -82,7 +82,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
         socket.on("view-leaderboard", (leaderboard, oldleaderboard, points, scores, d) => {
             setData(d);
             setMode("hostresults");
-            setLeaderboardData({ leaderboard, oldleaderboard, points, scores });
+        setLeaderboardData({ leaderboard, oldleaderboard, points, scores });
         });
         socket.on("perfect-score", (name) => {
             showMessage(name + " passed all test cases!")
@@ -115,7 +115,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                 <div className="hostlobby-container">
                     <p className="pass-message" style={{opacity:passMessage.opacity}}>{passMessage.message}</p>
                     <Rectangle>
-                        <p className = "title">Question {question.substring(1)}</p>
+                        <p className = "title">Question {question + 1}</p>
                     </Rectangle>
                     <p className="bigtime">{Math.round(time)}</p>
                     { time > 0 &&
@@ -230,7 +230,7 @@ function Host({ setPlayers, players, mode, setMode, question, setQuestion, room,
                             <p>{players.length}</p>
                         </div> 
                         <Mainbutton fontSize="30px" onClick={startMatch}>{mode == "hostlobby" ? "Start" : time > 0 ? 
-                            "Skip" : mode == "hostingame" ? "Results" : mode == "hostresults" ? (question == "Q" + Object.keys(config.qdata).length ? "Podium" : "View Leaderboard") : "Next Round"}</Mainbutton>
+                            "Skip" : mode == "hostingame" ? "Results" : mode == "hostresults" ? (question == Object.keys(config.qdata).length - 1 ? "Podium" : "View Leaderboard") : "Next Round"}</Mainbutton>
                     </div>
                 </div>
 

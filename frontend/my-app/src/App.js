@@ -12,7 +12,7 @@ function App() {
   const [code, setCode] = useState({in: "", expect: "", code: "// Fetching code from server..."});
   const [name, setName] = useState('');
   const [output, setOutput] = useState({});
-  const [question, setQuestion] = useState('Q1');
+  const [question, setQuestion] = useState(0);
   const [avatar, setAvatar] = useState('C');
   const [players, setPlayers] = useState([]);
   const [socket, setSocket] = useState(null);

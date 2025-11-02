@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
                 continue;
             }
             let room = "CS" + i;
-            rooms[room] = { host: socket.id, userids: [], question: "Q1", stage: "lobby", userdata:{}, time: -1, testcases: -1, deleteduserdata: {}};
+            rooms[room] = { host: socket.id, userids: [], question: 0, stage: "lobby", userdata:{}, time: -1, testcases: -1, deleteduserdata: {}};
             console.log(`${socket.id} is joining room ${room}.`);
             socket.join(room);
             socket.emit("created-room", room, rooms[room]);
